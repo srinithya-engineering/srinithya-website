@@ -659,7 +659,7 @@ function initNavbar() {
             l.classList.add("ml-2", "text-left");
             c.classList.add("opacity-0");
             d.classList.remove("text-[clamp(11px,3.5vw,30px)]", "md:mb-2");
-            d.classList.add("text-[clamp(10px,2.8vw,20px)]");
+            d.classList.add("text-[clamp(10px,2.9vw,20px)]");
             m.classList.remove("w-full", "border-t", "justify-center", "py-2", "lg:gap-8");
             m.classList.add("py-1", "flex-shrink-0", "text-sm");
         } else {
