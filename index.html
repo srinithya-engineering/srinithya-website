@@ -443,8 +443,14 @@
                     const handleReset = (newPosition) => {
                         isManualResetting = true;
                         carousel.style.scrollBehavior = 'auto';
+                        carousel.style.scrollSnapType = 'none';
                         carousel.scrollLeft = newPosition;
-                        requestAnimationFrame(() => { isManualResetting = false; });
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                carousel.style.scrollSnapType = '';
+                                isManualResetting = false;
+                            });
+                        });
                     };
 
                     // If scrolled to the end clone zone
@@ -454,6 +460,31 @@
                         handleReset(scrollLeft + totalContentWidth);
                     }
                 });
+
+                // 7. Swipe Hint Animation
+                const hintObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                if (isTransitioning || isManualResetting) return;
+                                
+                                stopAutoPlay();
+                                carousel.style.scrollBehavior = 'smooth';
+                                carousel.scrollLeft += 60; // Nudge right
+                                
+                                setTimeout(() => {
+                                    carousel.scrollLeft -= 60;
+                                    setTimeout(() => {
+                                        carousel.style.scrollBehavior = '';
+                                        startAutoPlay();
+                                    }, 500);
+                                }, 800);
+                            }, 1500);
+                            hintObserver.disconnect();
+                        }
+                    });
+                }, { threshold: 0.6 });
+                hintObserver.observe(carousel);
 
                 // Start initially
                 startAutoPlay();
