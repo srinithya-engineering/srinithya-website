@@ -86,7 +86,14 @@ window.createProductCard = function(product) {
             webpSrc = imageSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
         }
 
-        const imgTag = `<img onclick="openImageModal('${imageSrc}')" src="${imageSrc}" alt="${product.name}" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full ${imageClass} transition-transform duration-300 group-hover:scale-110 cursor-pointer">`;
+        // Determine click action: Service pages trigger enquiry, others open image modal
+        let clickAction = `openImageModal('${imageSrc}')`;
+        if (window.location.pathname.includes('/Service_details/')) {
+            const safeName = (product.name || '').replace(/'/g, "\\'");
+            clickAction = `initiateSingleProductEnquiry('${safeName}')`;
+        }
+
+        const imgTag = `<img onclick="${clickAction}" src="${imageSrc}" alt="${product.name}" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full ${imageClass} transition-transform duration-300 group-hover:scale-110 cursor-pointer">`;
         
         // Wrap in picture tag if WebP source is available (or inferred)
         mediaHTML = webpSrc ? `<picture class="w-full h-full block"><source srcset="${webpSrc.replace(/ /g, '%20')}" type="image/webp">${imgTag}</picture>` : imgTag;

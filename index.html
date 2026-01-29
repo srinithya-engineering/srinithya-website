@@ -10,7 +10,7 @@
     <!-- Modern Font: Outfit -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=60&w=1200&auto=format&fit=crop" fetchpriority="high">
+    <link rel="preload" as="image" href="./Assets/Others/unsplash.png" fetchpriority="high">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/config/tailwind-config.js"></script>
@@ -61,15 +61,12 @@
     <main id="main-content">
     <section id="home" class="relative bg-dark min-h-screen flex items-center pt-24 md:pt-40">
         <div class="absolute inset-0 z-0 opacity-30">
-            <img 
-                src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=60&w=1200&auto=format&fit=crop" 
-                alt="Construction Site Background" 
-                class="w-full h-full object-cover"
-                width="1200"
-                height="800"
-                fetchpriority="high"
-                decoding="async"
-            >
+            <div 
+                class="w-full h-full bg-fixed bg-cover bg-center bg-no-repeat" 
+                style="background-image: url('./Assets/Others/unsplash.png');"
+                role="img"
+                aria-label="Construction Site Background"
+            ></div>
         </div>
         
         <!-- Tech Grid Overlay -->
@@ -82,7 +79,7 @@
             <p class="text-xl text-gray-200 mb-8 max-w-2xl"> Direct manufacturers of heavy-duty Bar Processing Machinery and premium Light Construction Equipment.
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="#products" class="bg-secondary text-white font-bold px-8 py-3 rounded text-center hover:bg-yellow-600 transition">
+                <a href="#heavy-construction-machinery" class="bg-secondary text-white font-bold px-8 py-3 rounded text-center hover:bg-yellow-600 transition">
                     View Our Heavy Construction Machines     
                 </a>
                 <a href="#light-construction-machinery" class="border-2 border-white text-white font-bold px-8 py-3 rounded text-center hover:bg-white hover:text-dark transition">
@@ -108,7 +105,7 @@
                 <p class="text-gray-600 mt-4">Explore our range of heavy-duty machinery and light construction equipment.</p>
             </div>
 
-            <div class="flex items-center mb-8 fade-in-section">
+            <div id="heavy-construction-machinery" class="flex items-center mb-8 fade-in-section">
                 <div class="flex-grow h-px bg-gray-300"></div>
                 <h3 class="text-2xl font-bold text-primary px-4">Heavy Construction Machinery</h3>
                 <div class="flex-grow h-px bg-gray-300"></div>
@@ -126,47 +123,97 @@
         </div>
     </section>
 
-    <section class="py-20 bg-gray-50 border-t border-gray-200">
+    <section class="py-20 bg-gray-50 bg-pattern-dots border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-12 fade-in-section">
-                <h2 class="text-3xl font-bold text-primary">Trusted by Professionals</h2>
-                <p class="text-gray-600 mt-2">See what our clients have to say about our machinery and service.</p>
+                <h2 class="text-3xl font-bold text-primary">Client Appreciation</h2>
+                <p class="text-gray-600 mt-2">We are honored to be recognized by our valued partners for our commitment to quality and service.</p>
             </div>
-            <div class="grid md:grid-cols-3 gap-8 fade-in-section delay-200">
-                <!-- Testimonial 1 -->
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition relative">
-                    <i class="fa-solid fa-quote-right absolute top-6 right-6 text-4xl text-gray-100"></i>
-                    <p class="text-gray-600 italic mb-6 relative z-10">"The Bar Bending machine (SBB52) has significantly reduced our labor costs. The digital control panel is very easy to use for our operators."</p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3">R</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 text-sm">RajKumar</h4>
-                            <p class="text-xs text-gray-500">ASBL LOFT, Hyderabad</p>
+            
+            <div class="relative fade-in-section delay-200 group/carousel px-4 md:px-0 max-w-4xl mx-auto">
+                <!-- Navigation Buttons -->
+                <button id="apc-prev" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 z-10 bg-white text-primary w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-primary hover:text-white transition opacity-0 group-hover/carousel:opacity-100 focus:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Previous Certificate">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button id="apc-next" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 z-10 bg-white text-primary w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-primary hover:text-white transition opacity-0 group-hover/carousel:opacity-100 focus:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Next Certificate">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+
+                <!-- Carousel Track -->
+                <div id="apc-carousel" class="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- DEC APC -->
+                    <div class="min-w-full snap-center flex-shrink-0 group text-center">
+                        <div class="bg-white p-1 rounded-xl shadow-lg border border-gray-100 overflow-hidden relative w-full max-w-[18rem] md:max-w-[22rem] h-[24rem] md:h-[30rem] mx-auto flex items-center justify-center">
+                            <img src="Assets/APC/DEC APC.png" alt="DEC Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
                         </div>
+                        <h3 class="mt-4 font-bold text-gray-800 text-lg">DEC Infrastructure</h3>
+                    </div>
+                    <!-- KMV APC -->
+                    <div class="min-w-full snap-center flex-shrink-0 group text-center">
+                        <div class="bg-white p-1 rounded-xl shadow-lg border border-gray-100 overflow-hidden relative w-full max-w-[18rem] md:max-w-[22rem] h-[24rem] md:h-[30rem] mx-auto flex items-center justify-center">
+                            <img src="Assets/APC/KMV APC.png" alt="KMV Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                        </div>
+                        <h3 class="mt-4 font-bold text-gray-800 text-lg">KMV Projects</h3>
+                    </div>
+                    <!-- MEIL APC -->
+                    <div class="min-w-full snap-center flex-shrink-0 group text-center">
+                        <div class="bg-white p-1 rounded-xl shadow-lg border border-gray-100 overflow-hidden relative w-full max-w-[18rem] md:max-w-[22rem] h-[24rem] md:h-[30rem] mx-auto flex items-center justify-center">
+                            <img src="Assets/APC/MEIL APC.png" alt="MEIL Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                        </div>
+                        <h3 class="mt-4 font-bold text-gray-800 text-lg">Megha Engineering (MEIL)</h3>
                     </div>
                 </div>
-                <!-- Testimonial 2 -->
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition relative">
-                    <i class="fa-solid fa-quote-right absolute top-6 right-6 text-4xl text-gray-100"></i>
-                    <p class="text-gray-600 italic mb-6 relative z-10">"We rented plate compactors for a quick road repair job. The equipment was in top condition and the service was prompt."</p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white font-bold mr-3">S</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 text-sm">Tarakesh</h4>
-                            <p class="text-xs text-gray-500">Essen Infra, Bengaluru</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-50 bg-pattern-dots">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12 fade-in-section">
+                <h2 class="text-3xl font-bold text-primary">Featured Videos</h2>
+                <p class="text-gray-600 mt-2">Watch our machinery in action on the field.</p>
+            </div>
+            
+            <div class="relative fade-in-section delay-200 group/carousel px-4 md:px-0 max-w-4xl mx-auto">
+                <!-- Navigation Buttons -->
+                <button id="vid-prev" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 z-10 bg-white text-primary w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-primary hover:text-white transition opacity-0 group-hover/carousel:opacity-100 focus:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Previous Video">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button id="vid-next" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 z-10 bg-white text-primary w-10 h-10 rounded-full shadow-lg flex items-center justify-center hover:bg-primary hover:text-white transition opacity-0 group-hover/carousel:opacity-100 focus:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Next Video">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+
+                <!-- Carousel Track -->
+                <div id="vid-carousel" class="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Video 1 -->
+                    <div class="min-w-full md:min-w-[calc(50%-0.75rem)] snap-center flex-shrink-0 group text-center">
+                        <div class="bg-black rounded-xl shadow-lg overflow-hidden relative w-full max-w-[35rem] h-[20rem] mx-auto flex items-center justify-center">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/hhB_2MK2ve8?autoplay=1" srcdoc="<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/hhB_2MK2ve8?autoplay=1><img src=https://img.youtube.com/vi/hhB_2MK2ve8/hqdefault.jpg alt='Machine Demo 1'><span>▶</span></a>" loading="lazy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <a href="https://www.youtube.com/@srinithyaengineering" target="_blank" class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md hover:bg-red-700 transition flex items-center gap-2 z-20 opacity-90 hover:opacity-100">
+                                <i class="fa-brands fa-youtube"></i> Subscribe
+                            </a>
                         </div>
+                        <h3 class="mt-4 font-bold text-gray-800 text-lg">Machine Demo 1</h3>
                     </div>
-                </div>
-                <!-- Testimonial 3 -->
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition relative">
-                    <i class="fa-solid fa-quote-right absolute top-6 right-6 text-4xl text-gray-100"></i>
-                    <p class="text-gray-600 italic mb-6 relative z-10">"Srinithya's scrap straightener turned our waste steel into usable bars. It paid for itself in just a few months."</p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold mr-3">V</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 text-sm">Krishna Reddy</h4>
-                            <p class="text-xs text-gray-500">Project Manager, Vijayawada</p>
+                    <!-- Video 2 -->
+                    <div class="min-w-full md:min-w-[calc(50%-0.75rem)] snap-center flex-shrink-0 group text-center">
+                        <div class="bg-black rounded-xl shadow-lg overflow-hidden relative w-full max-w-[35rem] h-[20rem] mx-auto flex items-center justify-center">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/RtgVJOWGKug?autoplay=1" srcdoc="<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/RtgVJOWGKug?autoplay=1><img src=https://img.youtube.com/vi/RtgVJOWGKug/hqdefault.jpg alt='Machine Demo 2'><span>▶</span></a>" loading="lazy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <a href="https://www.youtube.com/@srinithyaengineering" target="_blank" class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md hover:bg-red-700 transition flex items-center gap-2 z-20 opacity-90 hover:opacity-100">
+                                <i class="fa-brands fa-youtube"></i> Subscribe
+                            </a>
                         </div>
+                        <h3 class="mt-4 font-bold text-gray-800 text-lg">Machine Demo 2</h3>
+                    </div>
+                    <!-- Video 3 -->
+                    <div class="min-w-full md:min-w-[calc(50%-0.75rem)] snap-center flex-shrink-0 group text-center">
+                        <div class="bg-black rounded-xl shadow-lg overflow-hidden relative w-full max-w-[35rem] h-[20rem] mx-auto flex items-center justify-center">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/N_gYC8cgyFk?autoplay=1" srcdoc="<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/N_gYC8cgyFk?autoplay=1><img src=https://img.youtube.com/vi/N_gYC8cgyFk/hqdefault.jpg alt='Machine Demo 3'><span>▶</span></a>" loading="lazy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <a href="https://www.youtube.com/@srinithyaengineering" target="_blank" class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md hover:bg-red-700 transition flex items-center gap-2 z-20 opacity-90 hover:opacity-100">
+                                <i class="fa-brands fa-youtube"></i> Subscribe
+                            </a>
+                        </div>
+                        <h3 class="mt-4 font-bold text-gray-800 text-lg">Machine Demo 3</h3>
                     </div>
                 </div>
             </div>
@@ -272,6 +319,154 @@
             if (modal) modal.classList.add('hidden');
         }
 
+        // Generic Infinite Carousel Logic
+        function initInfiniteCarousel(carouselId, prevBtnId, nextBtnId, autoPlayDelay = 3000) {
+            const carousel = document.getElementById(carouselId);
+            const prevBtn = document.getElementById(prevBtnId);
+            const nextBtn = document.getElementById(nextBtnId);
+            let autoPlayInterval;
+            let isTransitioning = false;
+
+            if (carousel && prevBtn && nextBtn) {
+                // 1. Setup Infinite Loop (Clone Items)
+                const items = Array.from(carousel.children);
+                if (items.length === 0) return;
+
+                // Clone 2 items to support multi-item view (safe for single item view too)
+                const clonesCount = 2;
+                const countToClone = Math.min(items.length, clonesCount);
+
+                const firstClones = items.slice(0, countToClone).map(i => i.cloneNode(true));
+                const lastClones = items.slice(items.length - countToClone).map(i => i.cloneNode(true));
+
+                // Append clones
+                firstClones.forEach(clone => carousel.appendChild(clone));
+                
+                // Prepend clones (reverse order for correct insertion)
+                for (let i = lastClones.length - 1; i >= 0; i--) {
+                    carousel.insertBefore(lastClones[i], carousel.firstChild);
+                }
+
+                // 2. Initial Positioning (Jump to first real item)
+                const getSlideWidth = () => {
+                    // Measure a real item (now shifted by countToClone)
+                    const item = carousel.children[countToClone];
+                    const gap = 24; // gap-6 is 1.5rem = 24px
+                    return item.offsetWidth + gap;
+                };
+
+                const resetPosition = () => {
+                    carousel.style.scrollBehavior = 'auto';
+                    carousel.scrollLeft = getSlideWidth() * countToClone;
+                };
+
+                // Wait for layout to stabilize
+                window.addEventListener('load', resetPosition);
+                setTimeout(resetPosition, 100); // Fallback
+
+                // 3. Scroll Logic
+                const scrollToIndex = (index, smooth = true) => {
+                    if (isTransitioning) return;
+                    isTransitioning = true;
+                    
+                    carousel.style.scrollBehavior = smooth ? 'smooth' : 'auto';
+                    carousel.scrollLeft = getSlideWidth() * index;
+
+                    // Handle Infinite Loop Reset after animation
+                    setTimeout(() => {
+                        isTransitioning = false;
+                        const slideWidth = getSlideWidth();
+                        const currentScroll = carousel.scrollLeft;
+                        const currentIndex = Math.round(currentScroll / slideWidth);
+                        
+                        // If in end clones zone
+                        if (currentIndex >= countToClone + items.length) {
+                            carousel.style.scrollBehavior = 'auto';
+                            carousel.scrollLeft = slideWidth * (currentIndex - items.length);
+                        } 
+                        // If in start clones zone
+                        else if (currentIndex < countToClone) {
+                            carousel.style.scrollBehavior = 'auto';
+                            carousel.scrollLeft = slideWidth * (currentIndex + items.length);
+                        }
+                    }, 500); // Match smooth scroll duration roughly
+                };
+
+                const nextSlide = () => {
+                    const currentScroll = carousel.scrollLeft;
+                    const width = getSlideWidth();
+                    const currentIndex = Math.round(currentScroll / width);
+                    scrollToIndex(currentIndex + 1);
+                };
+
+                const prevSlide = () => {
+                    const currentScroll = carousel.scrollLeft;
+                    const width = getSlideWidth();
+                    const currentIndex = Math.round(currentScroll / width);
+                    scrollToIndex(currentIndex - 1);
+                };
+
+                // 4. Event Listeners
+                prevBtn.addEventListener('click', () => {
+                    stopAutoPlay();
+                    prevSlide();
+                    startAutoPlay();
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    stopAutoPlay();
+                    nextSlide();
+                    startAutoPlay();
+                });
+
+                // 5. Auto Play Logic
+                const startAutoPlay = () => {
+                    stopAutoPlay();
+                    autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+                };
+
+                const stopAutoPlay = () => clearInterval(autoPlayInterval);
+
+                carousel.addEventListener('mouseenter', stopAutoPlay);
+                carousel.addEventListener('mouseleave', startAutoPlay);
+                carousel.addEventListener('touchstart', stopAutoPlay, { passive: true });
+
+                // 6. Manual Scroll Infinite Loop Handling
+                let isManualResetting = false;
+                carousel.addEventListener('scroll', () => {
+                    if (isTransitioning || isManualResetting) return;
+
+                    const scrollLeft = carousel.scrollLeft;
+                    const slideWidth = getSlideWidth();
+                    const totalContentWidth = slideWidth * items.length;
+                    
+                    const handleReset = (newPosition) => {
+                        isManualResetting = true;
+                        carousel.style.scrollBehavior = 'auto';
+                        carousel.scrollLeft = newPosition;
+                        requestAnimationFrame(() => { isManualResetting = false; });
+                    };
+
+                    // If scrolled to the end clone zone
+                    if (scrollLeft >= slideWidth * (countToClone + items.length) - 10) {
+                        handleReset(scrollLeft - totalContentWidth);
+                    } else if (scrollLeft <= slideWidth * (countToClone - 1) + 10) { // If scrolled to the start clone zone
+                        handleReset(scrollLeft + totalContentWidth);
+                    }
+                });
+
+                // Start initially
+                startAutoPlay();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Client Appreciation Carousel
+            initInfiniteCarousel('apc-carousel', 'apc-prev', 'apc-next', 3000);
+            // Initialize Video Carousel (Slower auto-play)
+            initInfiniteCarousel('vid-carousel', 'vid-prev', 'vid-next', 5000);
+        });
+
         // Contact Form Submission with UI Feedback
         // Use event delegation to handle form submission even after SPA navigation
         document.addEventListener('submit', function(event) {
@@ -297,7 +492,7 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `<span class="flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Sending...</span>`;
 
-                
+                // IMPORTANT: Replace with your actual Service ID and Template ID from your EmailJS account.
                 const serviceID = 'service_nd0rboa'; 
                 const templateID = 'template_rk2m9n7'; // Main Admin Email (Contains your custom placeholders)
 

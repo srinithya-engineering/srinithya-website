@@ -251,6 +251,14 @@ window.confirmSendWhatsapp = function() {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
     
+    // If this was a cart enquiry (not single product), close the cart sidebar as well
+    if (!pendingEnquiryProduct) {
+        const cartModal = document.getElementById('cart-modal');
+        if (cartModal && !cartModal.classList.contains('hidden')) {
+            toggleCart();
+        }
+    }
+
     pendingEnquiryProduct = null; // Reset
     closeNameInputModal();
 }

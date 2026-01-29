@@ -62,21 +62,21 @@ window.updateNavbarLinks = function() {
 
 const rootPath = getRootPath(),
     navbarHTML = `
-    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200/50 fixed w-full z-50 transition-all duration-300 ease-in-out will-change-transform transform-gpu" id="navbar">
+    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200/50 fixed w-full z-50 transition-all duration-500 ease-in-out will-change-transform transform-gpu" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:grid md:grid-cols-1 transition-all duration-300 ease-in-out" id="nav-container">
-                <div class="flex justify-between items-center py-2 transition-all duration-300 ease-in-out w-full" id="top-bar">
-                <a href="${rootPath}index.html" class="flex items-center relative group flex-1 transition-all duration-300 ease-in-out cursor-pointer min-w-0" id="brand-wrapper">
+            <div class="flex flex-col md:grid md:grid-cols-1 transition-all duration-500 ease-in-out" id="nav-container">
+                <div class="flex justify-between items-center py-2 transition-all duration-500 ease-in-out w-full" id="top-bar">
+                <a href="${rootPath}index.html" class="flex items-center relative group flex-1 transition-all duration-500 ease-in-out cursor-pointer min-w-0" id="brand-wrapper">
                     <picture class="mr-1 relative z-20 flex-shrink-0">
                         <source srcset="${rootPath}Assets/Others/logo.webp" type="image/webp">
-                        <img src="${rootPath}Assets/Others/logo.png" alt="Srinithya Engineering Logo" class="h-12 md:h-16 w-auto transition-all duration-300 ease-in-out" width="64" height="64" id="nav-logo">
+                        <img src="${rootPath}Assets/Others/logo.png" alt="Srinithya Engineering Logo" class="h-12 md:h-16 w-auto transition-all duration-500 ease-in-out" width="64" height="64" id="nav-logo">
                     </picture>
-                    <div class="relative pl-0 pr-1 py-1 flex-grow text-center transition-all duration-300 ease-in-out min-w-0" id="name-strip">
+                    <div class="relative pl-0 pr-1 py-1 flex-grow text-center transition-all duration-500 ease-in-out min-w-0" id="name-strip">
                         <!-- Updated to font-black (weight 900) for maximum thickness -->
-                        <span class="text-[clamp(11px,3.5vw,30px)] text-primary relative z-10 transition-all duration-300 ease-in-out whitespace-normal md:whitespace-nowrap drop-shadow-sm block mb-0 md:mb-2 leading-tight md:leading-none w-full pr-1" id="company-name">SRINITHYA ENGINEERING PRIVATE LIMITED</span>
+                        <span class="text-[clamp(11px,3.5vw,30px)] text-primary relative z-10 transition-all duration-500 ease-in-out whitespace-normal md:whitespace-nowrap drop-shadow-sm block mb-0 md:mb-2 leading-tight md:leading-none w-full pr-1" id="company-name">SRINITHYA ENGINEERING PRIVATE LIMITED</span>
                         
                         <!-- Construction Animations Layer -->
-                        <div class="hidden md:block absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-300 ease-in-out" id="animation-layer">
+                        <div class="hidden md:block absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-500 ease-in-out" id="animation-layer">
                             <!-- 3D Road Surface -->
                             <div class="absolute bottom-0 left-0 w-full h-4 bg-gray-600 opacity-60 transform origin-bottom" style="transform: perspective(100px) rotateX(30deg);">
                                 <div class="absolute top-1/2 left-0 w-full border-t border-dashed border-white opacity-70"></div>
@@ -114,7 +114,7 @@ const rootPath = getRootPath(),
                     </button>
                 </div>
                 </div>
-                <div class="hidden md:flex items-center justify-center w-full py-2 border-t border-gray-100 gap-4 lg:gap-8 transition-all duration-300 ease-in-out" id="nav-links">
+                <div class="hidden md:flex items-center justify-center w-full py-2 border-t border-gray-100 gap-4 lg:gap-8 transition-all duration-500 ease-in-out" id="nav-links">
                     <a href="${rootPath}index.html#home" class="text-gray-700 hover:text-secondary font-medium px-2 py-1">Home</a>
                     <a href="${rootPath}about.html" class="text-gray-700 hover:text-secondary font-medium px-2 py-1">About Us</a>
                     
@@ -567,6 +567,9 @@ function initScrollSpy() {
         });
 
         navLinks.forEach(link => {
+            // Skip the CTA button (Get in Touch) to prevent style overriding
+            if (link.classList.contains('bg-primary')) return;
+
             // Reset classes
             link.classList.remove('text-secondary', 'font-bold');
             link.classList.add('text-gray-700', 'font-medium');
@@ -643,48 +646,64 @@ function initNavbar() {
         m = document.getElementById("nav-links"),
         u = document.getElementById("scroll-progress");
 
-    window.addEventListener("scroll", () => {
+    let isScrolledState = false;
+
+    const updateNavbarState = () => {
         const isScrolled = window.scrollY > 50;
 
-        if (isScrolled) {
-            // Scrolled State
-            o.classList.add("shadow-md");
-            n.classList.remove("md:grid", "md:grid-cols-1");
-            n.classList.add("md:flex", "md:flex-row", "md:items-center", "md:justify-between", "gap-2");
-            i.classList.remove("w-full");
-            i.classList.add("md:w-auto", "flex-shrink", "min-w-0");
-            r.classList.remove("h-12", "md:h-16");
-            r.classList.add("h-10");
-            l.classList.remove("flex-grow", "text-center", "pl-0", "pr-1");
-            l.classList.add("ml-2", "text-left");
-            c.classList.add("opacity-0");
-            d.classList.remove("text-[clamp(11px,3.5vw,30px)]", "md:mb-2");
-            d.classList.add("text-[clamp(10px,2.9vw,20px)]");
-            m.classList.remove("w-full", "border-t", "justify-center", "py-2", "lg:gap-8");
-            m.classList.add("py-1", "flex-shrink-0", "text-sm");
-        } else {
-            // Top State
-            o.classList.remove("shadow-md");
-            n.classList.add("md:grid", "md:grid-cols-1");
-            n.classList.remove("md:flex", "md:flex-row", "md:items-center", "md:justify-between", "gap-2");
-            i.classList.add("w-full");
-            i.classList.remove("md:w-auto", "flex-shrink", "min-w-0");
-            r.classList.add("h-12", "md:h-16");
-            r.classList.remove("h-10");
-            l.classList.add("flex-grow", "text-center", "pl-0", "pr-1");
-            l.classList.remove("ml-2", "text-left");
-            c.classList.remove("opacity-0");
-            d.classList.remove("text-[clamp(10px,2.9vw,20px)]");
-            d.classList.add("text-[clamp(11px,3.5vw,30px)]", "md:mb-2");
-            m.classList.add("w-full", "border-t", "justify-center", "py-2", "lg:gap-8");
-            m.classList.remove("py-1", "flex-shrink-0", "text-sm");
+        // Only update DOM classes if state has changed
+        if (isScrolled !== isScrolledState) {
+            isScrolledState = isScrolled;
+
+            if (isScrolled) {
+                // Scrolled State
+                o.classList.add("shadow-md");
+                // Glassmorphism Effect
+                o.classList.remove("bg-white/90", "backdrop-blur-md");
+                o.classList.add("bg-white/70", "backdrop-blur-xl");
+                n.classList.remove("md:grid", "md:grid-cols-1");
+                n.classList.add("md:flex", "md:flex-row", "md:items-center", "md:justify-between", "gap-2");
+                i.classList.remove("w-full");
+                i.classList.add("md:w-auto", "flex-shrink", "min-w-0");
+                r.classList.remove("h-12", "md:h-16");
+                r.classList.add("h-10");
+                l.classList.remove("flex-grow", "text-center", "pl-0", "pr-1");
+                l.classList.add("ml-2", "text-left");
+                c.classList.add("opacity-0");
+                d.classList.remove("text-[clamp(11px,3.5vw,30px)]", "md:mb-2");
+                d.classList.add("text-[clamp(10px,2.9vw,20px)]");
+                m.classList.remove("w-full", "border-t", "justify-center", "py-2", "lg:gap-8");
+                m.classList.add("py-1", "flex-shrink-0", "text-sm");
+            } else {
+                // Top State
+                o.classList.remove("shadow-md");
+                // Revert Glassmorphism
+                o.classList.add("bg-white/90", "backdrop-blur-md");
+                o.classList.remove("bg-white/70", "backdrop-blur-xl");
+
+                n.classList.add("md:grid", "md:grid-cols-1");
+                n.classList.remove("md:flex", "md:flex-row", "md:items-center", "md:justify-between", "gap-2");
+                i.classList.add("w-full");
+                i.classList.remove("md:w-auto", "flex-shrink", "min-w-0");
+                r.classList.add("h-12", "md:h-16");
+                r.classList.remove("h-10");
+                l.classList.add("flex-grow", "text-center", "pl-0", "pr-1");
+                l.classList.remove("ml-2", "text-left");
+                c.classList.remove("opacity-0");
+                d.classList.remove("text-[clamp(10px,2.9vw,20px)]");
+                d.classList.add("text-[clamp(11px,3.5vw,30px)]", "md:mb-2");
+                m.classList.add("w-full", "border-t", "justify-center", "py-2", "lg:gap-8");
+                m.classList.remove("py-1", "flex-shrink-0", "text-sm");
+            }
         }
 
         if (u) {
             const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
             u.style.width = scrollPercent + "%";
         }
-    })
+    };
+
+    window.addEventListener("scroll", () => requestAnimationFrame(updateNavbarState));
 }
 document.addEventListener("DOMContentLoaded", () => {
     document.body.insertAdjacentHTML("afterbegin", navbarHTML), document.body.insertAdjacentHTML("beforeend", cartHTML), document.body.insertAdjacentHTML("beforeend", clearCartModalHTML), document.body.insertAdjacentHTML("beforeend", emptyCartModalHTML), document.body.insertAdjacentHTML("beforeend", nameInputModalHTML), document.body.insertAdjacentHTML("beforeend", scrollButtonsHTML), initNavbar(), initScrollButtons(), initSmoothScroll(), initCartAnimation(), initScrollSpy();

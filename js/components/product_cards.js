@@ -64,7 +64,7 @@ const lightEquipment = [
         {
             title: "High Frequency Pokers",
             image: ["./Assets/Product Images/shfn60_12m.png", "./Assets/Product Images/shfn40_12m.png", "./Assets/Product Images/shfn60_5m.png", "./Assets/Product Images/shfn40_5m.png","./Assets/Product Images/shiv40.png", "./Assets/Product Images/shiv60.png"],
-            imageWebp: ["./Assets/Product Images/60hf.webp", "./Assets/Product Images/40hf.webp", "./Assets/Product Images/shfn60_5m.webp", "./Assets/Product Images/shfn40_5m.webp", "./Assets/Product Images/shiv40.webp", "./Assets/Product Images/shiv60.webp"],
+            imageWebp: ["./Assets/Product Images/shfn60_12m.webp", "./Assets/Product Images/shfn40_12m.webp", "./Assets/Product Images/shfn60_5m.webp", "./Assets/Product Images/shfn40_5m.webp", "./Assets/Product Images/shiv40.webp", "./Assets/Product Images/shiv60.webp"],
             description: "Internal concrete vibration needles for superior consolidation.",
             features: ["40mm & 60mm Diameters", "Hose lengths up to 12 meters", "Multiple Power Options"],
             link: "Product_details/high_frequency_poker_models.html"
