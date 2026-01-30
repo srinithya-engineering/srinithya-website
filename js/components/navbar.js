@@ -58,7 +58,29 @@ window.updateNavbarLinks = function() {
     if (mobileMenu) {
         mobileMenu.querySelectorAll('a').forEach(updateLink);
     }
-};
+                                                       
+    // Update Animation Layer Images
+    const animationLayer = document.getElementById('animation-layer');
+    if (animationLayer) {
+        animationLayer.querySelectorAll('img').forEach(img => {
+            const src = img.getAttribute('src');
+            if (src && !src.startsWith('http') && !src.startsWith('data:')) {
+                const cleanSrc = src.replace(/^(\.\/|\.\.\/)/, '');
+                img.setAttribute('src', newRootPath + cleanSrc);
+                
+                const picture = img.closest('picture');
+                if (picture) {
+                    const source = picture.querySelector('source');
+                    if (source && source.srcset) {
+                        const cleanSrcset = source.srcset.replace(/^(\.\/|\.\.\/)/, '');
+                        source.srcset = newRootPath + cleanSrcset;
+                    }
+                }
+            }
+        });
+    }
+};  
+
 
 const rootPath = getRootPath(),
     navbarHTML = `
@@ -84,25 +106,43 @@ const rootPath = getRootPath(),
 
                             <!-- Building Construction -->
                             <div class="absolute bottom-2 left-1 md:left-6 flex items-end z-20">
-                                <img src="${rootPath}Assets/Custom%20Icons/building-construction1.png" alt="Building Construction1" class="h-8 opacity-40">
-                                <img src="${rootPath}Assets/Custom%20Icons/building-construction2.png" alt="Building Construction2" class="h-10 opacity-40 transform scale-x-[-1]">
+                                <picture>
+                                    <source srcset="${rootPath}Assets/Custom%20Icons/building-construction1.webp" type="image/webp">
+                                    <img src="${rootPath}Assets/Custom%20Icons/building-construction1.png" alt="Building Construction1" class="h-8 opacity-40">
+                                </picture>
+                                <picture>
+                                    <source srcset="${rootPath}Assets/Custom%20Icons/building-construction2.webp" type="image/webp">
+                                    <img src="${rootPath}Assets/Custom%20Icons/building-construction2.png" alt="Building Construction2" class="h-10 opacity-40 transform scale-x-[-1]">
+                                </picture>
                                 <div class="animate-bounce-subtle -ml-2">
-                                    <img src="${rootPath}Assets/Custom%20Icons/worker.png" alt="Worker" class="h-5 opacity-60">
+                                    <picture>
+                                        <source srcset="${rootPath}Assets/Custom%20Icons/worker.webp" type="image/webp">
+                                        <img src="${rootPath}Assets/Custom%20Icons/worker.png" alt="Worker" class="h-5 opacity-60">
+                                    </picture>
                                 </div>
                                 <div class="animate-bounce-subtle" style="animation-delay: 1s;">
-                                    <img src="${rootPath}Assets/Custom%20Icons/worker.png" alt="Worker" class="h-5 opacity-60 transform scale-x-[-1]">
+                                    <picture>
+                                        <source srcset="${rootPath}Assets/Custom%20Icons/worker.webp" type="image/webp">
+                                        <img src="${rootPath}Assets/Custom%20Icons/worker.png" alt="Worker" class="h-5 opacity-60 transform scale-x-[-1]">
+                                    </picture>
                                 </div>
                             </div>
 
                             <!-- Crane Truck with Smoke -->
                             <div class="animate-roll bottom-1 opacity-90 flex items-end z-30" style="animation-duration: 38s;">
                                 <div class="w-16 h-2 bg-gradient-to-r from-transparent to-gray-400 opacity-50 mb-2 rounded-l-full"></div>
-                                <img src="${rootPath}Assets/Custom%20Icons/crane-truck.png" alt="Crane Truck" class="h-6 w-auto transform scale-x-[-1]">
+                                <picture>
+                                    <source srcset="${rootPath}Assets/Custom%20Icons/crane-truck.webp" type="image/webp">
+                                    <img src="${rootPath}Assets/Custom%20Icons/crane-truck.png" alt="Crane Truck" class="h-6 w-auto transform scale-x-[-1]">
+                                </picture>
                             </div>
 
                             <!-- Road Roller (Opposite Direction) -->
                             <div class="animate-roll bottom-1 opacity-90 flex items-end z-20" style="animation-duration: 45s; animation-direction: reverse;">
-                                <img src="${rootPath}Assets/Custom%20Icons/RR-Icon.png" alt="Road Roller" class="h-6 w-auto transform scale-x-[-1]">
+                                <picture>
+                                    <source srcset="${rootPath}Assets/Custom%20Icons/RR-Icon.webp" type="image/webp">
+                                    <img src="${rootPath}Assets/Custom%20Icons/RR-Icon.png" alt="Road Roller" class="h-6 w-auto transform scale-x-[-1]">
+                                </picture>
                             </div>
                         </div>
                     </div>
@@ -706,7 +746,42 @@ function initNavbar() {
     window.addEventListener("scroll", () => requestAnimationFrame(updateNavbarState));
 }
 document.addEventListener("DOMContentLoaded", () => {
-    document.body.insertAdjacentHTML("afterbegin", navbarHTML), document.body.insertAdjacentHTML("beforeend", cartHTML), document.body.insertAdjacentHTML("beforeend", clearCartModalHTML), document.body.insertAdjacentHTML("beforeend", emptyCartModalHTML), document.body.insertAdjacentHTML("beforeend", nameInputModalHTML), document.body.insertAdjacentHTML("beforeend", scrollButtonsHTML), initNavbar(), initScrollButtons(), initSmoothScroll(), initCartAnimation(), initScrollSpy();
+    // Remove existing navbar if present (fixes duplicate/legacy navbar on index page)
+    const existingNav = document.getElementById('navbar');
+    if (existingNav) existingNav.remove();
+
+    document.body.insertAdjacentHTML("afterbegin", navbarHTML);
+    document.body.insertAdjacentHTML("beforeend", cartHTML);
+    document.body.insertAdjacentHTML("beforeend", clearCartModalHTML);
+    document.body.insertAdjacentHTML("beforeend", emptyCartModalHTML);
+    document.body.insertAdjacentHTML("beforeend", nameInputModalHTML);
+    document.body.insertAdjacentHTML("beforeend", scrollButtonsHTML);
+    
+    // Upgrade static images (Loader, Appreciation Letters, etc.) to WebP
+    const staticImages = document.querySelectorAll('#loader-wrapper img, #appreciation-letters img, .appreciation-section img, section[id*="appreciation"] img, #apc-carousel img');
+    staticImages.forEach(img => {
+        if (img.closest('picture')) return;
+        const src = img.getAttribute('src');
+        if (src && !src.endsWith('.webp') && !src.startsWith('data:')) {
+            const webpSrc = src.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+            const picture = document.createElement('picture');
+            picture.className = img.className; // Preserve classes
+            
+            const source = document.createElement('source');
+            source.srcset = webpSrc;
+            source.type = 'image/webp';
+            
+            picture.appendChild(source);
+            picture.appendChild(img.cloneNode(true));
+            img.parentNode.replaceChild(picture, img);
+        }
+    });
+
+    initNavbar();
+    initScrollButtons();
+    initSmoothScroll();
+    initCartAnimation();
+    initScrollSpy();
 });
 
 // Loader Logic

@@ -42,6 +42,13 @@
     </script>
     <style>
         .hide-loader #loader-wrapper { display: none !important; }
+        @keyframes pulse-logo {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        #loader-logo-container img {
+            animation: pulse-logo 1.5s infinite ease-in-out;
+        }
     </style>
 
     <!-- Loading Screen -->
@@ -53,7 +60,10 @@
                 <div class="logo-light-container">
                     <div class="logo-light-spinner"></div>
                 </div>
-                <img src="Assets/Others/logo.png" alt="Loading..." class="relative z-20 w-full h-auto drop-shadow-2xl">
+                <picture>
+                    <source srcset="Assets/Others/logo.webp" type="image/webp">
+                    <img src="Assets/Others/logo.png" alt="Loading..." class="relative z-20 w-full h-auto drop-shadow-2xl">
+                </picture>
             </div>
         </div>
     </div>
@@ -144,21 +154,30 @@
                     <!-- DEC APC -->
                     <div class="min-w-full snap-center flex-shrink-0 group text-center">
                         <div class="bg-white p-1 rounded-xl shadow-lg border border-gray-100 overflow-hidden relative w-full max-w-[18rem] md:max-w-[22rem] h-[24rem] md:h-[30rem] mx-auto flex items-center justify-center">
-                            <img src="Assets/APC/DEC APC.png" alt="DEC Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                            <picture class="w-full h-full block">
+                                <source srcset="Assets/APC/DEC%20APC.webp" type="image/webp">
+                                <img src="Assets/APC/DEC APC.png" alt="DEC Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.currentSrc || this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                            </picture>
                         </div>
                         <h3 class="mt-4 font-bold text-gray-800 text-lg">DEC Infrastructure</h3>
                     </div>
                     <!-- KMV APC -->
                     <div class="min-w-full snap-center flex-shrink-0 group text-center">
                         <div class="bg-white p-1 rounded-xl shadow-lg border border-gray-100 overflow-hidden relative w-full max-w-[18rem] md:max-w-[22rem] h-[24rem] md:h-[30rem] mx-auto flex items-center justify-center">
-                            <img src="Assets/APC/KMV APC.png" alt="KMV Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                            <picture class="w-full h-full block">
+                                <source srcset="Assets/APC/KMV%20APC.webp" type="image/webp">
+                                <img src="Assets/APC/KMV APC.png" alt="KMV Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.currentSrc || this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                            </picture>
                         </div>
                         <h3 class="mt-4 font-bold text-gray-800 text-lg">KMV Projects</h3>
                     </div>
                     <!-- MEIL APC -->
                     <div class="min-w-full snap-center flex-shrink-0 group text-center">
                         <div class="bg-white p-1 rounded-xl shadow-lg border border-gray-100 overflow-hidden relative w-full max-w-[18rem] md:max-w-[22rem] h-[24rem] md:h-[30rem] mx-auto flex items-center justify-center">
-                            <img src="Assets/APC/MEIL APC.png" alt="MEIL Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                            <picture class="w-full h-full block">
+                                <source srcset="Assets/APC/MEIL%20APC.webp" type="image/webp">
+                                <img src="Assets/APC/MEIL APC.png" alt="MEIL Appreciation Certificate" width="600" height="800" onclick="openImageModal(this.currentSrc || this.src)" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 cursor-pointer">
+                            </picture>
                         </div>
                         <h3 class="mt-4 font-bold text-gray-800 text-lg">Megha Engineering (MEIL)</h3>
                     </div>

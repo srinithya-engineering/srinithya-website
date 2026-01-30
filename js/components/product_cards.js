@@ -136,7 +136,7 @@ const lightEquipment = [
         {
             title: "Industrial Cutting Tools",
             image: ["./Assets/Product Images/scc-90.png","./Assets/Product Images/scc-200.png", "./Assets/Product Images/groove.png"],
-            // imageWebp removed to allow auto-inference (scc-90.webp, scc-200.webp, groove.webp)
+            imageWebp: ["./Assets/Product Images/scc-90.webp","./Assets/Product Images/scc-200.webp", "./Assets/Product Images/groove.webp"],
             description: "Precision tools for groove and core cutting applications.",
             features: ["Groove Cutters", "Core Cutters", "Electric & Petrol Options"],
             link: "Product_details/industrial_cutting_tools.html"
@@ -144,7 +144,7 @@ const lightEquipment = [
         {
             title: "Concrete Handling Equipment",
             image: ["./Assets/Product Images/scme.png", "./Assets/Product Images/scpb.png", "./Assets/Product Images/scme-220.png"],
-            imageWebp: ["./Assets/Product Images/scme.webp", "./Assets/Product Images/scpb.webp"],
+            imageWebp: ["./Assets/Product Images/scme.webp", "./Assets/Product Images/scpb.webp", "./Assets/Product Images/scme-220.webp"],
             description: "Portable 1-bag and 2-bag mixers for any site.",
             features: ["Heavy-Duty Chassis", "Electric & Diesel Options", "Easy Mobility"],
             link: "Product_details/concrete_mixer_models.html"
