@@ -327,9 +327,12 @@ const rootPath = getRootPath(),
             <div class="p-4 overflow-y-auto flex-grow bg-gray-50" id="cart-items">
                 <!-- Cart Items will be injected here -->
             </div>
-            <div class="p-4 border-t bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+            <div class="p-4 border-t bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] flex flex-col gap-3">
                 <button onclick="sendRequirementToWhatsapp()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-yellow-600 transition shadow-md flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp"></i> Send Requirement
+                </button>
+                <button onclick="downloadCataloguePdf()" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> Download Catalogue
                 </button>
             </div>
         </div>
@@ -493,13 +496,9 @@ function initSmoothScroll() {
                         const offsetPosition = elementPosition + window.scrollY - headerOffset;
                         
                         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                        history.pushState(null, null, targetUrl.hash);
                     }
                 } else {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                    if (targetUrl.search !== currentUrl.search) {
-                        history.pushState(null, null, targetUrl.pathname + targetUrl.search);
-                    }
                 }
                 
                 // Close mobile menu if open
@@ -781,6 +780,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initScrollButtons();
     initSmoothScroll();
     initCartAnimation();
+    initBreadcrumbs();
     initScrollSpy();
 });
 
@@ -809,3 +809,185 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// --- Breadcrumbs Logic ---
+window.initBreadcrumbs = function() {
+    const path = window.location.pathname;
+    // Only show on detail pages
+    if (!path.includes('/Product_details/') && !path.includes('/Service_details/')) return;
+
+    const rootPath = getRootPath();
+    // Convert filename to readable text (e.g., "bar_bending_models.html" -> "Bar Bending")
+    let pageName = path.split('/').pop().replace('.html', '').replace(/_/g, ' ');
+    pageName = pageName.replace(/\b\w/g, l => l.toUpperCase()).replace('Models', '').replace('Details', '').trim();
+
+    const breadcrumbHTML = `
+        <div class="absolute top-[60px] md:top-[80px] left-0 w-full z-30 pointer-events-none">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="inline-flex items-center bg-white/90 backdrop-blur px-4 py-1.5 rounded-b-lg shadow-sm border-x border-b border-gray-100 pointer-events-auto text-xs md:text-sm text-gray-600">
+                    <a href="${rootPath}index.html" class="hover:text-primary transition"><i class="fa-solid fa-house"></i></a>
+                    <span class="mx-2 text-gray-400">/</span>
+                    <span class="text-gray-500">Products</span>
+                    <span class="mx-2 text-gray-400">/</span>
+                    <span class="font-bold text-primary">${pageName}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const navbar = document.getElementById('navbar');
+    if (navbar) {
+        navbar.insertAdjacentHTML('afterend', breadcrumbHTML);
+    }
+};
+
+// --- Catalogue PDF Generation ---
+window.downloadCataloguePdf = async function() {
+    if (!window.jspdf) {
+        window.showToast('PDF Library not loaded', 'error');
+        return;
+    }
+
+    // Retrieve cart items (assuming stored in localStorage as 'sepl_cart')
+    const cartItems = JSON.parse(localStorage.getItem('sepl_cart') || '[]');
+    
+    if (cartItems.length === 0) {
+        window.showToast('Selection Tray is empty', 'error');
+        return;
+    }
+
+    window.showToast('Generating Catalogue...', 'info');
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    let yPos = 20;
+
+    // Helper to find product details in global data
+    const findProduct = (name) => {
+        if (!window.productData) return null;
+        const targetName = name.trim().toLowerCase();
+        const search = (obj) => {
+            if (Array.isArray(obj)) {
+                for (let item of obj) {
+                    if (item.name && item.name.trim().toLowerCase() === targetName) return item;
+                    if (item.models) {
+                         const found = search(item.models);
+                         if (found) return found;
+                    }
+                }
+            } else if (typeof obj === 'object' && obj !== null) {
+                for (let key in obj) {
+                    if (key === 'name' && typeof obj[key] === 'string' && obj[key].trim().toLowerCase() === targetName) return obj;
+                    if (typeof obj[key] === 'object' && obj[key] !== null) {
+                        const found = search(obj[key]);
+                        if (found) return found;
+                    }
+                }
+            }
+            return null;
+        };
+        return search(window.productData);
+    };
+
+    // Header
+    doc.setFillColor(30, 58, 138); // Primary Blue
+    doc.rect(0, 0, pageWidth, 40, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('SRINITHYA ENGINEERING', margin, 20);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Product Catalogue', margin, 30);
+    
+    yPos = 60;
+
+    for (let i = 0; i < cartItems.length; i++) {
+        const item = cartItems[i];
+        const product = findProduct(item.name);
+        
+        if (!product) continue;
+
+        // Check for page break
+        if (yPos > 220) {
+            doc.addPage();
+            yPos = 20;
+        }
+
+        // Product Title
+        doc.setTextColor(30, 58, 138);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text(product.name, margin, yPos);
+        yPos += 10;
+
+        // Image Handling
+        let imageAdded = false;
+        let imgHeight = 0;
+        if (product.image) {
+            try {
+                const rootPath = (window.location.pathname.includes('/Product_details/') || window.location.pathname.includes('/Service_details/')) ? '../' : './';
+                let imgUrl = Array.isArray(product.image) ? product.image[0] : product.image;
+                if (imgUrl.startsWith('./')) imgUrl = rootPath + imgUrl.substring(2);
+                
+                const imgData = await getBase64ImageFromUrl(imgUrl);
+                if (imgData) {
+                    const imgProps = doc.getImageProperties(imgData);
+                    const maxWidth = 50;
+                    const maxHeight = 40;
+                    const ratio = imgProps.width / imgProps.height;
+                    let w = maxWidth;
+                    let h = w / ratio;
+                    if (h > maxHeight) {
+                        h = maxHeight;
+                        w = h * ratio;
+                    }
+                    doc.addImage(imgData, 'PNG', margin, yPos, w, h, undefined, 'FAST');
+                    imageAdded = true;
+                    imgHeight = h;
+                }
+            } catch (e) { console.warn('PDF Image Error:', e); }
+        }
+
+        // Specs Table
+        if (product.specs && doc.autoTable) {
+            const tableData = product.specs.map(s => [s.text]);
+            doc.autoTable({
+                startY: yPos,
+                head: [['Specifications']],
+                body: tableData,
+                theme: 'striped',
+                headStyles: { fillColor: [217, 119, 6] }, // Secondary Orange
+                styles: { fontSize: 10 },
+                margin: { left: imageAdded ? margin + 55 : margin }, // Offset if image exists
+                tableWidth: imageAdded ? pageWidth - (margin * 2) - 55 : pageWidth - (margin * 2)
+            });
+            yPos = Math.max(yPos + imgHeight + 15, doc.lastAutoTable.finalY + 15);
+        } else {
+            yPos += Math.max(40, imgHeight + 10);
+        }
+        
+        // Separator
+        doc.setDrawColor(220, 220, 220);
+        doc.line(margin, yPos - 5, pageWidth - margin, yPos - 5);
+        yPos += 5;
+    }
+
+    doc.save('SEPL_Catalogue.pdf');
+    window.showToast('Catalogue Downloaded!', 'success');
+};
+
+async function getBase64ImageFromUrl(url) {
+    try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+        });
+    } catch (e) { return null; }
+}

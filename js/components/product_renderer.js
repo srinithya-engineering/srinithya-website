@@ -1,3 +1,23 @@
+// --- Inject Styles for Product Highlight ---
+(function() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes productPulse {
+            0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7); transform: scale(1); }
+            50% { transform: scale(1.02); }
+            70% { box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); transform: scale(1); }
+            100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); transform: scale(1); }
+        }
+        .product-highlight-pulse {
+            animation: productPulse 2s infinite;
+            z-index: 20;
+            position: relative;
+            border-color: #d97706 !important;
+        }
+    `;
+    document.head.appendChild(style);
+})();
+
 /**
  * Creates the HTML for a single product card.
  * @param {object} product - The product data object.
@@ -7,6 +27,9 @@ window.createProductCard = function(product) {
     if (!product) return '';
 
     const rootPath = (window.location.pathname.includes('/Product_details/') || window.location.pathname.includes('/Service_details/')) ? '../' : './';
+
+    // Generate unique ID for deep linking
+    const productId = (product.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
     // Generate data attributes for the compare functionality
     let compareDataAttributes = product.compare ? Object.entries(product.compare)
@@ -20,6 +43,12 @@ window.createProductCard = function(product) {
 
     // Generate badge if it exists
     const badgeHTML = product.badge ? `<span class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-2 py-1 rounded">${product.badge}</span>` : '';
+
+    // Generate Share Button
+    const shareHTML = `
+        <button onclick="shareProduct('${product.name.replace(/'/g, "\\'")}')" class="absolute top-4 left-4 bg-white/90 hover:bg-white text-gray-600 hover:text-secondary p-2 rounded-full shadow-md transition-all duration-200 z-10" title="Share this product">
+            <i class="fa-solid fa-share-nodes"></i>
+        </button>`;
 
     // Generate feature list
     const specsHTML = (product.specs || []).map(spec => `
@@ -105,16 +134,17 @@ window.createProductCard = function(product) {
     }
 
     return `
-        <div class="${cardWrapperClass}" ${compareDataAttributes}>
+        <div id="${productId}" class="${cardWrapperClass}" ${compareDataAttributes}>
             <div class="${imageContainerClass} bg-white flex items-center justify-center relative overflow-hidden">
                 ${mediaHTML}
                 ${badgeHTML}
+                ${shareHTML}
             </div>
             <div class="${contentClass}">
                 ${compareCheckboxHTML}
                 <h3 class="text-sm md:text-2xl font-bold text-gray-900 mb-1 md:mb-2 leading-tight">${product.name}</h3>
                 ${product.description ? `<p class="text-xs md:text-sm text-gray-600 mb-2 md:mb-4 flex-grow line-clamp-2">${product.description}</p>` : ''}
-                <ul class="text-xs md:text-sm text-left text-gray-700 space-y-1 md:space-y-2 mb-3 md:mb-6 inline-block w-full px-1 md:px-4">
+                <ul oncontextmenu="return window.handleSpecsLongPress(this, event)" class="text-xs md:text-sm text-left text-gray-700 space-y-1 md:space-y-2 mb-3 md:mb-6 inline-block w-full px-1 md:px-4 hover:bg-gray-50 rounded-lg transition-colors duration-200 cursor-pointer" title="Right Click/Long press to copy specifications">
                     ${specsHTML}
                 </ul>
                 <div class="flex flex-col gap-2 mt-auto product-actions-container">
@@ -156,6 +186,11 @@ window.renderProductCards = function(containerId, products) {
                 };
                 document.body.appendChild(script);
             }
+        }
+
+        // Check for shared product highlight
+        if (window.location.hash) {
+            setTimeout(window.highlightSharedProduct, 500);
         }
 
         // Announce that products have been rendered so other components (like Compare Bar) can sync
@@ -284,3 +319,138 @@ document.addEventListener('keydown', function (event) {
     // Initialize on Router navigation
     window.addEventListener('router:navigation-complete', window.initHandyVibratorPage);
 })();
+
+// --- Specs Copy Logic ---
+window.handleSpecsLongPress = function(element, event) {
+    event.preventDefault();
+    
+    // Extract text from list items
+    const specs = Array.from(element.querySelectorAll('li span'))
+        .map(span => span.textContent.trim())
+        .join('\n');
+
+    if (specs) {
+        navigator.clipboard.writeText(specs).then(() => {
+            showCopyToast();
+        }).catch(err => {
+            console.error('Failed to copy specs:', err);
+        });
+    }
+    return false;
+};
+
+function showCopyToast() {
+    let toast = document.getElementById('specs-copy-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'specs-copy-toast';
+        toast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full shadow-lg z-[100] transition-all duration-300 opacity-0 translate-y-4 flex items-center gap-2 text-sm font-bold pointer-events-none';
+        toast.innerHTML = '<i class="fa-solid fa-check text-green-400"></i> Specs Copied!';
+        document.body.appendChild(toast);
+    }
+    toast.classList.remove('opacity-0', 'translate-y-4');
+    if (window.copyToastTimeout) clearTimeout(window.copyToastTimeout);
+    window.copyToastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4');
+    }, 2000);
+}
+
+// --- Share Logic ---
+window.shareProduct = function(productName) {
+    const productId = productName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const shareData = {
+        title: 'Check out this product from Srinithya Engineering',
+        text: `I found this ${productName} interesting:`,
+        url: `${window.location.origin}${window.location.pathname}#${productId}`
+    };
+
+    if (navigator.share) {
+        navigator.share(shareData).catch(console.error);
+    } else {
+        // Fallback to clipboard
+        navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        window.showToast('Link copied to clipboard!', 'info');
+    }
+};
+
+// --- Highlight Shared Product Logic ---
+window.highlightSharedProduct = function() {
+    const hash = window.location.hash.substring(1);
+    if (!hash) return;
+
+    const element = document.getElementById(hash);
+    if (element) {
+        // Scroll with offset for fixed header
+        const headerOffset = 120;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+
+        // Add highlight effect
+        element.classList.add('product-highlight-pulse');
+        
+        // Clean URL to hide the hash while keeping the user on the page
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+
+        // Remove after 5 seconds
+        setTimeout(() => {
+            element.classList.remove('product-highlight-pulse');
+        }, 5000);
+    }
+};
+
+// --- Recently Viewed Logic ---
+window.initRecentlyViewed = function() {
+    const path = window.location.pathname;
+    // Only track product detail pages
+    if (!path.includes('/Product_details/')) return;
+
+    // Get Page Title (Clean up the document title)
+    const title = document.title.split('|')[0].replace('Srinithya Engineering', '').trim() || 'Machinery';
+
+    // 1. Update History in LocalStorage
+    let history = JSON.parse(localStorage.getItem('sepl_history') || '[]');
+    
+    // Remove current page if it exists (to move it to the top)
+    history = history.filter(h => h.path !== path);
+    
+    // Add current page to top
+    history.unshift({ title: title, path: path });
+    
+    // Keep only last 5 items
+    if (history.length > 5) history.pop();
+    
+    localStorage.setItem('sepl_history', JSON.stringify(history));
+
+    // 2. Render "Recently Viewed" Section
+    const others = history.filter(h => h.path !== path);
+    if (others.length === 0) return;
+
+    const container = document.createElement('div');
+    container.className = 'max-w-7xl mx-auto px-4 py-8 border-t border-gray-200 mt-12 animate-fade-in-up';
+    container.innerHTML = `
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-secondary"></i> Recently Viewed</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            ${others.map(item => `
+                <a href="${item.path}" class="block p-3 bg-white border border-gray-100 rounded-lg hover:border-primary hover:shadow-md transition group">
+                    <div class="text-xs font-bold text-gray-700 group-hover:text-primary truncate">${item.title}</div>
+                    <div class="text-[10px] text-gray-500 mt-1 flex items-center gap-1">View <i class="fa-solid fa-arrow-right text-[8px]"></i></div>
+                </a>
+            `).join('')}
+        </div>
+    `;
+    
+    const main = document.querySelector('main');
+    if (main) main.appendChild(container);
+};
+
+// Initialize on load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.initRecentlyViewed);
+} else {
+    window.initRecentlyViewed();
+}
