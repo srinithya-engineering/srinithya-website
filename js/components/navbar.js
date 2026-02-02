@@ -622,6 +622,39 @@ function initScrollSpy() {
     });
 }
 
+function initUrlCleanup() {
+    // Helper to clean the URL. 'removeHash' determines if we strip the #section too.
+    const clean = (removeHash) => {
+        const loc = window.location;
+        let path = loc.pathname;
+        let needsUpdate = false;
+
+        // 1. Remove 'index.html' for a cleaner look
+        if (path.endsWith('/index.html')) {
+            path = path.replace(/\/index\.html$/, '/');
+            needsUpdate = true;
+        }
+
+        // 2. Remove Hash (Sections) if still present
+        if (removeHash && loc.hash) {
+            needsUpdate = true;
+        }
+
+        if (needsUpdate) {
+            const origin = (loc.origin && loc.origin !== 'null') ? loc.origin : '';
+            const hash = removeHash ? '' : loc.hash;
+            const cleanUrl = origin + path + loc.search + hash;
+            history.replaceState(null, document.title, cleanUrl);
+        }
+    };
+
+    // 1. Immediately: Remove 'index.html' but KEEP hash so scrolling scripts work
+    clean(false);
+
+    // 2. Later: Remove hash too (after scrolling is likely done)
+    setTimeout(() => clean(true), 1200);
+}
+
 function initNavbar() {
     const t = document.getElementById("mobile-menu-button"),
         e = document.getElementById("mobile-menu");
@@ -782,6 +815,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCartAnimation();
     initBreadcrumbs();
     initScrollSpy();
+    initUrlCleanup();
 });
 
 // Loader Logic
