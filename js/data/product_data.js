@@ -66,7 +66,8 @@ window.productData = {
             specs: [
                 { icon: "fa-solid fa-water-ladder", text: "Capacity: 220 Litres" },
                 { icon: "fa-solid fa-bolt-lightning", text: "Power: 3 HP Electric Motor" },
-                { icon: "fa-solid fa-truck-fast", text: "Mobility: Towable on site" }
+                { icon: "fa-solid fa-truck-fast", text: "Mobility: Towable on site" },
+                { icon: "fa-solid fa-plug", text: "Input Voltage: 220V" }
             ],
             compare: { model: "SCME-220L Electric", category: "concrete-mixers", capacity: "220 Litres", power: "3 HP Electric Motor", mobility: "Towable on site" },
             actions: [{ type: 'cart', name: 'SCME-220L Electric' }]
@@ -79,7 +80,8 @@ window.productData = {
             specs: [
                 { icon: "fa-solid fa-water-ladder", text: "Capacity: 350 Litres" },
                 { icon: "fa-solid fa-bolt-lightning", text: "Power: 5 HP Electric Motor" },
-                { icon: "fa-solid fa-truck-fast", text: "Mobility: Heavy Duty Chassis" }
+                { icon: "fa-solid fa-truck-fast", text: "Mobility: Heavy Duty Chassis" },
+                { icon: "fa-solid fa-plug", text: "Input Voltage: 220V" }
             ],
             compare: { model: "SCME-350L Electric", category: "concrete-mixers", capacity: "350 Litres", power: "5 HP Electric Motor", mobility: "Heavy Duty Chassis" },
             actions: [{ type: 'cart', name: 'SCME-350L Electric' }]
@@ -93,10 +95,10 @@ window.productData = {
             description: "Heavy duty concrete pouring bucket for crane operation.",
             specs: [
                 { icon: "fa-solid fa-bucket", text: "Capacity: 0.25 Cu.m" },
-                { icon: "fa-solid fa-arrow-down", text: "Type: Center Discharge" },
+                { icon: "fa-solid fa-arrow-down", text: "Type: Lever/Gear or Screw" },
                 { icon: "fa-solid fa-weight-hanging", text: "Operation: Crane Lift" }
             ],
-            compare: { model: "SCCB25", category: "concrete-buckets", capacity: "0.25 Cu.m", type: "Center Discharge", operation: "Crane Lift" },
+            compare: { model: "SCCB25", category: "concrete-buckets", capacity: "0.25 Cu.m", type: "Lever/Gear or Screw", operation: "Crane Lift" },
             actions: [{ type: 'cart', name: 'SCCB25 Bucket' }]
         },
         {
@@ -106,7 +108,7 @@ window.productData = {
             description: "Large capacity concrete pouring bucket for efficient placement.",
             specs: [
                 { icon: "fa-solid fa-bucket", text: "Capacity: 0.5 Cu.m" },
-                { icon: "fa-solid fa-arrow-down", text: "Type: Center Discharge" },
+                { icon: "fa-solid fa-arrow-down", text: "Type: Lever/Gear or Screw" },
                 { icon: "fa-solid fa-weight-hanging", text: "Operation: Crane Lift" }
             ],
             compare: { model: "SCCB50", category: "concrete-buckets", capacity: "0.5 Cu.m", type: "Center Discharge", operation: "Crane Lift" },
@@ -207,7 +209,9 @@ window.productData = {
             description: "Compact converter designed for efficiency.",
             specs: [
                 { icon: "fa-solid fa-plug", text: "Outlets: 2 Outlet" },
-                { icon: "fa-solid fa-bolt", text: "Type: High Frequency" }
+                { icon: "fa-solid fa-bolt", text: "Type: High Frequency" },
+                { icon: "fa-solid fa-weight-hanging", text: "Input Voltage: 415V"},
+                { icon: "fa-solid fa-weight-hanging", text: "Output Voltage: 42V"}
             ],
             compare: { model: "SHFC 35", category: "high-frequency-converter", outlets: "2 Outlet", type: "Converter" },
             actions: [{ type: 'cart', name: 'SHFC 35 Converter' }]
@@ -219,7 +223,9 @@ window.productData = {
             description: "Heavy-duty converter for multiple connections.",
             specs: [
                 { icon: "fa-solid fa-plug", text: "Outlets: 4 Outlet" },
-                { icon: "fa-solid fa-bolt", text: "Type: High Frequency" }
+                { icon: "fa-solid fa-bolt", text: "Type: High Frequency" },
+                { icon: "fa-solid fa-weight-hanging", text: "Input Voltage: 415V"},
+                { icon: "fa-solid fa-weight-hanging", text: "Output Voltage: 42V"}
             ],
             compare: { model: "SHFC90P", category: "high-frequency-converter", outlets: "4 Outlet", type: "Converter" },
             actions: [{ type: 'cart', name: 'SHFC90P Converter' }]
@@ -277,7 +283,8 @@ window.productData = {
                 specs: [
                     { icon: "fa-solid fa-ruler-horizontal", text: "Diameter: 58mm" },
                     { icon: "fa-solid fa-ruler-vertical", text: "Hose Length: 12 Meters" },
-                    { icon: "fa-solid fa-bolt", text: "Voltage: 42V (200Hz)" }
+                    { icon: "fa-solid fa-bolt", text: "Voltage: 42V (200Hz)" },
+                    { icon: "fa-solid fa-wave-square", text: "Vibration: 12000 RPM" }
                 ],
                 compare: { model: "SHFN 60 (12Mtr)", category: "high-frequency-poker", diameter: "58mm", length: "12 Meters", voltage: "42V", frequency: "200Hz" },
                 actions: [{ type: 'cart', name: 'SHFN 60 (12Mtr)' }]
@@ -289,9 +296,11 @@ window.productData = {
                 description: "",
                 specs: [
                     { icon: "fa-solid fa-ruler-horizontal", text: "Diameter: 40mm" },
-                    { icon: "fa-solid fa-ruler-vertical", text: "Hose Length: 5 Meters" }
+                    { icon: "fa-solid fa-ruler-vertical", text: "Hose Length: 5 Meters" },
+                    { icon: "fa-solid fa-bolt", text: "Voltage: 42V (200Hz)" },
+                    { icon: "fa-solid fa-wave-square", text: "Vibration: 12000 RPM" }
                 ],
-                compare: { model: "40MM Needle 5Mtr", category: "high-frequency-poker", diameter: "40mm", length: "5 Meters" },
+                compare: { model: "40MM Needle 5Mtr", category: "high-frequency-poker", diameter: "40mm", length: "5 Meters", voltage: "42V", frequency: "200Hz" },
                 actions: [{ type: 'cart', name: '40MM Needle 5Mtr' }]
             },
             {
@@ -301,9 +310,11 @@ window.productData = {
                 description: "",
                 specs: [
                     { icon: "fa-solid fa-ruler-horizontal", text: "Diameter: 40mm" },
-                    { icon: "fa-solid fa-ruler-vertical", text: "Hose Length: 12 Meters" }
+                    { icon: "fa-solid fa-ruler-vertical", text: "Hose Length: 12 Meters" },
+                    { icon: "fa-solid fa-bolt", text: "Voltage: 42V (200Hz)" },
+                    { icon: "fa-solid fa-wave-square", text: "Vibration: 12000 RPM" }
                 ],
-                compare: { model: "40MM Needle 12Mtr", category: "high-frequency-poker", diameter: "40mm", length: "12 Meters" },
+                compare: { model: "40MM Needle 12Mtr", category: "high-frequency-poker", diameter: "40mm", length: "12 Meters", voltage: "42V", frequency: "200Hz" },
                 actions: [{ type: 'cart', name: '40MM Needle 12Mtr' }]
             }
         ]
@@ -492,6 +503,7 @@ window.productData = {
                 description: "Robust mechanical needle for standard vibrators.", 
                 specs: [
                     { icon: "fa-solid fa-ruler-horizontal", text: "Diameter: 25mm" },
+                    { icon: "fa-solid fa-bolt", text: "Hose Lengths: Avilable in 3/6 Meters" },
                     { icon: "fa-solid fa-bolt", text: "Type: Mechanical" }
                 ],
                 compare: { model: "Mechanical Needle 25mm", category: "mechanical-pokers", diameter: "25mm", type: "Mechanical" },
@@ -504,6 +516,7 @@ window.productData = {
                 description: "Standard mechanical needle for efficient compaction.", 
                 specs: [
                     { icon: "fa-solid fa-ruler-horizontal", text: "Diameter: 40mm" },
+                    { icon: "fa-solid fa-bolt", text: "Hose Lengths: Avilable in 3/6 Meters" },
                     { icon: "fa-solid fa-bolt", text: "Type: Mechanical" }
                 ],
                 compare: { model: "Mechanical Needle 40mm", category: "mechanical-pokers", diameter: "40mm", type: "Mechanical" },
@@ -516,6 +529,7 @@ window.productData = {
                 description: "High capacity mechanical needle for large jobs.", 
                 specs: [
                     { icon: "fa-solid fa-ruler-horizontal", text: "Diameter: 60mm" },
+                    { icon: "fa-solid fa-bolt", text: "Hose Lengths: Avilable in 3/6 Meters" },
                     { icon: "fa-solid fa-bolt", text: "Type: Mechanical" }
                 ],
                 compare: { model: "Mechanical Needle 60mm", category: "mechanical-pokers", diameter: "60mm", type: "Mechanical" },
@@ -532,7 +546,8 @@ window.productData = {
             specs: [
                 { icon: "fa-solid fa-weight-hanging", text: "Capacity: 300 Kg" },
                 { icon: "fa-solid fa-arrows-up-down", text: "Lifting Height: 30 Mtr" },
-                { icon: "fa-solid fa-rotate", text: "Rotation: 360 Degrees" }
+                { icon: "fa-solid fa-rotate", text: "Rotation: 360 Degrees" },
+                { icon: "fa-solid fa-ruler-vertical", text: "Rope: 08MM 30x6 FC" }
             ],
             compare: { model: "Mini Lift 300Kg", category: "mini-lifts", capacity: "300 Kg", height: "30 Mtr", rotation: "360 Degrees" },
             actions: [{ type: 'cart', name: 'Mini Lift 300Kg' }]
@@ -545,7 +560,8 @@ window.productData = {
             specs: [
                 { icon: "fa-solid fa-weight-hanging", text: "Capacity: 500 Kg" },
                 { icon: "fa-solid fa-arrows-up-down", text: "Lifting Height: 30 Mtr" },
-                { icon: "fa-solid fa-rotate", text: "Rotation: 360 Degrees" }
+                { icon: "fa-solid fa-rotate", text: "Rotation: 360 Degrees" },
+                { icon: "fa-solid fa-ruler-vertical", text: "Rope: 08MM 30x6 FC" }
             ],
             compare: { model: "Mini Lift 500Kg", category: "mini-lifts", capacity: "500 Kg", height: "30 Mtr", rotation: "360 Degrees" },
             actions: [{ type: 'cart', name: 'Mini Lift 500Kg' }]
@@ -626,7 +642,10 @@ window.productData = {
                 name: "Portable Bender 25 - SPB25",
                 image: "./Assets/Product Images/spb.png",
                 description: "Lightweight bender for bars up to 25mm.",
-                specs: [{ icon: "fa-solid fa-ruler-combined", text: "Capacity: 25mm" }, { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" }],
+                specs: [
+                    { icon: "fa-solid fa-ruler-combined", text: "Capacity: 25mm" },
+                    { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" }],
+
                 compare: { model: "SPB25", category: "portable-bar-equipment", type: "Portable Bender", capacity: "25mm", voltage: "220V/110V" },
                 actions: [{ type: 'cart', name: 'SPB25 Portable Bender' }]
             },
@@ -635,7 +654,10 @@ window.productData = {
                 name: "Portable Bender 32 - SPB32",
                 image: "./Assets/Product Images/spb.png",
                 description: "Powerful portable unit for bending bars up to 32mm.",
-                specs: [{ icon: "fa-solid fa-ruler-combined", text: "Capacity: 32mm" }, { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" }],
+                specs: [
+                    { icon: "fa-solid fa-ruler-combined", text: "Capacity: 32mm" },
+                    { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" }],
+
                 compare: { model: "SPB32", category: "portable-bar-equipment", type: "Portable Bender", capacity: "32mm", voltage: "220V/110V" },
                 actions: [{ type: 'cart', name: 'SPB32 Portable Bender' }]
             },
@@ -644,7 +666,11 @@ window.productData = {
                 name: "Bender & Straightener - SPS 32",
                 image: "./Assets/Product Images/spb.png",
                 description: "Dual function machine: Bends and Straightens bars up to 32mm.",
-                specs: [{ icon: "fa-solid fa-ruler-combined", text: "Capacity: 32mm" }, { icon: "fa-solid fa-arrows-left-right", text: "Function: Bend & Straighten" }],
+                specs: [
+                    { icon: "fa-solid fa-ruler-combined", text: "Capacity: 32mm" },
+                    { icon: "fa-solid fa-arrows-left-right", text: "Function: Bend & Straighten" }
+                ],
+
                 compare: { model: "SPS 32", category: "portable-bar-equipment", type: "Bender & Straightener", capacity: "32mm", voltage: "220V/110V", power: "600W" },
                 actions: [{ type: 'cart', name: 'SPS 32 Bender & Straightener' }]
             }
@@ -712,10 +738,17 @@ window.productData = {
             description: "Heavy-duty ride-on roller designed for large scale road construction projects.",
             specs: [
                 { icon: "fa-solid fa-truck-monster", text: "Type: Ride-on Roller" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 3000 kg" },
-                { icon: "fa-solid fa-gas-pump", text: "Engine: Diesel Engine" }
+                { icon: "fa-solid fa-gas-pump", text: "Engine: Diesel Engine" },
+                { icon: "fa-solid fa-road", text: "Gradeability: 30%" },
+                { icon: "fa-solid fa-tachometer-alt", text: "Speed: 0-8 km/h" },
+                { icon: "fa-solid fa-arrows-left-right", text: "Vibration Frequency: 0-3000 vpm" },
+                { icon: "fa-solid fa-compress-arrows-alt", text: "Centrifugal Force: 30 kN" },
+                { icon: "fa-solid fa-ruler-vertical", text: "Width: 1200 mm" },
+                { icon: "fa-solid fa-fan", text: "Water Tank Capacity: 150 L" },
+                { icon: "fa-solid fa-gauge-high", text: "Fuel Tank Capacity: 15 L" },
+                { icon: "fa-solid fa-horse-head", text: "Engine Power: 25 HP" }
             ],
-            compare: { model: "SRR30", category: "road-rollers", type: "Ride-on Roller", weight: "3000 kg", engine: "Diesel Engine" },
+            compare: { model: "SRR30", category: "road-rollers", type: "Ride-on Roller", weight: "3000 kg", engine: "Diesel Engine", power: "25 HP", gradeability: "30%", speed: "0-8 km/h", vibration: "0-3000 vpm", centrifugal: "30 kN", width: "1200 mm", water: "150 L", fuel: "15 L" },
             actions: [{ type: 'cart', name: 'SRR30 Ride on Roller' }]
         },
         {
@@ -725,10 +758,17 @@ window.productData = {
             description: "Compact walk-behind roller ideal for tight spaces and patch work.",
             specs: [
                 { icon: "fa-solid fa-person-walking", text: "Type: Walk-behind Roller" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 800 kg" },
-                { icon: "fa-solid fa-gas-pump", text: "Engine: 10 HP Diesel" }
+                { icon: "fa-solid fa-gas-pump", text: "Engine: 10 HP Diesel" },
+                { icon: "fa-solid fa-road", text: "Gradeability: 25%" },
+                { icon: "fa-solid fa-tachometer-alt", text: "Speed: 0-5 km/h" },
+                { icon: "fa-solid fa-arrows-left-right", text: "Vibration Frequency: 0-3000 vpm" },
+                { icon: "fa-solid fa-horse-head", text: "Vibration Source: Single Drum" },
+                { icon: "fa-solid fa-compress-arrows-alt", text: "Centrifugal Force: 20 kN" },
+                { icon: "fa-solid fa-ruler-vertical", text: "Width: 800 mm" },
+                { icon: "fa-solid fa-fan", text: "Water Tank Capacity: 100 L" },
+                { icon: "fa-solid fa-gauge-high", text: "Fuel Tank Capacity: 10 L" }
             ],
-            compare: { model: "SWR 30", category: "road-rollers", type: "Walk-behind Roller", weight: "800 kg", engine: "Diesel Engine", power: "10 HP" },
+            compare: { model: "SWR 30", category: "road-rollers", type: "Walk-behind Roller", weight: "800 kg", engine: "Diesel Engine", power: "10 HP", gradeability: "25%", speed: "0-5 km/h", vibration: "0-3000 vpm", vibrationSource: "Single Drum",centrifugal: "20 kN", width: "800 mm", water: "100 L", fuel: "10 L" },
             actions: [{ type: 'cart', name: 'SWR 30 Walk behind' }]
         },
         {
@@ -738,17 +778,24 @@ window.productData = {
             description: "Enhanced walk-behind roller with superior compaction force.",
             specs: [
                 { icon: "fa-solid fa-person-walking", text: "Type: Walk-behind Roller" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 900 kg" },
-                { icon: "fa-solid fa-gas-pump", text: "Engine: Diesel Engine" }
+                { icon: "fa-solid fa-gas-pump", text: "Engine: Diesel Engine" },
+                { icon: "fa-solid fa-road", text: "Gradeability: 30%" },
+                { icon: "fa-solid fa-tachometer-alt", text: "Speed: 0-6 km/h" },
+                { icon: "fa-solid fa-arrows-left-right", text: "Vibration Frequency: 0-3500 vpm" },
+                { icon: "fa-solid fa-horse-head", text: "Vibration Source: Dual Drum" },
+                { icon: "fa-solid fa-compress-arrows-alt", text: "Centrifugal Force: 25 kN" },
+                { icon: "fa-solid fa-ruler-vertical", text: "Width: 900 mm" },
+                { icon: "fa-solid fa-fan", text: "Water Tank Capacity: 120 L" },
+                { icon: "fa-solid fa-gauge-high", text: "Fuel Tank Capacity: 12 L" }
             ],
-            compare: { model: "SWR30 FH", category: "road-rollers", type: "Walk-behind Roller", weight: "900 kg", engine: "Diesel Engine" },
+            compare: { model: "SWR30 FH", category: "road-rollers", type: "Walk-behind Roller", weight: "900 kg", engine: "Diesel Engine", power: "15 HP", gradeability: "30%", speed: "0-6 km/h", vibration: "0-3500 vpm", vibrationSource: "Dual Drum", centrifugal: "25 kN", width: "900 mm", water: "120 L", fuel: "12 L" },
             actions: [{ type: 'cart', name: 'SWR30 FH Walk behind' }]
         }
     ],
     'scrap-straightener-models': [
         {
-            model: "SS-12 Eco Model",
-            name: "SS-12 Eco Model",
+            model: "GX8-25 Eco Model",
+            name: "GX8-25",
             image: "./Assets/Product Images/sss.png",
             description: "Cost-effective solution for straightening coils and lighter scrap.",
             specs: [
@@ -756,12 +803,12 @@ window.productData = {
                 { icon: "fa-solid fa-gauge", text: "Speed: 25 meters/min" },
                 { icon: "fa-solid fa-recycle", text: "Usage: Coil & Light Scrap" }
             ],
-            compare: { model: "SS-12 Eco Model", category: "scrap-straightener-models", range: "4mm - 12mm", "speed-feature": "25 meters/min", "usage-accuracy": "Coil & Light Scrap" },
-            actions: [{ type: 'cart', name: 'SS-12 Eco Model' }]
+            compare: { model: "GX8-25 Eco Model", category: "scrap-straightener-models", range: "4mm - 12mm", "speed-feature": "25 meters/min", "usage-accuracy": "Coil & Light Scrap" },
+            actions: [{ type: 'cart', name: 'GX8-25 Eco Model' }]
         },
         {
-            model: "SSC-16 Pro",
-            name: "SSC-16 Pro (+ Cutter)",
+            model: "GX6-25 Pro Model",
+            name: "GX6-25 Pro (+ Cutter)",
             image: "./Assets/Product Images/sss.png",
             description: "Advanced straightener with integrated hydraulic cutter for precise lengths.",
             specs: [
@@ -769,8 +816,8 @@ window.productData = {
                 { icon: "fa-solid fa-scissors", text: "Feature: Auto-Cut Function" },
                 { icon: "fa-solid fa-arrows-left-right", text: "Accuracy: High Precision" }
             ],
-            compare: { model: "SSC-16 Pro", category: "scrap-straightener-models", range: "6mm - 16mm", "speed-feature": "Auto-Cut Function", "usage-accuracy": "High Precision" },
-            actions: [{ type: 'cart', name: 'SSC-16 Pro' }]
+            compare: { model: "GX6-25 Pro Model", category: "scrap-straightener-models", range: "6mm - 16mm", "speed-feature": "Auto-Cut Function", "usage-accuracy": "High Precision" },
+            actions: [{ type: 'cart', name: 'GX6-25 Pro Model' }]
         }
     ],
     'shutter-vibrator-models': {
@@ -783,7 +830,7 @@ window.productData = {
                 specs: [
                     { icon: "fa-solid fa-bolt", text: "Power: 1.5 HP" },
                     { icon: "fa-solid fa-wave-square", text: "Vibrations: 6000 RPM" },
-                    { icon: "fa-solid fa-plug", text: "Voltage: 42V / 200Hz" }
+                    { icon: "fa-solid fa-plug", text: "Voltage: 42V / 200Hz" },
                 ],
                 compare: { model: "SHFS-4215", category: "shutter-vibrators", power: "1.5 HP", vibrations: "6000 RPM", voltage: "42V (200Hz)" },
                 actions: [{ type: 'cart', name: 'Shutter Vibrator SHFS-4215' }]
@@ -853,7 +900,8 @@ window.productData = {
                 description: "Electric vibrator for leveling concrete surfaces. Blades sold separately.",
                 specs: [
                     { icon: "fa-solid fa-bolt", text: "Drive: Electric Motor" },
-                    { icon: "fa-solid fa-gauge-high", text: "Speed: 2000 RPM" }
+                    { icon: "fa-solid fa-gauge-high", text: "Speed: 2000 RPM" },
+                    
                 ],
                 compare: { model: "SSVE-2", category: "surface-smootheners", type: "Screed Vibrator", power: "Electric Motor", speed: "2000 RPM" },
                 actions: [{ type: 'cart', name: 'Screed Vibrator SSVE-2' }]
@@ -905,7 +953,9 @@ window.productData = {
                 { icon: "fa-solid fa-weight-scale", text: "Rated Load: Up to 1000 Kgs" },
                 { icon: "fa-solid fa-arrows-up-down", text: "Max Lifting Height: Up to 100m" },
                 { icon: "fa-solid fa-shield-halved", text: "Safety: Equipped with Load Calibration Cell" },
-                { icon: "fa-solid fa-ruler-combined", text: "Platform Size: Customizable" }
+                { icon: "fa-solid fa-ruler-combined", text: "Platform Size: Customizable" },
+                { icon: "fa-solid fa-cogs", text: "Power: 220V/380V, 50Hz" },
+                { icon: "fa-solid fa-people-roof", text: "Capacity: 2-10 Persons" }
             ],
             actions: [{ type: 'enquire-link', href: '../index.html#contact' }]
         }
@@ -1017,66 +1067,6 @@ window.productData = {
             actions: [{ type: 'cart', name: 'Hydraulic Scissor Lift' }]
         }
     ],
-    'repair-services': [
-        {
-            name: "On-Site Repair",
-            image: "./Assets/Product Images/on-site.png",
-            description: "Expert technicians dispatched to your location for immediate repairs.",
-            actions: [{ type: 'repair', name: 'On-Site Repair' }]
-        },
-        {
-            name: "Workshop Service",
-            image: "./Assets/Product Images/workshop.png",
-            description: "Comprehensive servicing and overhauling at our fully equipped workshop.",
-            actions: [{ type: 'repair', name: 'Workshop Service' }]
-        },
-        {
-            name: "Spare Parts Replacement",
-            image: "./Assets/Product Images/spare.png",
-            description: "Genuine spare parts replacement for all major construction equipment brands.",
-            actions: [{ type: 'repair', name: 'Spare Parts' }]
-        }
-    ],
-    'rental-services': [
-        {
-            name: "Bar Bender",
-            image: "./Assets/Product Images/bender_sketch.png",
-            description: "Rent bar benders, cutters, and rollers for your heavy construction needs.",
-            actions: [{ type: 'rent', name: 'Bar Bender' }]
-        },
-        {
-            name: "Bar Cutter",
-            image: "./Assets/Product Images/cutter_sketch.png",
-            description: "Compactors, vibrators, and mixers available for daily or weekly rent.",
-            actions: [{ type: 'rent', name: 'Bar Cutter' }]
-        },
-        {
-            name: "Walk Behind Roller",
-            image: "./Assets/Product Images/roller_sketch.png",
-            description: "Suspended platforms and material lifts available for rent.",
-            actions: [{ type: 'rent', name: 'Walk Behind Roller' }]
-        }
-    ],
-    'maintenance-services': [
-        {
-            name: "Preventive Maintenance",
-            image: "./Assets/Product Images/pms.png",
-            description: "Regular check-ups to prevent breakdowns and extend equipment life.",
-            actions: [{ type: 'enquire', name: 'Preventive Maintenance' }]
-        },
-        {
-            name: "Annual Maintenance Contract",
-            image: "./Assets/Product Images/amc.png",
-            description: "Cost-effective AMC packages for complete peace of mind.",
-            actions: [{ type: 'enquire', name: 'AMC' }]
-        },
-        {
-            name: "Emergency Support",
-            image: "./Assets/Product Images/es.png",
-            description: "Breakdown support to minimize project downtime.",
-            actions: [{ type: 'enquire', name: 'Emergency Support' }]
-        }
-    ],
     'prefabStructures': [
         {
             name: "Portable Office Cabins",
@@ -1164,6 +1154,66 @@ window.productData = {
                 { icon: "fa-solid fa-cube", text: "Material: Cast Iron" }
             ],
             actions: [{ type: 'cart', name: 'Cast Iron Weights' }]
+        }
+    ],
+    'repair-services': [
+        {
+            name: "On-Site Repair",
+            image: "./Assets/Product Images/on-site.png",
+            description: "Expert technicians dispatched to your location for immediate repairs.",
+            actions: [{ type: 'repair', name: 'On-Site Repair' }]
+        },
+        {
+            name: "Workshop Service",
+            image: "./Assets/Product Images/workshop.png",
+            description: "Comprehensive servicing and overhauling at our fully equipped workshop.",
+            actions: [{ type: 'repair', name: 'Workshop Service' }]
+        },
+        {
+            name: "Spare Parts Replacement",
+            image: "./Assets/Product Images/spare.png",
+            description: "Genuine spare parts replacement for all major construction equipment brands.",
+            actions: [{ type: 'repair', name: 'Spare Parts' }]
+        }
+    ],
+    'rental-services': [
+        {
+            name: "Bar Bender",
+            image: "./Assets/Product Images/bender_sketch.png",
+            description: "Rent bar benders, cutters, and rollers for your heavy construction needs.",
+            actions: [{ type: 'rent', name: 'Bar Bender' }]
+        },
+        {
+            name: "Bar Cutter",
+            image: "./Assets/Product Images/cutter_sketch.png",
+            description: "Compactors, vibrators, and mixers available for daily or weekly rent.",
+            actions: [{ type: 'rent', name: 'Bar Cutter' }]
+        },
+        {
+            name: "Walk Behind Roller",
+            image: "./Assets/Product Images/roller_sketch.png",
+            description: "Suspended platforms and material lifts available for rent.",
+            actions: [{ type: 'rent', name: 'Walk Behind Roller' }]
+        }
+    ],
+    'maintenance-services': [
+        {
+            name: "Preventive Maintenance",
+            image: "./Assets/Product Images/pms.png",
+            description: "Regular check-ups to prevent breakdowns and extend equipment life.",
+            actions: [{ type: 'enquire', name: 'Preventive Maintenance' }]
+        },
+        {
+            name: "Annual Maintenance Contract",
+            image: "./Assets/Product Images/amc.png",
+            description: "Cost-effective AMC packages for complete peace of mind.",
+            actions: [{ type: 'enquire', name: 'AMC' }]
+        },
+        {
+            name: "Emergency Support",
+            image: "./Assets/Product Images/es.png",
+            description: "Breakdown support to minimize project downtime.",
+            actions: [{ type: 'enquire', name: 'Emergency Support' }]
         }
     ]
 };
