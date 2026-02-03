@@ -144,9 +144,17 @@ window.createProductCard = function(product) {
                 ${compareCheckboxHTML}
                 <h3 class="text-sm md:text-2xl font-bold text-gray-900 mb-1 md:mb-2 leading-tight">${product.name}</h3>
                 ${product.description ? `<p class="text-xs md:text-sm text-gray-600 mb-2 md:mb-4 flex-grow line-clamp-2">${product.description}</p>` : ''}
-                <ul oncontextmenu="return window.handleSpecsLongPress(this, event)" class="text-xs md:text-sm text-left text-gray-700 space-y-1 md:space-y-2 mb-3 md:mb-6 inline-block w-full px-1 md:px-4 hover:bg-gray-50 rounded-lg transition-colors duration-200 cursor-pointer" title="Right Click/Long press to copy specifications">
-                    ${specsHTML}
-                </ul>
+                <div class="relative group/specs w-full mb-1">
+                    <button onclick="window.copyProductSpecs(this)" class="absolute top-0 right-0 md:right-2 text-gray-400 hover:text-secondary p-1.5 opacity-100 transition-opacity duration-200 z-10 bg-white/80 md:bg-transparent rounded-full md:rounded-none shadow-sm md:shadow-none" title="Copy Specifications">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                    <ul oncontextmenu="return window.handleSpecsLongPress(this, event)" class="text-xs md:text-sm text-left text-gray-700 space-y-1 md:space-y-2 inline-block w-full px-1 md:px-4 hover:bg-gray-50 rounded-lg transition-colors duration-200 cursor-pointer" title="Right Click/Long press to copy specifications">
+                        ${specsHTML}
+                    </ul>
+                </div>
+                <div class="text-[10px] text-gray-400 text-center mb-3 md:mb-6 italic select-none">
+                    <i class="fa-regular fa-copy mr-1"></i> Right-click / Long-press to copy
+                </div>
                 <div class="flex flex-col gap-2 mt-auto product-actions-container">
                     ${actionsHTML}
                 </div>
@@ -337,6 +345,25 @@ window.handleSpecsLongPress = function(element, event) {
         });
     }
     return false;
+};
+
+// --- Copy Specs Button Logic ---
+window.copyProductSpecs = function(button) {
+    const container = button.closest('.relative');
+    if (!container) return;
+    
+    const ul = container.querySelector('ul');
+    if (ul) {
+        const specs = Array.from(ul.querySelectorAll('li span'))
+            .map(span => span.textContent.trim())
+            .join('\n');
+
+        if (specs) {
+            navigator.clipboard.writeText(specs).then(() => {
+                showCopyToast();
+            }).catch(err => console.error('Failed to copy specs:', err));
+        }
+    }
 };
 
 function showCopyToast() {

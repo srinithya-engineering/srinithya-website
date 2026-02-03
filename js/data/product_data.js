@@ -7,11 +7,21 @@ window.productData = {
             
             description: "High-precision bending with programmable angles for complex shapes.",
             specs: [
-                { icon: "fa-solid fa-rotate", text: "Bend Dia: Up to 42mm" },
+                { icon: "fa-solid fa-rotate", text: "Bend Dia: Up to 40mm" },
                 { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
-                { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" }
+                { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
+                { icon: "fa-solid fa-gears", text: "Motor: 5 HP Bharat Bijlee" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 450 kg" },
+                { icon: "fa-solid fa-ruler-combined", text: "Dimensions: 1200 x 800 x 1200 mm" },
+                { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
+                { icon: "fa-solid fa-gauge-high", text: "Speed: 20 bends/min" },
+                { icon: "fa-solid fa-cogs", text: "Gearbox: Oil Bath Lubricated" },
+                { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" },
+                { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
+                { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
+                { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" },
             ],
-            compare: { model: "SBB52", category: "bar-benders", "bend-dia": "Up to 42mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
+            compare: { model: "SBB52", category: "bar-benders", "bend-dia": "Up to 40mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
             actions: [{ type: 'cart', name: 'SBB52' }]
         },
         {
@@ -22,7 +32,14 @@ window.productData = {
             specs: [
                 { icon: "fa-solid fa-rotate", text: "Bend Dia: 6mm - 32mm" },
                 { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
-                { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" }
+                { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
+                { icon: "fa-solid fa-gears", text: "Motor: 5HP Bharat Bijlee" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 300 kg" },
+                { icon: "fa-solid fa-ruler-combined", text: "Dimensions: 1000 x 700 x 1100 mm" },
+                { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
+                { icon: "fa-solid fa-gauge-high", text: "Speed: 15 bends/min" },
+                { icon: "fa-solid fa-cogs", text: "Gearbox: Oil Bath Lubricated" },
+                { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" },
             ],
             compare: { model: "SBB42", category: "bar-benders", "bend-dia": "6mm - 32mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
             actions: [{ type: 'cart', name: 'SBB42' }]
@@ -31,30 +48,42 @@ window.productData = {
     ],
     'bar-cutting-models': [
         {
-            model: "SBC52 Heavy Duty",
-            name: "SBC52 Heavy Duty",
+            model: "SBC52",
+            name: "SBC52",
             image: "./Assets/Product Images/sbc.png",
             description: "Engineered for infrastructure projects requiring high-volume processing.",
             specs: [
-                { icon: "fa-solid fa-ruler-combined", text: "Capacity: Up to 42mm TMT" },
-                { icon: "fa-solid fa-bolt", text: "Power: 4 KW Motor" },
-                { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" }
+                { icon: "fa-solid fa-ruler-combined", text: "Capacity: Up to 40mm TMT" },
+                { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
+                { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
+                { icon: "fa-solid fa-gauge-high", text: "Speed: 28 times/min" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 500 kg" },
+                { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
+                { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
+                { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" },
+                { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" }
             ],
-            compare: { model: "SBC52 Heavy Duty", category: "bar-cutters", capacity: "Up to 42mm TMT", power: "4 KW Motor", gearbox: "Reinforced Oil Bath" },
-            actions: [{ type: 'cart', name: 'SBC52 Heavy Duty' }]
+            compare: { model: "SBC52", category: "bar-cutters", capacity: "Up to 42mm TMT", power: "5HP Motor", gearbox: "Reinforced Oil Bath" },
+            actions: [{ type: 'cart', name: 'SBC52' }]
         },
         {
-            model: "SBC42 Standard",
-            name: "SBC42 Standard",
+            model: "SBC42",
+            name: "SBC42",
             image: "./Assets/Product Images/sbc.png",
             description: "The industry standard for residential and commercial construction sites.",
             specs: [
-                { icon: "fa-solid fa-ruler-combined", text: "Capacity: Up to 32mm TMT" },
-                { icon: "fa-solid fa-bolt", text: "Power: 3 KW Motor" },
-                { icon: "fa-solid fa-gauge-high", text: "Speed: 32 times/min" }
+                { icon: "fa-solid fa-ruler-combined", text: "Capacity: Up to 36mm TMT" },
+                { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
+                { icon: "fa-solid fa-gauge-high", text: "Speed: 32 times/min" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 350 kg" },
+                { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
+                { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
+                { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" },
+                { icon: "fa-solid fa-gear", text: "Gearbox: Oil Bath Lubricated" },
+                { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" }
             ],
-            compare: { model: "SBC42 Standard", category: "bar-cutters", capacity: "Up to 32mm TMT", power: "3 KW Motor", speed: "32 times/min" },
-            actions: [{ type: 'cart', name: 'SBC42 Standard' }]
+            compare: { model: "SBC42", category: "bar-cutters", capacity: "Up to 36mm TMT", power: "5HP Motor", speed: "32 times/min" },
+            actions: [{ type: 'cart', name: 'SBC42' }]
         }
     ],
     'concrete-mixer-models': [
@@ -288,7 +317,8 @@ window.productData = {
                 ],
                 compare: { model: "SHFN 60 (12Mtr)", category: "high-frequency-poker", diameter: "58mm", length: "12 Meters", voltage: "42V", frequency: "200Hz" },
                 actions: [{ type: 'cart', name: 'SHFN 60 (12Mtr)' }]
-            },
+            }, 
+        
             {
                 model: "40MM Needle 5Mtr",
                 name: "40MM Needle - 5Mtr Hose",
