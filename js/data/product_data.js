@@ -40,6 +40,9 @@ window.productData = {
                 { icon: "fa-solid fa-gauge-high", text: "Speed: 15 bends/min" },
                 { icon: "fa-solid fa-cogs", text: "Gearbox: Oil Bath Lubricated" },
                 { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" },
+                { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
+                { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
+                { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" }
             ],
             compare: { model: "SBB42", category: "bar-benders", "bend-dia": "6mm - 32mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
             actions: [{ type: 'cart', name: 'SBB42' }]

@@ -481,3 +481,8 @@ if (document.readyState === 'loading') {
 } else {
     window.initRecentlyViewed();
 }
+
+// Listen for hash changes to trigger highlight (e.g. same-page navigation)
+window.addEventListener('hashchange', () => {
+    setTimeout(window.highlightSharedProduct, 100);
+});

@@ -79,6 +79,7 @@ async function loadPage(url, scroll = true) {
                 return tag !== 'nav' && id !== 'navbar' && tag !== 'footer' && 
                        !id.includes('modal') && !id.includes('overlay') &&
                        id !== 'loader-wrapper' && id !== 'scroll-progress' && id !== 'back-to-top-container' &&
+                       id !== 'sepl-chatbot-container' &&
                        !el.classList.contains('fixed'); 
             });
 
@@ -155,7 +156,8 @@ async function loadPage(url, scroll = true) {
                 newScript.src.includes('router.js') || 
                 newScript.src.includes('navbar.js') || 
                 newScript.src.includes('footer.js') ||
-                newScript.src.includes('product_renderer.js')
+                newScript.src.includes('product_renderer.js') ||
+                newScript.src.includes('chatbot.js')
             )) return;
 
             // If it's an inline script with renderProductCards, we might need to delay it 
@@ -221,10 +223,15 @@ async function loadPage(url, scroll = true) {
                 setTimeout(() => {
                     const targetElement = document.getElementById(targetId);
                     if (targetElement) {
-                        const headerOffset = 80;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.scrollY - headerOffset;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        // Use the specialized highlighter if available (handles scroll + animation)
+                        if (window.highlightSharedProduct) {
+                            window.highlightSharedProduct();
+                        } else {
+                            const headerOffset = 80;
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.scrollY - headerOffset;
+                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
                     } else {
                         window.scrollTo(0, 0);
                     }
