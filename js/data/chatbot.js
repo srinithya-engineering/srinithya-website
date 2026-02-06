@@ -471,6 +471,17 @@ document.addEventListener('DOMContentLoaded', function() {
             transform: translateX(-50%) translateY(-2px); 
         }
 
+        /* Align External Scroll/Back-to-Top Buttons (Desktop Default) */
+        #back-to-top-container, .scroll-to-top {
+            right: 20px !important;
+            bottom: 110px !important;
+            width: 80px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            z-index: 9900 !important;
+        }
+
         @media (max-width: 480px) {
             #sepl-chatbot-container {
                 right: 10px;
@@ -482,17 +493,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 bottom: 10px;
                 right: 10px;
             }
-        }
+            
+            /* Mobile Bubble Sizing */
+            #sepl-fab-trigger {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+            .sepl-fab-options {
+                height: 60px;
+                gap: 10px;
+                margin-right: 10px;
+            }
+            .sepl-fab-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 18px;
+            }
+            /* Adjust Tooltips for smaller buttons */
+            .sepl-fab-btn::after { bottom: 54px; }
+            .sepl-fab-btn::before { bottom: 48px; }
 
-        /* Align External Scroll/Back-to-Top Buttons */
-        #back-to-top-container, .scroll-to-top {
-            right: 20px !important;
-            bottom: 110px !important;
-            width: 80px !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            z-index: 9900 !important;
+            /* Adjust Icons Scale */
+            #sepl-fab-trigger .sepl-css-bot { transform: scale(0.65); }
+            #sepl-fab-trigger .fa-whatsapp { font-size: 22px !important; }
+
+            /* Align Scroll Buttons for Mobile */
+            #back-to-top-container, .scroll-to-top {
+                right: 10px !important;
+                bottom: 80px !important; /* 10px bottom + 60px height + 10px gap */
+                width: 60px !important;
+            }
         }
     `;
 
@@ -686,15 +717,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
         }
     });
-
-    // Auto-open chatbot on first visit (Session based)
-    if (!sessionStorage.getItem('sepl_chat_auto_opened')) {
-        setTimeout(() => {
-            if (!isOpen && !sessionStorage.getItem('sepl_chat_auto_opened')) {
-                toggleChat();
-            }
-        }, 3000);
-    }
 
     function addMessage(sender, text, html = null, suggestions = null, save = true) {
         const msgDiv = document.createElement("div");
