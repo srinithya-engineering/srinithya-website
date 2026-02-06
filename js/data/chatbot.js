@@ -23,33 +23,21 @@ document.addEventListener('DOMContentLoaded', function() {
         companyName: "SEPL Assistant"
     };
 
+    // Determine root path for assets
+    const rootPath = (window.location.pathname.includes('/Product_details/') || window.location.pathname.includes('/Service_details/')) ? '../' : '';
+
     // 1. Inject CSS Styles
     const styles = `
         #sepl-chatbot-container {
             position: fixed;
             bottom: 20px;
-            left: 20px;
+            right: 20px;
             z-index: 9999;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-        #sepl-chatbot-toggle {
-            background-color: ${config.colors.secondary};
-            color: ${config.colors.white};
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-        #sepl-chatbot-toggle:hover {
-            transform: scale(1.1);
-            background-color: #b45309;
+            justify-content: flex-end;
         }
         #sepl-chatbot-window {
             display: none;
@@ -60,9 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             flex-direction: column;
             overflow: hidden;
-            position: absolute;
-            bottom: 80px;
-            left: 0;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
             border: 1px solid #e5e7eb;
             animation: slideIn 0.3s ease-out;
         }
@@ -275,6 +263,237 @@ document.addEventListener('DOMContentLoaded', function() {
             border-style: solid;
             border-color: transparent ${config.colors.white} transparent transparent;
         }
+
+        /* --- Unified FAB Styles --- */
+        #sepl-fab-trigger {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            color: ${config.colors.primary};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10000;
+            position: relative;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        #sepl-fab-trigger:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+        }
+        #sepl-fab-trigger.active {
+            transform: rotate(180deg);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            color: ${config.colors.primary};
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        @keyframes sepl-icon-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        #sepl-fab-trigger #sepl-fab-icon i, #sepl-fab-trigger #sepl-fab-icon .sepl-css-bot {
+            animation: sepl-icon-bounce 2s ease-in-out infinite;
+        }
+        #sepl-fab-trigger #sepl-fab-icon :nth-child(2) { animation-delay: 0.2s; }
+
+        /* CSS Bot Icon */
+        .sepl-css-bot {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sepl-bot-head {
+            width: 26px;
+            height: 20px;
+            background: ${config.colors.primary};
+            border-radius: 6px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .sepl-bot-eyes {
+            position: absolute;
+            top: 6px;
+            left: 5px;
+            right: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .sepl-bot-eye {
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: sepl-blink 4s infinite;
+        }
+        .sepl-bot-eye:nth-child(2) { animation-delay: 0.1s; }
+        .sepl-bot-antenna {
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 8px;
+            background: ${config.colors.secondary};
+        }
+        .sepl-bot-antenna::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -2.5px;
+            width: 7px;
+            height: 7px;
+            background: ${config.colors.primary};
+            border-radius: 50%;
+            border: 1px solid white;
+        }
+        .sepl-bot-ear {
+            position: absolute;
+            top: 7px;
+            width: 3px;
+            height: 6px;
+            background: ${config.colors.primary};
+            border-radius: 2px;
+        }
+        .sepl-bot-ear.left { left: -2px; }
+        .sepl-bot-ear.right { right: -2px; }
+
+        @keyframes sepl-blink {
+            0%, 48%, 52%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+        }
+
+        /* CSS Bot Icon overrides for Header (Dark Background) */
+        #sepl-chatbot-header .sepl-bot-head { background-color: ${config.colors.white}; }
+        #sepl-chatbot-header .sepl-bot-ear { background-color: ${config.colors.white}; }
+        #sepl-chatbot-header .sepl-bot-eye { background-color: ${config.colors.primary}; }
+        #sepl-chatbot-header .sepl-bot-antenna::after { background-color: ${config.colors.white}; border-color: ${config.colors.primary}; }
+
+        .sepl-fab-options {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            margin-right: 15px;
+            align-items: center;
+            height: 80px; /* Match trigger height for perfect alignment */
+        }
+
+        .sepl-fab-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(20px) scale(0.8);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        .sepl-fab-options.show .sepl-fab-btn {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: all;
+        }
+        
+        .sepl-fab-options.show .sepl-fab-btn:nth-child(1) { transition-delay: 0.05s; }
+        .sepl-fab-options.show .sepl-fab-btn:nth-child(2) { transition-delay: 0.1s; }
+
+        .sepl-fab-btn-chat { background-color: white; }
+        .sepl-fab-btn-whatsapp { background-color: #25D366; }
+
+        /* Tooltips */
+        /* Tooltip Text */
+        .sepl-fab-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 62px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        /* Tooltip Arrow */
+        .sepl-fab-btn::before {
+            content: '';
+            position: absolute;
+            bottom: 56px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px 6px 0;
+            border-style: solid;
+            border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .sepl-fab-btn:hover::after { 
+            opacity: 1; 
+            transform: translateX(-50%) translateY(-2px); 
+        }
+        .sepl-fab-btn:hover::before { 
+            opacity: 1; 
+            transform: translateX(-50%) translateY(-2px); 
+        }
+
+        @media (max-width: 480px) {
+            #sepl-chatbot-container {
+                right: 10px;
+                bottom: 10px;
+            }
+            #sepl-chatbot-window {
+                width: calc(100vw - 20px);
+                height: 60vh;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Align External Scroll/Back-to-Top Buttons */
+        #back-to-top-container, .scroll-to-top {
+            right: 20px !important;
+            bottom: 110px !important;
+            width: 80px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            z-index: 9900 !important;
+        }
     `;
 
     const styleSheet = document.createElement("style");
@@ -287,7 +506,16 @@ document.addEventListener('DOMContentLoaded', function() {
     container.innerHTML = `
         <div id="sepl-chatbot-window">
             <div id="sepl-chatbot-header">
-                <span><i class="fa-solid fa-robot"></i> ${config.companyName}</span>
+                <span style="display:flex; align-items:center; gap:8px;">
+                    <div class="sepl-css-bot" style="transform: scale(0.7);">
+                        <div class="sepl-bot-antenna"></div>
+                        <div class="sepl-bot-head">
+                            <div class="sepl-bot-eyes"><div class="sepl-bot-eye"></div><div class="sepl-bot-eye"></div></div>
+                            <div class="sepl-bot-ear left"></div><div class="sepl-bot-ear right"></div>
+                        </div>
+                    </div>
+                    ${config.companyName}
+                </span>
                 <div>
                     <button id="sepl-chatbot-clear" title="Clear Chat" style="background:none;border:none;color:white;cursor:pointer;font-size:14px;margin-right:10px;"><i class="fa-solid fa-trash-can"></i></button>
                     <button id="sepl-chatbot-close" style="background:none;border:none;color:white;cursor:pointer;font-size:20px;">&times;</button>
@@ -305,30 +533,83 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button id="sepl-chatbot-send"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
-        <button id="sepl-chatbot-toggle" title="Chat with us"><i class="fa-solid fa-comments"></i></button>
-        <div id="sepl-chatbot-hint">Chat with AI</div>
+        
+        <div class="sepl-fab-options" id="sepl-fab-options">
+            <button class="sepl-fab-btn sepl-fab-btn-whatsapp" id="sepl-fab-whatsapp" data-tooltip="WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+            <button class="sepl-fab-btn sepl-fab-btn-chat" id="sepl-fab-chat" data-tooltip="Chat Assistant">
+                <div class="sepl-css-bot" style="transform: scale(0.8);">
+                    <div class="sepl-bot-antenna"></div>
+                    <div class="sepl-bot-head">
+                        <div class="sepl-bot-eyes"><div class="sepl-bot-eye"></div><div class="sepl-bot-eye"></div></div>
+                        <div class="sepl-bot-ear left"></div><div class="sepl-bot-ear right"></div>
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <button id="sepl-fab-trigger" title="Need Help?">
+            <div id="sepl-fab-icon" style="display:flex; align-items:center; justify-content:center; gap:6px; width:100%; height:100%;">
+                <i class="fa-brands fa-whatsapp" style="font-size: 28px; color: #25D366; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));"></i>
+                <div class="sepl-css-bot" style="filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));">
+                    <div class="sepl-bot-antenna"></div>
+                    <div class="sepl-bot-head">
+                        <div class="sepl-bot-eyes"><div class="sepl-bot-eye"></div><div class="sepl-bot-eye"></div></div>
+                        <div class="sepl-bot-ear left"></div><div class="sepl-bot-ear right"></div>
+                    </div>
+                </div>
+            </div>
+            <i class="fa-solid fa-xmark" id="sepl-fab-close-icon" style="display:none;"></i>
+        </button>
     `;
     document.body.appendChild(container);
 
     // 3. Chatbot Logic
-    const toggleBtn = document.getElementById("sepl-chatbot-toggle");
     const chatWindow = document.getElementById("sepl-chatbot-window");
     const closeBtn = document.getElementById("sepl-chatbot-close");
     const clearBtn = document.getElementById("sepl-chatbot-clear");
-    const hintDiv = document.getElementById("sepl-chatbot-hint");
     const quickActionsDiv = document.getElementById("sepl-chatbot-quick-actions");
     const messagesDiv = document.getElementById("sepl-chatbot-messages");
     const inputField = document.getElementById("sepl-chatbot-input");
     const sendBtn = document.getElementById("sepl-chatbot-send");
+    
+    // FAB Logic
+    const fabTrigger = document.getElementById('sepl-fab-trigger');
+    const fabOptions = document.getElementById('sepl-fab-options');
+    const fabIcon = document.getElementById('sepl-fab-icon');
+    const fabCloseIcon = document.getElementById('sepl-fab-close-icon');
 
     let isOpen = false;
-    let lastContextProduct = null; // Stores the last product discussed for context awareness
+    // Load history and context from session storage
+    let chatHistory = JSON.parse(sessionStorage.getItem('sepl_chat_history')) || [];
+    let lastContextProduct = JSON.parse(sessionStorage.getItem('sepl_chat_context_product')) || null;
+
+    function toggleFab() {
+        const isActive = fabTrigger.classList.toggle('active');
+        fabOptions.classList.toggle('show');
+        
+        if (isActive) {
+            fabIcon.style.display = 'none';
+            fabCloseIcon.style.display = 'block';
+        } else {
+            fabIcon.style.display = 'flex';
+            fabCloseIcon.style.display = 'none';
+        }
+    }
+
+    fabTrigger.addEventListener('click', toggleFab);
 
     function toggleChat() {
         isOpen = !isOpen;
         chatWindow.style.display = isOpen ? "flex" : "none";
-        toggleBtn.style.display = isOpen ? "none" : "flex";
-        if (hintDiv) hintDiv.style.opacity = isOpen ? "0" : "1";
+        
+        // Toggle FAB visibility so chat takes its place
+        fabTrigger.style.display = isOpen ? 'none' : 'flex';
+        fabOptions.style.display = isOpen ? 'none' : 'flex';
+
+        // If opening chat, close FAB menu logic if open (reset state)
+        if (isOpen && fabTrigger.classList.contains('active')) {
+            toggleFab();
+        }
         
         // Mark as opened so auto-open doesn't trigger if user manually opens
         sessionStorage.setItem('sepl_chat_auto_opened', 'true');
@@ -343,12 +624,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    toggleBtn.addEventListener("click", toggleChat);
+    document.getElementById('sepl-fab-chat').addEventListener('click', toggleChat);
     closeBtn.addEventListener("click", toggleChat);
+    
+    document.getElementById('sepl-fab-whatsapp').addEventListener('click', () => {
+        const message = "Hi, I visited your website and would like to know more about your products.";
+        window.open(`https://wa.me/919032069819?text=${encodeURIComponent(message)}`, '_blank');
+        toggleFab();
+    });
+    
+    // Attempt to remove standalone WhatsApp widgets to prevent duplicates
+    const removeOldWidgets = () => {
+        const potentialIds = ['whatsapp-widget', 'wa-widget', 'whatsapp_chat_widget', 'wa-chat-widget', 'whatsapp-btn', 'wa-btn'];
+        potentialIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        });
+        // Also hide by class if common plugins are used
+        const potentialClasses = document.querySelectorAll('.whatsapp-widget, .wa-widget, .whatsapp-float');
+        potentialClasses.forEach(el => el.remove());
+    };
+
+    removeOldWidgets();
+    setTimeout(removeOldWidgets, 500);
+    setTimeout(removeOldWidgets, 2000);
 
     clearBtn.addEventListener("click", () => {
         messagesDiv.innerHTML = '';
         lastContextProduct = null;
+        chatHistory = [];
+        sessionStorage.removeItem('sepl_chat_history');
+        sessionStorage.removeItem('sepl_chat_context_product');
         addMessage("bot", "Chat history cleared. How can I help you?");
     });
 
@@ -390,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
 
-    function addMessage(sender, text, html = null, suggestions = null) {
+    function addMessage(sender, text, html = null, suggestions = null, save = true) {
         const msgDiv = document.createElement("div");
         msgDiv.className = `sepl-message ${sender}`;
         if (html) {
@@ -417,6 +723,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         messagesDiv.appendChild(msgDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        if (save) {
+            chatHistory.push({ sender, text, html, suggestions });
+            sessionStorage.setItem('sepl_chat_history', JSON.stringify(chatHistory));
+        }
+    }
+
+    // Restore chat history on load
+    if (chatHistory.length > 0) {
+        chatHistory.forEach(msg => {
+            addMessage(msg.sender, msg.text, msg.html, msg.suggestions, false);
+        });
     }
 
     function showTyping() {
@@ -457,8 +775,64 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === "Enter") processInput();
     });
 
+    function updateContext(product) {
+        lastContextProduct = product;
+        sessionStorage.setItem('sepl_chat_context_product', JSON.stringify(product));
+    }
+
     function generateResponse(query) {
         query = query.toLowerCase();
+
+        // 0.1 Name Recognition
+        const nameMatch = query.match(/(?:my name is|i am|i'm|call me) ([a-zA-Z]+)/i);
+        if (nameMatch && !query.includes('looking') && !query.includes('interested') && !query.includes('sending')) {
+            const name = nameMatch[1].charAt(0).toUpperCase() + nameMatch[1].slice(1);
+            sessionStorage.setItem('sepl_user_name', name);
+            return { text: `Nice to meet you, ${name}! How can I assist you with our machinery today?` };
+        }
+        const userName = sessionStorage.getItem('sepl_user_name');
+
+        // 0.2 Name Recall
+        if (query.includes('what is my name') || query.includes('who am i') || query.includes('do you know my name')) {
+            if (userName) {
+                return { 
+                    text: `You told me your name is ${userName}.`,
+                    html: `You told me your name is <strong>${userName}</strong>.`
+                };
+            } else {
+                return { text: "I don't know your name yet. You can tell me by saying 'My name is...'" };
+            }
+        }
+
+        // 0.3 Help / Capabilities
+        if (query === 'help' || query.includes('what can you do') || query.includes('capabilities')) {
+            return {
+                text: "I can help you with:<br>• <strong>Finding products</strong> (e.g., 'Show me bar benders')<br>• <strong>Technical specs</strong> (e.g., 'Weight of SBB52')<br>• <strong>Comparisons</strong> (e.g., 'Compare SBB52 and SBB42')<br>• <strong>General questions</strong> (e.g., 'What is 3 phase power?')<br>• <strong>Getting quotes</strong> and brochures.",
+                suggestions: ["Find Bar Bender", "Download Brochure", "Contact Sales"]
+            };
+        }
+
+        // 0.4 Selection from previous results (Contextual)
+        const ordinalMatch = query.match(/\b(first|second|third|1st|2nd|3rd|number 1|number 2|number 3|top one|best one)\b/);
+        const lastResults = JSON.parse(sessionStorage.getItem('sepl_chat_search_results')) || [];
+        
+        if (ordinalMatch && lastResults.length > 0) {
+            let index = -1;
+            const term = ordinalMatch[1];
+            if (term.includes('1') || term.includes('first') || term.includes('top') || term.includes('best')) index = 0;
+            else if (term.includes('2') || term.includes('second')) index = 1;
+            else if (term.includes('3') || term.includes('third')) index = 2;
+
+            if (index >= 0 && index < lastResults.length) {
+                const p = lastResults[index];
+                updateContext(p);
+                return {
+                    text: `Here are the details for the <strong>${p.name}</strong> (Option ${index + 1}):`,
+                    html: getProductCardHTML(p),
+                    suggestions: [`Price of ${p.model}`, `Specs of ${p.model}`, "Compare"]
+                };
+            }
+        }
 
         // 0. Sentiment Analysis (Handle frustration)
         if (query.match(/\b(wrong|bad|incorrect|stupid|useless|hate|shut up)\b/)) {
@@ -571,7 +945,7 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (path.includes('concrete_mixer')) contextMsg = "Looking for Concrete Mixers? I can help you choose the right capacity.";
 
             return { 
-                text: `${timeGreeting}! I am the SEPL Intelligent Assistant. ${contextMsg} How can I help you today?`,
+                text: `${timeGreeting}${userName ? ' ' + userName : ''}! I am the SEPL Intelligent Assistant. ${contextMsg} How can I help you today?`,
                 suggestions: ["Show me Bar Benders", "I need a Mixer", "Download Brochure"]
             };
         }
@@ -602,6 +976,13 @@ document.addEventListener('DOMContentLoaded', function() {
             { keywords: ['catalog'], response: "You can download our complete product catalogue from the Contact section of our website." },
             { keywords: ['catalogue'], response: "You can download our complete product catalogue from the Contact section of our website." },
             { keywords: ['brochure'], response: "You can download our complete product catalogue from the Contact section of our website." },
+            // Technical Glossary
+            { keywords: ['single', 'phase'], response: "Single-phase power (220V-240V) is standard for residential and light commercial use. Our smaller equipment like 2HP vibrators and mini lifts often use this." },
+            { keywords: ['three', 'phase'], response: "Three-phase power (415V) provides more consistent power for heavy-duty industrial machinery like large bar benders and cutters." },
+            { keywords: ['hp', 'horsepower'], response: "HP (Horsepower) measures the engine or motor's power. Higher HP generally means the machine can handle heavier loads or work faster." },
+            { keywords: ['rpm'], response: "RPM (Revolutions Per Minute) indicates the speed of the motor or vibration frequency. Higher RPM in vibrators leads to better concrete consolidation." },
+            { keywords: ['who', 'created', 'you'], response: "I was developed by the tech team at Srinithya Engineering to assist customers like you!" },
+            { keywords: ['who', 'made', 'you'], response: "I was developed by the tech team at Srinithya Engineering to assist customers like you!" },
             // General Construction Knowledge
             { keywords: ['m20'], response: "The mix ratio for M20 grade concrete is typically 1:1.5:3 (Cement : Sand : Aggregate)." },
             { keywords: ['m25'], response: "The mix ratio for M25 grade concrete is typically 1:1:2 (Cement : Sand : Aggregate)." },
@@ -637,69 +1018,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const products = flattenProducts(window.productData);
         
-        // --- Comparison Logic ---
-        if (query.includes('compare') || query.includes(' vs ') || query.includes('difference')) {
-            // Try to find mentioned products
-            const mentionedProducts = products.filter(p => {
-                const name = p.name.toLowerCase();
-                const model = p.model.toLowerCase();
-                return query.includes(name) || query.includes(model);
-            });
-
-            // If we have 2 distinct products
-            const uniqueProducts = [...new Set(mentionedProducts)];
-            if (uniqueProducts.length >= 2) {
-                const p1 = uniqueProducts[0];
-                const p2 = uniqueProducts[1];
-                return {
-                    text: `Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:`,
-                    html: generateComparisonHTML(p1, p2),
-                    suggestions: [`Price of ${p1.model}`, `Price of ${p2.model}`, "Add both to Estimate"]
-                };
-            }
-            // If only 1 mentioned and we have context
-            if (uniqueProducts.length === 1 && lastContextProduct && uniqueProducts[0].name !== lastContextProduct.name) {
-                 const p1 = lastContextProduct;
-                 const p2 = uniqueProducts[0];
-                 return {
-                    text: `Comparing your previous selection <strong>${p1.name}</strong> with <strong>${p2.name}</strong>:`,
-                    html: generateComparisonHTML(p1, p2),
-                    suggestions: [`Price of ${p2.model}`, "Add to Estimate"]
-                };
-            }
-        }
-
-        // --- Contextual Attribute Query ---
-        const attributeMap = {
-            'weight': ['weight', 'weighs', 'heavy', 'kg'],
-            'power': ['power', 'motor', 'engine', 'hp', 'voltage', 'watts', 'electric', 'supply'],
-            'capacity': ['capacity', 'dimension', 'size', 'dia', 'diameter', 'mm', 'range', 'depth', 'width', 'height', 'output', 'volume', 'tank'],
-            'speed': ['speed', 'rpm', 'fast', 'velocity', 'rate'],
-            'warranty': ['warranty', 'guarantee'],
-            'price': ['price', 'cost', 'rate', 'how much', 'quote']
-        };
-
-        // Check if query contains a product name/model
-        const hasProductMention = products.some(p => query.includes(p.name.toLowerCase()) || query.includes(p.model.toLowerCase()));
-
-        // If no product mentioned but we have context, check if user is asking about the context product
-        if (!hasProductMention && lastContextProduct) {
-            for (const [attr, keywords] of Object.entries(attributeMap)) {
-                if (keywords.some(k => query.includes(k))) {
-                    return getAttributeResponse(lastContextProduct, attr, keywords);
-                }
-            }
-            // Handle generic "it" references
-            if (query.includes('it') || query.includes('this') || query.includes('that')) {
-                return {
-                    text: `Are you referring to the <strong>${lastContextProduct.name}</strong>?`,
-                    html: getProductCardHTML(lastContextProduct),
-                    suggestions: [`Price of ${lastContextProduct.model}`, `Specs of ${lastContextProduct.model}`]
-                };
-            }
-        }
-
-        // --- Standard Search Logic ---
         // Synonyms map for better context understanding
         const synonyms = {
             'rod': 'bar', 'rebar': 'bar', 'iron': 'bar', 'steel': 'bar', 'tmt': 'bar',
@@ -713,8 +1031,35 @@ document.addEventListener('DOMContentLoaded', function() {
             'bend': 'bender', 'bending': 'bender'
         };
 
+        // Stop words to ignore for better search precision
+        const stopWords = new Set([
+            'what', 'is', 'the', 'of', 'for', 'and', 'a', 'an', 'in', 'on', 'to', 'with', 'at', 'by', 'from',
+            'machine', 'machinery', 'equipment', 'tool', 'unit', 'device', 'product', 'item',
+            'i', 'you', 'we', 'my', 'your', 'asked', 'about', 'act', 'according', 'previous', 'messages', 'chat', 
+            'meant', 'actually', 'please', 'tell', 'me', 'show', 'find', 'search', 'looking', 'want', 'know',
+            'model', 'type', 'version', 'series', 'weight', 'price', 'cost', 'specs', 'specification',
+            'how', 'much', 'many', 'can', 'do', 'does', 'will', 'would', 'should', 'details', 'detail'
+        ]);
+
         // Tokenize and expand query
-        let tokens = query.split(/\s+/).filter(t => t.length > 2);
+        // Allow numbers (even single digit) or words length >= 2, filter stop words
+        let rawTokens = query.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+        let tokens = rawTokens.filter(t => {
+            if (stopWords.has(t)) return false;
+            return /\d/.test(t) || t.length >= 2;
+        });
+
+        // Explicit Context Recall (Overrides search if user asks for "previous")
+        if (query.includes('previous') || query.includes('last') || query.includes('earlier') || query.includes('back')) {
+            if (lastContextProduct) {
+                 return {
+                     text: `Referring back to the <strong>${lastContextProduct.name}</strong>:`,
+                     html: getProductCardHTML(lastContextProduct),
+                     suggestions: [`Price of ${lastContextProduct.model}`, `Specs of ${lastContextProduct.model}`]
+                 };
+            }
+        }
+
         const searchTokens = new Set(tokens);
         tokens.forEach(t => {
             if (synonyms[t]) searchTokens.add(synonyms[t]);
@@ -728,10 +1073,44 @@ document.addEventListener('DOMContentLoaded', function() {
             let score = 0;
             const specsStr = p.specs ? p.specs.map(s => s.text).join(' ') : '';
             const searchStr = `${p.name} ${p.model} ${p.category} ${p.description || ''} ${specsStr}`.toLowerCase();
+            // Create a set of words for exact matching of short tokens
+            const searchWords = new Set(searchStr.split(/[\s\-\(\)\/]+/));
             
             finalTokens.forEach(token => {
-                if (searchStr.includes(token) || isFuzzyMatch(token, searchStr)) {
-                    score += 10;
+                let matched = false;
+                let tokenScore = 0;
+
+                // 1. Numeric Match (Strongest) - Allow substring for models (e.g. "52" in "SBB52")
+                if (/\d/.test(token)) {
+                    if (p.model.toLowerCase().includes(token)) {
+                        tokenScore += 40; // High boost for model numbers
+                        matched = true;
+                    } else if (searchStr.includes(token)) {
+                        tokenScore += 10;
+                        matched = true;
+                    }
+                } 
+                // 2. Text Match - Enforce Word Boundaries for short words (< 4 chars) to avoid "act" -> "compactor"
+                else {
+                    if (token.length < 4) {
+                        if (searchWords.has(token)) {
+                            tokenScore += 10;
+                            matched = true;
+                        }
+                    } else {
+                        // Longer words: allow substring (e.g. "bend" matches "bending")
+                        if (searchStr.includes(token)) {
+                            tokenScore += 10;
+                            matched = true;
+                        } else if (isFuzzyMatch(token, searchStr)) {
+                            tokenScore += 5;
+                            matched = true;
+                        }
+                    }
+                }
+
+                if (matched) {
+                    score += tokenScore;
                     // Bonus for exact category match
                     if (p.category.toLowerCase().includes(token)) score += 5;
                     // Bonus for name match
@@ -741,22 +1120,105 @@ document.addEventListener('DOMContentLoaded', function() {
             return { product: p, score: score };
         });
 
-        // Filter and sort
-        const matches = scoredProducts
+        // Filter and sort matches (Keep scored items for context logic)
+        const sortedScoredItems = scoredProducts
             .filter(item => item.score > 0)
-            .sort((a, b) => b.score - a.score)
-            .map(item => item.product);
+            .sort((a, b) => b.score - a.score);
+            
+        const matches = sortedScoredItems.map(item => item.product);
+
+        // --- Comparison Logic ---
+        if (query.includes('compare') || query.includes(' vs ') || query.includes('difference')) {
+            // Use matches or find mentioned products specifically
+            const uniqueProducts = [...new Set(matches)];
+            
+            if (uniqueProducts.length >= 2) {
+                const p1 = uniqueProducts[0];
+                const p2 = uniqueProducts[1];
+                return {
+                    text: `Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:`,
+                    html: `<p>Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:</p>` + generateComparisonHTML(p1, p2),
+                    suggestions: [`Price of ${p1.model}`, `Price of ${p2.model}`, "Add both to Estimate"]
+                };
+            }
+            // If only 1 mentioned and we have context
+            if (uniqueProducts.length === 1 && lastContextProduct && uniqueProducts[0].name !== lastContextProduct.name) {
+                 const p1 = lastContextProduct;
+                 const p2 = uniqueProducts[0];
+                 return {
+                    text: `Comparing your previous selection <strong>${p1.name}</strong> with <strong>${p2.name}</strong>:`,
+                    html: `<p>Comparing your previous selection <strong>${p1.name}</strong> with <strong>${p2.name}</strong>:</p>` + generateComparisonHTML(p1, p2),
+                    suggestions: [`Price of ${p2.model}`, "Add to Estimate"]
+                };
+            }
+        }
+
+        // --- Attribute & Usage Query ---
+        const attributeMap = {
+            'weight': ['weight', 'weighs', 'heavy', 'kg'],
+            'power': ['power', 'motor', 'engine', 'hp', 'voltage', 'watts', 'electric', 'supply'],
+            'capacity': ['capacity', 'dimension', 'size', 'dia', 'diameter', 'mm', 'range', 'depth', 'width', 'height', 'output', 'volume', 'tank'],
+            'speed': ['speed', 'rpm', 'fast', 'velocity', 'rate', 'time'],
+            'warranty': ['warranty', 'guarantee'],
+            'price': ['price', 'cost', 'rate', 'how much', 'quote'],
+            'usage': ['usage', 'use', 'function', 'work', 'application', 'do', 'purpose'],
+            'specs': ['spec', 'specification', 'feature', 'detail', 'config']
+        };
+
+        // Determine target product based on score confidence
+        let targetProduct = null;
+        let contextSwitch = false;
 
         if (matches.length > 0) {
-            const p = matches[0];
-            lastContextProduct = p; // Update context
+            const topScore = sortedScoredItems[0].score;
+            // Threshold 15: Requires at least one Name/Category match (10+5) or multiple keyword matches
+            // This prevents generic words like "weight" (score 10) from switching context
+            if (topScore >= 15) {
+                targetProduct = matches[0];
+                contextSwitch = true;
+            } else {
+                targetProduct = lastContextProduct || matches[0];
+            }
+        } else {
+            targetProduct = lastContextProduct;
+        }
 
-            // Check for specific attribute questions in the current query (e.g. "weight of SBB52")
+        if (targetProduct) {
             for (const [attr, keywords] of Object.entries(attributeMap)) {
                 if (keywords.some(k => query.includes(k))) {
-                     return getAttributeResponse(p, attr, keywords);
+                    // Update context if we switched topics or if establishing initial context
+                    if (contextSwitch) updateContext(targetProduct);
+                    if (!lastContextProduct && targetProduct) updateContext(targetProduct);
+                    
+                    return getAttributeResponse(targetProduct, attr, keywords);
                 }
             }
+        }
+
+        // --- Handle Empty Tokens (Context Fallback) ---
+        // If we reached here, no attribute matched, and tokens might be empty due to stop words
+        if (tokens.length === 0) {
+             if (lastContextProduct) {
+                 return {
+                     text: `Referring back to the <strong>${lastContextProduct.name}</strong>:`,
+                     html: getProductCardHTML(lastContextProduct),
+                     suggestions: [`Price of ${lastContextProduct.model}`, `Specs of ${lastContextProduct.model}`]
+                 };
+             } else {
+                 return {
+                     text: "I'm not sure which product you're referring to. Could you please specify a model name (e.g., SBB52) or category?",
+                     suggestions: ["Bar Bender", "Concrete Mixer", "View Catalogue"]
+                 };
+             }
+        }
+
+        // --- Standard Search Results ---
+        if (matches.length > 0) {
+            // Save results for context selection
+            sessionStorage.setItem('sepl_chat_search_results', JSON.stringify(matches.slice(0, 5)));
+
+            const p = matches[0];
+            updateContext(p); // Update context
 
             // Determine intent for conversational response
             let responseText = "";
@@ -839,6 +1301,44 @@ document.addEventListener('DOMContentLoaded', function() {
              };
         }
 
+        if (attr === 'usage') {
+            const categoryUsageMap = {
+                'bending': "Bar Bending machines are used to bend TMT steel bars into various shapes (L, U, C, etc.) required for construction reinforcement.",
+                'cutting': "Bar Cutting machines are designed to cut TMT steel bars and rods to precise lengths with high efficiency.",
+                'mixer': "Concrete Mixers are used to homogeneously combine cement, aggregate, sand, and water to form concrete.",
+                'compactor': "Plate Compactors are used to compress soil, gravel, or asphalt to create a solid, level foundation.",
+                'vibrator': "Vibrators are used to eliminate air bubbles from freshly poured concrete, ensuring structural strength and a smooth finish.",
+                'lift': "Mini Lifts and Cranes are used to hoist construction materials like bricks, cement, and sand to upper floors.",
+                'roller': "Road Rollers are used to compact concrete, soil, gravel, or asphalt in the construction of roads and foundations.",
+                'straightener': "Scrap Straighteners are used to straighten used or bent steel bars so they can be reused, reducing wastage.",
+                'trowel': "Power Trowels are used to create a smooth, level finish on large, flat concrete areas.",
+                'converter': "High Frequency Converters are used to power high-frequency vibrators for efficient concrete compaction."
+            };
+
+            let usageText = p.description || "This machine is designed for heavy-duty construction tasks.";
+            // Check category map for better explanation
+            for (const [cat, text] of Object.entries(categoryUsageMap)) {
+                if ((p.category || '').toLowerCase().includes(cat) || (p.name || '').toLowerCase().includes(cat)) {
+                    usageText = text;
+                    break;
+                }
+            }
+            
+            return {
+                text: `<strong>Usage of ${p.name}:</strong> ${usageText}`,
+                html: getProductCardHTML(p),
+                suggestions: ["View Specs", "Get Quote"]
+            };
+        }
+
+        if (attr === 'specs') {
+             return {
+                 text: `Here are the specifications for <strong>${p.name}</strong>:`,
+                 html: getProductCardHTML(p), // Card already contains specs list
+                 suggestions: ["Compare", "Get Quote"]
+             };
+        }
+
         // Search in specs
         if (p.specs) {
             const foundSpec = p.specs.find(s => {
@@ -856,6 +1356,22 @@ document.addEventListener('DOMContentLoaded', function() {
                             <button onclick="window.addToCart('${p.name.replace(/'/g, "\\'")}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
                            </div>`,
                     suggestions: ["Get Quote", "Compare"]
+                };
+            }
+        }
+
+        // Search in Compare object (often has structured data like weight/power)
+        if (p.compare) {
+            const compareKey = Object.keys(p.compare).find(k => keywords.some(kw => k.toLowerCase().includes(kw)));
+            if (compareKey) {
+                return {
+                    text: `The ${compareKey} of <strong>${p.name}</strong> is <strong>${p.compare[compareKey]}</strong>.`,
+                    html: `<div class="bot-product-card">
+                            <h4>${p.name}</h4>
+                            <p><strong>${compareKey.charAt(0).toUpperCase() + compareKey.slice(1)}:</strong> ${p.compare[compareKey]}</p>
+                            <button onclick="window.addToCart('${p.name.replace(/'/g, "\\'")}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
+                           </div>`,
+                    suggestions: ["View Full Specs", "Compare"]
                 };
             }
         }
