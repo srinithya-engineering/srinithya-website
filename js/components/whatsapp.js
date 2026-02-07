@@ -8,25 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .flash-animation {
             animation: total-flash 0.5s ease-in-out;
         }
-        @keyframes pulse-green {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-        .whatsapp-pulse {
-            animation: pulse-green 2s infinite;
-        }
     `;
     document.head.appendChild(style);
 
     // 2. Inject HTML for Button and Modal
     const whatsappHTML = `
-        <!-- Floating WhatsApp Button -->
-        <a id="whatsapp-btn" href="https://wa.me/919032069819?text=Hi%20there%2C%20I%20have%20requirement%20of%20equipment%20listed%20in%20your%20website.%0APlease%20call%20me%20back%20for%20a%20detailed%20description%20of%20my%20requirements." target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 z-50 hover:scale-110 flex items-center justify-center whatsapp-pulse group" title="Chat on WhatsApp">
-            <i class="fa-brands fa-whatsapp text-3xl"></i>
-            <span class="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 text-sm font-bold px-3 py-1 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">Chat with us</span>
-        </a>
-
         <!-- Callback Success Modal -->
         <div id="callback-modal" class="fixed inset-0 flex items-center justify-center z-[60] hidden">
             <div class="absolute inset-0 bg-black opacity-50"></div>

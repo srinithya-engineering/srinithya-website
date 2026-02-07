@@ -39,7 +39,7 @@
                     <div class="flex space-x-4">
                         <a href="https://www.facebook.com/SRINITHYAEPL/" target="_blank" aria-label="Follow us on Facebook" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-600 hover:text-white transition"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
                         <a href="https://www.linkedin.com/company/srinithyaepl/" target="_blank" aria-label="Follow us on LinkedIn" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-500 hover:text-white transition"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/srinithyaepl/" target="_blank" aria-label="Follow us on Instagram" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 hover:text-white transition"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/srinithyaepl/" target="_blank" aria-label="Follow us on Instagram" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white transition"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
                         <a href="https://www.youtube.com/@srinithyaengineering" target="_blank" aria-label="Follow us on YouTube" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 hover:text-white transition"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
                     </div>
                 </div>

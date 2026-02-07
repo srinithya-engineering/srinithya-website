@@ -931,6 +931,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (query.includes('contact')) { setTimeout(() => window.location.href = rootPath + 'index.html#contact', 1000); return { text: "Taking you to the Contact section..." }; }
             if (query.includes('service')) { setTimeout(() => window.location.href = rootPath + 'services.html', 1000); return { text: "Opening Services page..." }; }
         }
+        
+        // 0.91. Intent: Rental Inquiry (Contextual)
+        if ((query.includes('rent') || query.includes('hire') || query.includes('lease')) && lastContextProduct) {
+             return {
+                 text: `Yes, the <strong>${lastContextProduct.name}</strong> is available for rent. Would you like to check availability or view our rental terms?`,
+                 suggestions: ["View Rental Services", "Contact Rental Desk"]
+             };
+        }
+
         if (query.includes('clear') && (query.includes('cart') || query.includes('estimate') || query.includes('tray'))) {
              if (typeof window.clearCart === 'function') {
                  window.clearCart();
@@ -1011,7 +1020,15 @@ document.addEventListener('DOMContentLoaded', function() {
             { keywords: ['curing'], response: "Concrete typically requires a minimum curing period of 7 days, but 28 days is recommended for full strength." },
             { keywords: ['tmt', 'full', 'form'], response: "TMT stands for Thermo Mechanically Treated bars, known for high strength and ductility." },
             { keywords: ['weight', 'steel'], response: "The unit weight of steel bars can be calculated as D²/162 (kg/m), where D is the diameter in mm." },
-            { keywords: ['cube', 'test'], response: "Compressive strength of concrete is determined by cube test on 150mm x 150mm x 150mm cubes after 7 and 28 days curing." }
+            { keywords: ['cube', 'test'], response: "Compressive strength of concrete is determined by cube test on 150mm x 150mm x 150mm cubes after 7 and 28 days curing." },
+            // Expanded Knowledge
+            { keywords: ['safety', 'gear'], response: "Safety is paramount. We recommend using helmets, gloves, safety shoes, and ear protection when operating heavy machinery." },
+            { keywords: ['oil', 'change', 'maintenance'], response: "Regular maintenance extends machine life. Check oil levels daily and change engine oil every 50-100 working hours depending on the model." },
+            { keywords: ['payment', 'mode', 'pay'], response: "We accept various payment modes including Bank Transfer (NEFT/RTGS) and Cheques. Please contact our sales team for details." },
+            { keywords: ['petrol', 'vs', 'diesel'], response: "Petrol engines are generally lighter and easier to start, while Diesel engines offer better fuel economy and torque for heavy-duty, continuous operation." },
+            { keywords: ['warranty', 'claim'], response: "To claim warranty, please keep your purchase invoice handy and contact our support team with the machine's serial number." },
+            { keywords: ['return', 'policy'], response: "Returns are subject to terms and conditions. Please contact our sales office immediately if you face issues with a delivered product." },
+            { keywords: ['rent', 'hire', 'rental'], response: "Yes, we offer equipment rental services! You can browse our rental options in the 'Services' section." }
         ];
 
         for (const item of aiKnowledge) {
@@ -1033,6 +1050,14 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
 
+        // 2.5. Troubleshooting / Problem Solving
+        if (query.includes('not working') || query.includes('wont start') || query.includes('broken') || query.includes('issue') || query.includes('problem') || query.includes('repair')) {
+             return {
+                 text: "I'm sorry to hear you're facing issues. Here are some quick checks:<br>1. Check fuel/power connection.<br>2. Ensure emergency stop is released.<br>3. Check oil levels.<br>If the issue persists, please book a repair service.",
+                 suggestions: ["Book Repair", "Contact Support", "WhatsApp Us"]
+             };
+        }
+
         // 3. Intelligent Product Search
         if (!window.productData) {
             return { text: "I'm currently syncing with the product catalog. Please try again in a moment." };
@@ -1042,15 +1067,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Synonyms map for better context understanding
         const synonyms = {
-            'rod': 'bar', 'rebar': 'bar', 'iron': 'bar', 'steel': 'bar', 'tmt': 'bar',
+            'rod': 'bar', 'rebar': 'bar', 'iron': 'bar', 'steel': 'bar', 'tmt': 'bar', 'stirrup': 'bar',
             'cement': 'concrete', 'mortar': 'concrete',
-            'mix': 'mixer',
-            'compaction': 'compactor', 'rammer': 'compactor', 'soil': 'compactor',
-            'breaker': 'cutter', 'shear': 'cutter', 'saw': 'cutter', 'cut': 'cutter',
-            'lift': 'crane', 'hoist': 'crane', 'elevator': 'lift',
-            'pokers': 'poker', 'needle': 'poker', 'vibrating': 'vibrator',
+            'mix': 'mixer', 'mixture': 'mixer',
+            'compaction': 'compactor', 'rammer': 'compactor', 'soil': 'compactor', 'plate': 'compactor', 'earth': 'compactor',
+            'breaker': 'cutter', 'shear': 'cutter', 'saw': 'cutter', 'cut': 'cutter', 'cutting': 'cutter',
+            'lift': 'crane', 'hoist': 'crane', 'elevator': 'lift', 'winch': 'lift', 'genie': 'lift', 'scissor': 'lift', 'platform': 'lift',
+            'pokers': 'poker', 'needle': 'poker', 'vibrating': 'vibrator', 'vibration': 'vibrator', 'shaft': 'poker',
             'tube': 'hose', 'pipe': 'hose',
-            'bend': 'bender', 'bending': 'bender'
+            'bend': 'bender', 'bending': 'bender',
+            'office': 'cabin', 'container': 'cabin', 'shed': 'cabin',
+            'pump': 'dewatering', 'water': 'dewatering', 'motor': 'pump',
+            'screed': 'smoothener', 'trowel': 'smoothener', 'floater': 'smoothener'
         };
 
         // Stop words to ignore for better search precision

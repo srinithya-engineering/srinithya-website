@@ -263,6 +263,36 @@ const lightEquipment = [
         `;
     }
 
+    window.initAppreciationCarousel = function() {
+        const carousel = document.getElementById('apc-carousel');
+        if (!carousel) return;
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            #apc-carousel {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 20px;
+                padding: 20px 10%;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            #apc-carousel::-webkit-scrollbar {
+                display: none;
+            }
+            #apc-carousel > * {
+                flex: 0 0 80%;
+                scroll-snap-align: center;
+            }
+            @media (min-width: 768px) {
+                #apc-carousel { padding: 20px 30%; }
+                #apc-carousel > * { flex: 0 0 40%; }
+            }
+        `;
+        document.head.appendChild(style);
+    };
+
     window.renderHomeCards = function() {
     const heavyContainer = document.getElementById('heavy-machinery-grid');
     const lightContainer = document.getElementById('light-machinery-grid');
@@ -321,6 +351,7 @@ const lightEquipment = [
     // Expose for manual calls if needed (Router compatibility)
     window.initProductCards = function() {
         window.renderHomeCards();
+        window.initAppreciationCarousel();
     };
 
     const CarouselManager = {
