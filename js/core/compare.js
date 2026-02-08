@@ -7,17 +7,19 @@
 // UI Templates for dynamic injection
 const COMPARE_BAR_HTML = `
 <div id="compare-bar" class="fixed bottom-0 left-0 w-full bg-white border-t-4 border-secondary shadow-[0_-4px_20px_rgba(0,0,0,0.15)] z-40 transform translate-y-full transition-transform duration-300 hidden">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-            <div class="bg-primary text-white font-bold rounded-full w-8 h-8 flex items-center justify-center" id="compare-count">0</div>
+    <div class="w-full px-4 py-3 pr-32 md:pr-48 flex flex-wrap items-center gap-4">
+        <div class="flex items-center gap-2">
+            <div class="bg-primary text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0" id="compare-count">0</div>
             <span class="font-semibold text-gray-700">Models Selected</span>
             <div class="h-6 w-px bg-gray-300 mx-2 hidden md:block"></div>
-            <div id="compare-items-preview" class="flex flex-wrap gap-2"></div>
         </div>
+        <div id="compare-items-preview" class="flex flex-wrap gap-2"></div>
         <div class="flex items-center gap-3">
-            <button onclick="clearCompare()" class="text-gray-500 hover:text-red-500 font-medium text-sm underline">Clear All</button>
-            <button id="compare-now-btn" onclick="showCompareModal()" class="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                Compare Now
+            <button onclick="clearCompare()" class="text-red-600 hover:text-red-800 font-medium text-sm flex items-center gap-1 transition-colors whitespace-nowrap" title="Clear All">
+                <i class="fa-solid fa-xmark"></i> Clear All
+            </button>
+            <button id="compare-now-btn" onclick="showCompareModal()" class="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shadow-sm">
+                Compare
             </button>
         </div>
     </div>
@@ -45,6 +47,12 @@ const COMPARE_STORAGE_KEY = 'srinithya_compare_storage';
 
 // Expose init function for Router to call
 window.initCompare = function() {
+    // Cleanup old elements to ensure we render the latest version on init
+    const existingBar = document.getElementById('compare-bar');
+    if (existingBar) existingBar.remove();
+    const existingModal = document.getElementById('compare-modal');
+    if (existingModal) existingModal.remove();
+
     injectCompareUI();
     updateCompareBar();
     // Re-attach observer if needed (though the global one persists)
@@ -284,7 +292,7 @@ window.showCompareModal = function() {
     allKeys.forEach(key => {
         html += `<tr class="hover:bg-gray-50 even:bg-gray-50 group">
             <td class="p-3 border-b border-gray-200 font-semibold text-gray-700 relative pl-8">
-                <button onclick="removeRowWithAnimation(this)" class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Remove Row">
+                <button onclick="removeRowWithAnimation(this)" class="absolute left-2 top-1/2 transform -translate-y-1/2 text-red-500 hover:text-red-700 transition-colors" title="Remove attribute">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
                 ${key}

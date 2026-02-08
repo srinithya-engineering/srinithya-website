@@ -86,7 +86,7 @@ const rootPath = getRootPath(),
     navbarHTML = `
     <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200/50 fixed w-full z-50 transition-all duration-500 ease-in-out will-change-transform transform-gpu" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:grid md:grid-cols-1 transition-all duration-500 ease-in-out" id="nav-container">
+            <div class="flex flex-col lg:grid lg:grid-cols-1 transition-all duration-500 ease-in-out" id="nav-container">
                 <div class="flex justify-between items-center py-2 transition-all duration-500 ease-in-out w-full" id="top-bar">
                 <a href="${rootPath}index.html" class="flex items-center relative group flex-1 transition-all duration-500 ease-in-out cursor-pointer min-w-0" id="brand-wrapper">
                     <picture class="mr-1 relative z-20 flex-shrink-0">
@@ -95,10 +95,10 @@ const rootPath = getRootPath(),
                     </picture>
                     <div class="relative pl-0 pr-1 py-1 flex-grow text-center transition-all duration-500 ease-in-out min-w-0" id="name-strip">
                         <!-- Updated to font-black (weight 900) for maximum thickness -->
-                        <span class="text-[clamp(11px,3.5vw,30px)] text-primary relative z-10 transition-all duration-500 ease-in-out whitespace-normal md:whitespace-nowrap drop-shadow-sm block mb-0 md:mb-2 leading-tight md:leading-none w-full pr-1" id="company-name">SRINITHYA ENGINEERING PRIVATE LIMITED</span>
+                        <span class="text-[clamp(14px,4.5vw,30px)] text-primary relative z-10 transition-all duration-500 ease-in-out whitespace-nowrap drop-shadow-sm block mb-0 md:mb-2 leading-tight md:leading-none w-full pr-1" id="company-name">SRINITHYA ENGINEERING<span class="hidden md:inline">&nbsp;</span><br class="block md:hidden" />PRIVATE LIMITED</span>
                         
                         <!-- Construction Animations Layer -->
-                        <div class="hidden md:block absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-500 ease-in-out" id="animation-layer">
+                        <div class="hidden lg:block absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-500 ease-in-out" id="animation-layer">
                             <!-- 3D Road Surface -->
                             <div class="absolute bottom-0 left-0 w-full h-4 bg-gray-600 opacity-60 transform origin-bottom" style="transform: perspective(100px) rotateX(30deg);">
                                 <div class="absolute top-1/2 left-0 w-full border-t border-dashed border-white opacity-70"></div>
@@ -148,13 +148,13 @@ const rootPath = getRootPath(),
                     </div>
                 </a>
                 
-                <div class="md:hidden flex items-center flex-shrink-0 ml-1">
+                <div class="lg:hidden flex items-center flex-shrink-0 ml-1">
                     <button id="mobile-menu-button" class="text-gray-700 hover:text-primary focus:outline-none p-1">
                         <i class="fa-solid fa-bars text-lg"></i>
                     </button>
                 </div>
                 </div>
-                <div class="hidden md:flex items-center justify-center w-full py-2 border-t border-gray-100 gap-4 lg:gap-8 transition-all duration-500 ease-in-out" id="nav-links">
+                <div class="hidden lg:flex items-center justify-center w-full py-2 border-t border-gray-100 gap-4 lg:gap-8 transition-all duration-500 ease-in-out" id="nav-links">
                     <a href="${rootPath}index.html#home" class="text-gray-700 hover:text-secondary font-medium px-2 py-1">Home</a>
                     <a href="${rootPath}about.html" class="text-gray-700 hover:text-secondary font-medium px-2 py-1">About Us</a>
                     
@@ -252,7 +252,7 @@ const rootPath = getRootPath(),
         </div>
         <div id="scroll-progress" class="h-1 bg-secondary w-0 transition-all duration-100 ease-out"></div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 w-full shadow-lg absolute left-0 top-full max-h-[calc(100vh-100%)] overflow-y-auto overscroll-contain">
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 w-full shadow-lg absolute left-0 top-full max-h-[calc(100vh-100%)] overflow-y-auto overscroll-contain">
             <div class="px-4 pt-2 pb-4 space-y-1 flex flex-col">
                 <a href="${rootPath}index.html#home" class="block text-gray-700 hover:text-secondary hover:bg-gray-50 font-medium px-3 py-3 rounded mobile-link">Home</a>
                 <a href="${rootPath}about.html" class="block text-gray-700 hover:text-secondary hover:bg-gray-50 font-medium px-3 py-3 rounded mobile-link">About Us</a>
@@ -711,6 +711,7 @@ function initNavbar() {
     const o = document.getElementById("navbar"),
         n = document.getElementById("nav-container"),
         i = document.getElementById("top-bar"),
+        bw = document.getElementById("brand-wrapper"),
         r = document.getElementById("nav-logo"),
         l = document.getElementById("name-strip"),
         d = document.getElementById("company-name"),
@@ -719,53 +720,76 @@ function initNavbar() {
         u = document.getElementById("scroll-progress");
 
     let isScrolledState = false;
+    let wasLargeScreen = window.innerWidth >= 1024;
 
     const updateNavbarState = () => {
         const isScrolled = window.scrollY > 50;
+        const isLargeScreen = window.innerWidth >= 1024;
 
         // Only update DOM classes if state has changed
-        if (isScrolled !== isScrolledState) {
+        if (isScrolled !== isScrolledState || isLargeScreen !== wasLargeScreen) {
             isScrolledState = isScrolled;
+            wasLargeScreen = isLargeScreen;
 
             if (isScrolled) {
-                // Scrolled State
+                // Scrolled State Common
                 o.classList.add("shadow-md");
-                // Glassmorphism Effect
                 o.classList.remove("bg-white/90", "backdrop-blur-md");
                 o.classList.add("bg-white/70", "backdrop-blur-xl");
-                n.classList.remove("md:grid", "md:grid-cols-1");
-                n.classList.add("md:flex", "md:flex-row", "md:items-center", "md:justify-between", "gap-2");
-                i.classList.remove("w-full");
-                i.classList.add("md:w-auto", "flex-shrink", "min-w-0");
-                r.classList.remove("h-12", "md:h-16");
-                r.classList.add("h-10");
-                l.classList.remove("flex-grow", "text-center", "pl-0", "pr-1");
-                l.classList.add("ml-2", "text-left");
-                c.classList.add("opacity-0");
-                d.classList.remove("text-[clamp(11px,3.5vw,30px)]", "md:mb-2");
-                d.classList.add("text-[clamp(10px,2.9vw,20px)]");
-                m.classList.remove("w-full", "border-t", "justify-center", "py-2", "lg:gap-8");
-                m.classList.add("py-1", "flex-shrink-0", "text-sm");
+                
+                if (isLargeScreen) {
+                    // Apply Shrunk Layout (Only for Desktop > 1024px)
+                    n.classList.remove("lg:grid", "lg:grid-cols-1");
+                    n.classList.add("lg:flex", "lg:flex-row", "lg:items-center", "lg:justify-between", "gap-2");
+                    i.classList.add("lg:w-auto", "flex-shrink", "min-w-0");
+                    i.classList.remove("justify-between");
+                    i.classList.add("justify-start", "gap-4");
+                    if (bw) bw.classList.remove("flex-1");
+                    r.classList.remove("h-12", "md:h-16");
+                    r.classList.add("h-10");
+                    l.classList.remove("flex-grow", "text-center", "pl-0", "pr-1");
+                    l.classList.add("ml-2", "text-left");
+                    c.classList.add("opacity-0");
+                    d.classList.remove("text-[clamp(14px,4.5vw,30px)]", "md:mb-2");
+                    d.classList.add("text-[clamp(10px,2.5vw,18px)]"); 
+                    m.classList.add("lg:w-auto", "lg:border-0", "lg:py-1", "flex-shrink-0", "text-sm");
+                } else {
+                    // Scrolled but Small Screen -> Keep Normal Layout (Hamburger on right)
+                    n.classList.add("lg:grid", "lg:grid-cols-1");
+                    n.classList.remove("lg:flex", "lg:flex-row", "lg:items-center", "lg:justify-between", "gap-2");
+                    i.classList.remove("lg:w-auto", "flex-shrink", "min-w-0");
+                    i.classList.add("justify-between");
+                    i.classList.remove("justify-start", "gap-4");
+                    if (bw) bw.classList.add("flex-1");
+                    r.classList.add("h-12", "md:h-16");
+                    r.classList.remove("h-10");
+                    l.classList.add("flex-grow", "text-center", "pl-0", "pr-1");
+                    l.classList.remove("ml-2", "text-left");
+                    c.classList.remove("opacity-0");
+                    d.classList.remove("text-[clamp(10px,2.5vw,18px)]");
+                    d.classList.add("text-[clamp(14px,4.5vw,30px)]", "md:mb-2");
+                    m.classList.remove("lg:w-auto", "lg:border-0", "lg:py-1", "flex-shrink-0", "text-sm");
+                }
             } else {
-                // Top State
+                // Top State (Reset everything)
                 o.classList.remove("shadow-md");
-                // Revert Glassmorphism
                 o.classList.add("bg-white/90", "backdrop-blur-md");
                 o.classList.remove("bg-white/70", "backdrop-blur-xl");
 
-                n.classList.add("md:grid", "md:grid-cols-1");
-                n.classList.remove("md:flex", "md:flex-row", "md:items-center", "md:justify-between", "gap-2");
-                i.classList.add("w-full");
-                i.classList.remove("md:w-auto", "flex-shrink", "min-w-0");
+                n.classList.add("lg:grid", "lg:grid-cols-1");
+                n.classList.remove("lg:flex", "lg:flex-row", "lg:items-center", "lg:justify-between", "gap-2");
+                i.classList.remove("lg:w-auto", "flex-shrink", "min-w-0");
+                i.classList.add("justify-between");
+                i.classList.remove("justify-start", "gap-4");
+                if (bw) bw.classList.add("flex-1");
                 r.classList.add("h-12", "md:h-16");
                 r.classList.remove("h-10");
                 l.classList.add("flex-grow", "text-center", "pl-0", "pr-1");
                 l.classList.remove("ml-2", "text-left");
                 c.classList.remove("opacity-0");
-                d.classList.remove("text-[clamp(10px,2.9vw,20px)]");
-                d.classList.add("text-[clamp(11px,3.5vw,30px)]", "md:mb-2");
-                m.classList.add("w-full", "border-t", "justify-center", "py-2", "lg:gap-8");
-                m.classList.remove("py-1", "flex-shrink-0", "text-sm");
+                d.classList.remove("text-[clamp(10px,2.5vw,18px)]");
+                d.classList.add("text-[clamp(14px,4.5vw,30px)]", "md:mb-2");
+                m.classList.remove("lg:w-auto", "lg:border-0", "lg:py-1", "flex-shrink-0", "text-sm");
             }
         }
 
@@ -776,6 +800,7 @@ function initNavbar() {
     };
 
     window.addEventListener("scroll", () => requestAnimationFrame(updateNavbarState));
+    window.addEventListener("resize", () => requestAnimationFrame(updateNavbarState));
 }
 document.addEventListener("DOMContentLoaded", () => {
     // Remove existing navbar if present (fixes duplicate/legacy navbar on index page)

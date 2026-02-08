@@ -39,7 +39,7 @@ function addToCart(name) {
     
     // Optional: Toast notification logic if showToast is defined
     if (typeof showToast === 'function') {
-        showToast(`${name} added to estimate`);
+        showToast(`${name} added to tray`);
     }
 }
 

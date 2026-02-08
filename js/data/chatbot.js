@@ -496,32 +496,32 @@ document.addEventListener('DOMContentLoaded', function() {
             
             /* Mobile Bubble Sizing */
             #sepl-fab-trigger {
-                width: 60px;
-                height: 60px;
+                width: 72px;
+                height: 72px;
                 font-size: 24px;
             }
             .sepl-fab-options {
-                height: 60px;
+                height: 72px;
                 gap: 10px;
                 margin-right: 10px;
             }
             .sepl-fab-btn {
-                width: 42px;
-                height: 42px;
-                font-size: 18px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
             }
             /* Adjust Tooltips for smaller buttons */
-            .sepl-fab-btn::after { bottom: 54px; }
-            .sepl-fab-btn::before { bottom: 48px; }
+            .sepl-fab-btn::after { bottom: 58px; }
+            .sepl-fab-btn::before { bottom: 52px; }
 
             /* Adjust Icons Scale */
-            #sepl-fab-trigger .sepl-css-bot { transform: scale(0.65); }
-            #sepl-fab-trigger .fa-whatsapp { font-size: 22px !important; }
+            #sepl-fab-trigger .sepl-css-bot { transform: scale(0.75); }
+            #sepl-fab-trigger .fa-whatsapp { font-size: 24px !important; }
 
             /* Align Scroll Buttons for Mobile */
             #back-to-top-container, .scroll-to-top {
                 right: 10px !important;
-                bottom: 80px !important; /* 10px bottom + 60px height + 10px gap */
+                bottom: 92px !important; /* 10px bottom + 72px height + 10px gap */
                 width: 60px !important;
             }
         }
@@ -558,6 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button class="sepl-quick-btn" data-action="catalog">Brochure</button>
                 <button class="sepl-quick-btn" data-action="support">Support</button>
                 <button class="sepl-quick-btn" data-action="whatsapp">WhatsApp</button>
+                <button class="sepl-quick-btn" data-action="feedback">Feedback</button>
             </div>
             <div id="sepl-chatbot-input-area">
                 <input type="text" id="sepl-chatbot-input" placeholder="Ask about machines, models...">
@@ -699,6 +700,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'catalog': text = "Download product brochure"; break;
                 case 'support': text = "Contact support"; break;
                 case 'whatsapp': text = "Connect on WhatsApp"; break;
+                case 'feedback': text = "I want to give feedback"; break;
             }
             if (text) {
                 inputField.value = text;
@@ -785,9 +787,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Random delay between 1s and 2s to simulate "thinking"
         const delay = Math.floor(Math.random() * 1000) + 1000;
         
-        setTimeout(() => {
+        setTimeout(async () => {
             hideTyping();
-            const response = generateResponse(text);
+            const response = await generateResponse(text);
             addMessage("bot", response.text, response.html, response.suggestions);
         }, delay);
     }
@@ -802,7 +804,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionStorage.setItem('sepl_chat_context_product', JSON.stringify(product));
     }
 
-    function generateResponse(query) {
+    async function generateResponse(query) {
         query = query.toLowerCase();
 
         // 0.1 Name Recognition
@@ -896,6 +898,56 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // 0.65. Utility: Time and Date
+        if (query.match(/what.*time/) || query.match(/current.*time/) || query.includes('time now')) {
+             return { text: `It is currently ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}.` };
+        }
+        if (query.match(/what.*date/) || query.match(/todays.*date/) || query.includes('date today')) {
+             return { text: `Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.` };
+        }
+        if (query.match(/what.*day/) || query.includes('day is it')) {
+             return { text: `Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long' })}.` };
+        }
+
+        // 0.62. Comparative Reasoning (Dynamic "Why X over Y")
+        const reasonMatch = query.match(/why (.*?) (?:is |are |should be )?(?:better|preferred|chosen|more suitable|selected) (?:than|over|instead of) (.*)/i);
+        if (reasonMatch) {
+            const subject = reasonMatch[1].toLowerCase().trim();
+            const object = reasonMatch[2].toLowerCase().trim();
+            const response = generateComparativeReasoning(subject, object);
+            if (response) return { text: response.replace(/<[^>]*>/g, ''), html: response };
+        }
+
+        // 0.67. Utility: Steel Weight Calculator
+        const steelWeightMatch = query.match(/weight.*(\d+)\s*mm/i) || query.match(/(\d+)\s*mm.*weight/i);
+        if (steelWeightMatch) {
+            const d = parseFloat(steelWeightMatch[1]);
+            const weight = (d * d) / 162;
+            const responseText = `The unit weight of a <strong>${d}mm</strong> steel bar is approximately <strong>${weight.toFixed(3)} kg/meter</strong>.`;
+            return {
+                text: responseText.replace(/<[^>]*>/g, ''),
+                html: responseText,
+                suggestions: ["Calculate another", "Show Bar Benders"]
+            };
+        }
+
+        // 0.69. Lead Capture (Phone/Email)
+        const phoneMatch = query.match(/\b[6-9]\d{9}\b/);
+        const emailMatch = query.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
+        if (phoneMatch || emailMatch) {
+            const contact = phoneMatch ? phoneMatch[0] : emailMatch[0];
+            // In a real app, send this to backend/email service
+            return {
+                text: `Thanks! I've noted your contact details (<strong>${contact}</strong>). Our sales team will get in touch with you shortly.`,
+                suggestions: ["Browse Products", "Download Brochure"]
+            };
+        }
+
+        // 0.66. Personality: Status
+        if (query.match(/how.*are.*you/) || query === 'how are you') {
+            return { text: "I'm functioning perfectly! Thanks for asking. How can I help you with your construction equipment needs today?", suggestions: ["Show me products", "Contact Support"] };
+        }
+
         // 0.7. Personality: Jokes
         if (query.includes('joke')) {
             const jokes = [
@@ -934,8 +986,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 0.91. Intent: Rental Inquiry (Contextual)
         if ((query.includes('rent') || query.includes('hire') || query.includes('lease')) && lastContextProduct) {
+             const responseText = `Yes, the <strong>${lastContextProduct.name}</strong> is available for rent. Would you like to check availability or view our rental terms?`;
              return {
-                 text: `Yes, the <strong>${lastContextProduct.name}</strong> is available for rent. Would you like to check availability or view our rental terms?`,
+                 text: responseText.replace(/<[^>]*>/g, ''),
+                 html: responseText,
                  suggestions: ["View Rental Services", "Contact Rental Desk"]
              };
         }
@@ -951,6 +1005,17 @@ document.addEventListener('DOMContentLoaded', function() {
                  setTimeout(() => window.toggleCart(), 500);
                  return { text: "Opening your selection tray..." };
              }
+        }
+
+        // 0.96. Feedback
+        if (query.includes('give feedback') || query.includes('rate experience')) {
+             return {
+                 text: "We value your feedback! How would you rate your experience?",
+                 suggestions: ["⭐⭐⭐⭐⭐ Great", "⭐⭐⭐ Good", "⭐ Needs Improvement"]
+             };
+        }
+        if (query.includes('⭐')) {
+             return { text: "Thank you for your feedback! We are constantly improving." };
         }
 
         // 0.95. Small Talk
@@ -981,8 +1046,64 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
         
-        // 2. Smart General Knowledge (Simulated AI)
-        const aiKnowledge = [
+        // 2. Knowledge Graph Engine (Dynamic Synthesis)
+        // Structured data to allow the bot to "think" and construct answers based on intent
+        const knowledgeGraph = {
+            'single phase': { term: "Single Phase Power", def: "a standard electrical supply system using 220V-240V AC", usage: "powering smaller equipment like 2HP vibrators and mini lifts", context: "residential and light commercial sites" },
+            'three phase': { term: "Three Phase Power", def: "an industrial electrical supply system using 415V AC", usage: "powering heavy-duty machinery like large bar benders and cutters", benefit: "consistent power delivery and higher efficiency for large motors" },
+            'hp': { term: "Horsepower (HP)", def: "a unit of measurement for engine or motor power", rule: "higher HP generally means the machine can handle heavier loads or work faster" },
+            'rpm': { term: "RPM", def: "Revolutions Per Minute, indicating speed or frequency", rule: "higher RPM in vibrators leads to better concrete consolidation" },
+            'm20': { term: "M20 Concrete", def: "a standard concrete grade with 20 N/mm² compressive strength", spec: "Mix Ratio 1:1.5:3 (Cement : Sand : Aggregate)" },
+            'm25': { term: "M25 Concrete", def: "a standard concrete grade with 25 N/mm² compressive strength", spec: "Mix Ratio 1:1:2 (Cement : Sand : Aggregate)" },
+            'opc': { term: "Ordinary Portland Cement (OPC)", def: "the most common type of cement used in general construction", benefit: "fast setting and high initial strength" },
+            'ppc': { term: "Pozzolana Portland Cement (PPC)", def: "a blended cement using pozzolanic materials", benefit: "better durability and resistance to cracks over time" },
+            'tmt': { term: "TMT (Thermo Mechanically Treated) Bars", def: "high-strength reinforcement steel with a tough outer core and soft inner core", benefit: "superior ductility, weldability, and earthquake resistance" },
+            'slump test': { term: "Slump Test", def: "a field test to measure the consistency and workability of fresh concrete", rule: "a higher slump value indicates more fluid (workable) concrete" },
+            'cover block': { term: "Cover Block", def: "a spacer used to lift the rebar off the ground before pouring concrete", usage: "maintaining a specified distance between the TMT bar and the shuttering to prevent corrosion" },
+            'needle': { term: "Vibrator Needle", def: "the vibrating head inserted into concrete", rule: "diameter should be chosen based on reinforcement spacing (e.g., 40mm is standard, 25mm for congested areas)" },
+            'curing': { term: "Curing", def: "the process of maintaining moisture in concrete to promote hydration", rule: "minimum 7 days is required, though 28 days is recommended for full strength" },
+            'fe500': { term: "Fe500 Grade", def: "steel bars with a yield strength of 500 N/mm²", usage: "general construction of high-rise buildings" },
+            'fe550': { term: "Fe550 Grade", def: "steel bars with a yield strength of 550 N/mm²", usage: "projects requiring higher load-bearing capacity" }
+        };
+
+        // Dynamic Synthesis Logic
+        for (const [key, data] of Object.entries(knowledgeGraph)) {
+            // Check if query contains the concept key
+            if (query.includes(key)) {
+                const term = data.term || key.replace(/\b\w/g, l => l.toUpperCase());
+                
+                // Intent: Reason/Benefit ("Why use...", "Benefits of...")
+                if (query.includes('why') || query.includes('benefit') || query.includes('advantage') || query.includes('better')) {
+                    if (data.benefit) return { text: `The main advantage of <strong>${term}</strong> is ${data.benefit}.` };
+                    if (data.rule) return { text: `Generally, ${data.rule}.` };
+                    if (data.usage) return { text: `<strong>${term}</strong> is preferred because it is effective for ${data.usage}.` };
+                }
+                
+                // Intent: Usage/Application ("What is X used for?", "Where to use X?")
+                if (query.includes('use') || query.includes('application') || query.includes('work') || query.includes('purpose')) {
+                    if (data.usage) return { text: `<strong>${term}</strong> is primarily used for ${data.usage}.` };
+                    if (data.context) return { text: `<strong>${term}</strong> is commonly found in ${data.context}.` };
+                }
+
+                // Intent: Specifications ("Specs of...", "Ratio of...")
+                if (query.includes('ratio') || query.includes('mix') || query.includes('spec') || query.includes('detail')) {
+                    if (data.spec) return { text: `The standard specification for <strong>${term}</strong> is: ${data.spec}.` };
+                }
+
+                // Default: Definition + Contextual Synthesis
+                let response = `<strong>${term}</strong> refers to ${data.def}.`;
+                // Chain thoughts logically
+                if (data.spec) response += ` It typically follows a ${data.spec}.`;
+                else if (data.usage) response += ` It is widely used for ${data.usage}.`;
+                else if (data.benefit) response += ` Key benefit: ${data.benefit}.`;
+                else if (data.rule) response += ` Note that ${data.rule}.`;
+                
+                return { text: response };
+            }
+        }
+
+        // 3. Static Fallback (Company Info & Phatic)
+        const staticKnowledge = [
             { 
                 keywords: ['open', 'time', 'hours'], 
                 response: (() => {
@@ -1007,19 +1128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             { keywords: ['catalog'], response: "You can download our complete product catalogue from the Contact section of our website." },
             { keywords: ['catalogue'], response: "You can download our complete product catalogue from the Contact section of our website." },
             { keywords: ['brochure'], response: "You can download our complete product catalogue from the Contact section of our website." },
-            // Technical Glossary
-            { keywords: ['single', 'phase'], response: "Single-phase power (220V-240V) is standard for residential and light commercial use. Our smaller equipment like 2HP vibrators and mini lifts often use this." },
-            { keywords: ['three', 'phase'], response: "Three-phase power (415V) provides more consistent power for heavy-duty industrial machinery like large bar benders and cutters." },
-            { keywords: ['hp', 'horsepower'], response: "HP (Horsepower) measures the engine or motor's power. Higher HP generally means the machine can handle heavier loads or work faster." },
-            { keywords: ['rpm'], response: "RPM (Revolutions Per Minute) indicates the speed of the motor or vibration frequency. Higher RPM in vibrators leads to better concrete consolidation." },
             { keywords: ['who', 'created', 'you'], response: "I was developed by the tech team at Srinithya Engineering to assist customers like you!" },
             { keywords: ['who', 'made', 'you'], response: "I was developed by the tech team at Srinithya Engineering to assist customers like you!" },
-            // General Construction Knowledge
-            { keywords: ['m20'], response: "The mix ratio for M20 grade concrete is typically 1:1.5:3 (Cement : Sand : Aggregate)." },
-            { keywords: ['m25'], response: "The mix ratio for M25 grade concrete is typically 1:1:2 (Cement : Sand : Aggregate)." },
-            { keywords: ['curing'], response: "Concrete typically requires a minimum curing period of 7 days, but 28 days is recommended for full strength." },
-            { keywords: ['tmt', 'full', 'form'], response: "TMT stands for Thermo Mechanically Treated bars, known for high strength and ductility." },
-            { keywords: ['weight', 'steel'], response: "The unit weight of steel bars can be calculated as D²/162 (kg/m), where D is the diameter in mm." },
             { keywords: ['cube', 'test'], response: "Compressive strength of concrete is determined by cube test on 150mm x 150mm x 150mm cubes after 7 and 28 days curing." },
             // Expanded Knowledge
             { keywords: ['safety', 'gear'], response: "Safety is paramount. We recommend using helmets, gloves, safety shoes, and ear protection when operating heavy machinery." },
@@ -1028,10 +1138,28 @@ document.addEventListener('DOMContentLoaded', function() {
             { keywords: ['petrol', 'vs', 'diesel'], response: "Petrol engines are generally lighter and easier to start, while Diesel engines offer better fuel economy and torque for heavy-duty, continuous operation." },
             { keywords: ['warranty', 'claim'], response: "To claim warranty, please keep your purchase invoice handy and contact our support team with the machine's serial number." },
             { keywords: ['return', 'policy'], response: "Returns are subject to terms and conditions. Please contact our sales office immediately if you face issues with a delivered product." },
-            { keywords: ['rent', 'hire', 'rental'], response: "Yes, we offer equipment rental services! You can browse our rental options in the 'Services' section." }
+            { keywords: ['rent', 'hire', 'rental'], response: "Yes, we offer equipment rental services! You can browse our rental options in the 'Services' section." },
+            // General Cleverness
+            { keywords: ['boss', 'owner', 'ceo', 'director'], response: "Srinithya Engineering is led by a team of experienced directors dedicated to construction innovation." },
+            { keywords: ['discount', 'offer'], response: "We offer competitive pricing! For bulk orders or specific discounts, please request a quote or contact our sales team directly." },
+            { keywords: ['made', 'in'], response: "Our machines are proudly manufactured in India, adhering to strict quality standards." },
+            { keywords: ['capital', 'india'], response: "The capital of India is New Delhi." },
+            { keywords: ['are', 'you', 'robot'], response: "Yes, I am a virtual assistant powered by code, designed to help you navigate SEPL's products." },
+            { keywords: ['are', 'you', 'human'], response: "No, I am a virtual assistant, but I can connect you with our human experts via WhatsApp!" },
+            { keywords: ['weather'], response: "I don't have a window, but I hope the weather is good for construction today!" },
+            { keywords: ['meaning', 'life'], response: "42. But for us, it's building strong foundations!" },
+            // Expanded Knowledge Base
+            { keywords: ['prime', 'minister', 'india'], response: "The current Prime Minister of India is Narendra Modi." },
+            { keywords: ['president', 'india'], response: "The current President of India is Droupadi Murmu." },
+            { keywords: ['portable', 'vs', 'stationary'], response: "Portable machines are ideal for sites with limited space or where rebar needs to be processed at multiple locations. Stationary machines offer higher capacity and speed for centralized processing yards." },
+            { keywords: ['portable', 'vs', 'normal'], response: "Portable machines are lightweight and can be moved easily around the site, whereas normal (stationary) machines are heavy-duty, designed for high-volume production in a fixed location." },
+            { keywords: ['email', 'mail'], response: "You can email us at sales@srinithyaepl.in for quotes and inquiries." },
+            { keywords: ['phone', 'call', 'number', 'mobile'], response: "You can reach our sales team at +91 90320 69819." },
+            { keywords: ['mission', 'vision'], response: "Our mission is to empower the construction industry with reliable, efficient, and affordable machinery." },
+            { keywords: ['founded', 'established'], response: "Srinithya Engineering has been serving the construction industry with dedication and quality products for many years." }
         ];
 
-        for (const item of aiKnowledge) {
+        for (const item of staticKnowledge) {
             if (item.keywords.every(k => query.includes(k))) {
                 return { text: item.response };
             }
@@ -1065,6 +1193,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const products = flattenProducts(window.productData);
         
+        // 0.68. Intelligent Recommendation (Capacity based)
+        const capacityMatch = query.match(/(?:bend|cut|process).*?(\d+)\s*mm/i);
+        if (capacityMatch) {
+            const size = parseFloat(capacityMatch[1]);
+            const action = query.includes('cut') ? 'cut' : 'bend';
+            const categoryKeyword = action === 'cut' ? 'cutting' : 'bending';
+            
+            // Filter products
+            const suitableProducts = products.filter(p => {
+                if (!p.category.toLowerCase().includes(categoryKeyword)) return false;
+                // Extract capacity from specs or compare data
+                let cap = 0;
+                if (p.compare && (p.compare.capacity || p.compare['bend-dia'])) {
+                    const capStr = p.compare.capacity || p.compare['bend-dia'];
+                    const capMatch = capStr.match(/(\d+)/);
+                    if (capMatch) cap = parseFloat(capMatch[1]);
+                }
+                return cap >= size;
+            }).sort((a, b) => {
+                // Sort by capacity ascending (closest match first)
+                let capA = 0, capB = 0;
+                if (a.compare) { const m = (a.compare.capacity || a.compare['bend-dia'] || '').match(/(\d+)/); if(m) capA = parseFloat(m[1]); }
+                if (b.compare) { const m = (b.compare.capacity || b.compare['bend-dia'] || '').match(/(\d+)/); if(m) capB = parseFloat(m[1]); }
+                return capA - capB;
+            });
+
+            if (suitableProducts.length > 0) {
+                const p = suitableProducts[0];
+                updateContext(p);
+                return {
+                    text: `For ${action}ing <strong>${size}mm</strong> bars, I recommend the <strong>${p.name}</strong> (Capacity: up to ${p.compare.capacity || p.compare['bend-dia']}).`,
+                    html: getProductCardHTML(p),
+                    suggestions: [`Price of ${p.model}`, "View Details", "Compare"]
+                };
+            } else {
+                return {
+                    text: `I couldn't find a standard machine for ${action}ing <strong>${size}mm</strong> bars. Our standard range usually goes up to 42mm or 52mm. Please contact us for custom heavy-duty solutions.`,
+                    suggestions: ["Contact Support"]
+                };
+            }
+        }
+
         // Synonyms map for better context understanding
         const synonyms = {
             'rod': 'bar', 'rebar': 'bar', 'iron': 'bar', 'steel': 'bar', 'tmt': 'bar', 'stirrup': 'bar',
@@ -1088,7 +1258,9 @@ document.addEventListener('DOMContentLoaded', function() {
             'i', 'you', 'we', 'my', 'your', 'asked', 'about', 'act', 'according', 'previous', 'messages', 'chat', 
             'meant', 'actually', 'please', 'tell', 'me', 'show', 'find', 'search', 'looking', 'want', 'know',
             'model', 'type', 'version', 'series', 'weight', 'price', 'cost', 'specs', 'specification',
-            'how', 'much', 'many', 'can', 'do', 'does', 'will', 'would', 'should', 'details', 'detail'
+            'how', 'much', 'many', 'can', 'do', 'does', 'will', 'would', 'should', 'details', 'detail',
+            'who', 'where', 'when', 'why',
+            'better', 'than', 'prefer', 'difference', 'vs', 'compare'
         ]);
 
         // Tokenize and expand query
@@ -1177,17 +1349,63 @@ document.addEventListener('DOMContentLoaded', function() {
             
         const matches = sortedScoredItems.map(item => item.product);
 
+        // Check for product-specific intent (attributes) to prevent Wiki takeover on specific questions
+        const productKeywords = ['price', 'cost', 'spec', 'capacity', 'weight', 'power', 'motor', 'engine', 'warranty', 'usage', 'use', 'buy', 'rent', 'speed', 'rpm', 'detail'];
+        const hasProductIntent = productKeywords.some(k => query.includes(k));
+
+        // Prioritize Wikipedia for "Who" questions or low-confidence product matches
+        const topScore = sortedScoredItems.length > 0 ? sortedScoredItems[0].score : 0;
+        const isWhoQuestion = /^(who|what|where|when|define|why) /i.test(query);
+        const isWhyQuestion = /^why /i.test(query);
+        
+        // Only try Wiki if: It's a 'Why' question OR (It's a 'Who' question AND (Score is low OR No specific product intent)) OR (Score is very low)
+        if (isWhyQuestion || (isWhoQuestion && (topScore < 45 || !hasProductIntent)) || (matches.length > 0 && topScore < 25)) {
+             try {
+                const wikiData = await fetchWikipediaSummary(query);
+                if (wikiData) {
+                    return {
+                        text: `Here is what I found on Wikipedia for "<strong>${wikiData.title}</strong>":<br>${wikiData.extract}`,
+                        html: `<div class="bot-product-card">
+                                <h4><i class="fa-brands fa-wikipedia-w"></i> ${wikiData.title}</h4>
+                                <p>${wikiData.extract}</p>
+                                <a href="${wikiData.url}" target="_blank" class="bot-action-btn" style="background-color: #f3f4f6; color: #333; border: 1px solid #ccc;">Read more on Wikipedia</a>
+                               </div>`,
+                        suggestions: ["Search Google", "Contact Support"]
+                    };
+                }
+            } catch (e) { }
+        }
+
+        // CRITICAL FIX: If it was a general knowledge question (Who/What) and Wiki failed,
+        // prevent weak product matches from showing up. Force fallback to Google Search.
+        // Only clear if score is low (< 40) AND no product intent. (Model matches usually score >= 40)
+        if (isWhoQuestion && topScore < 40 && !hasProductIntent) {
+            matches.length = 0; 
+        }
+
+        // Special handling for "Why" questions to avoid irrelevant model comparisons
+        // If user asks "Why X vs Y" (Category comparison) and we only match models of X, 
+        // we shouldn't compare Model X1 vs Model X2.
+        if (isWhyQuestion && topScore < 85) {
+             matches.length = 0;
+        }
+
         // --- Comparison Logic ---
-        if (query.includes('compare') || query.includes(' vs ') || query.includes('difference')) {
+        if (query.includes('compare') || query.includes(' vs ') || query.includes('difference') || query.includes('better') || query.includes('prefer')) {
             // Use matches or find mentioned products specifically
             const uniqueProducts = [...new Set(matches)];
             
             if (uniqueProducts.length >= 2) {
                 const p1 = uniqueProducts[0];
                 const p2 = uniqueProducts[1];
+                const isBetterQuery = query.includes('better') || query.includes('prefer');
+                const introText = isBetterQuery 
+                    ? `To help you decide whether <strong>${p1.name}</strong> is better than <strong>${p2.name}</strong>, here is a comparison:`
+                    : `Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:`;
+
                 return {
-                    text: `Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:`,
-                    html: `<p>Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:</p>` + generateComparisonHTML(p1, p2),
+                    text: introText,
+                    html: `<p>${introText}</p>` + generateComparisonHTML(p1, p2),
                     suggestions: [`Price of ${p1.model}`, `Price of ${p2.model}`, "Add both to Estimate"]
                 };
             }
@@ -1309,11 +1527,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // 4. External Source Fallback (Google Search)
+        // 4. External Source Fallback (Wikipedia + Google Search)
+        
+        // Try Wikipedia for general knowledge
+        try {
+            const wikiData = await fetchWikipediaSummary(query);
+            if (wikiData) {
+                return {
+                    text: `Here is what I found on Wikipedia for "<strong>${wikiData.title}</strong>":<br>${wikiData.extract}`,
+                    html: `<div class="bot-product-card">
+                            <h4><i class="fa-brands fa-wikipedia-w"></i> ${wikiData.title}</h4>
+                            <p>${wikiData.extract}</p>
+                            <a href="${wikiData.url}" target="_blank" class="bot-action-btn" style="background-color: #f3f4f6; color: #333; border: 1px solid #ccc;">Read more on Wikipedia</a>
+                           </div>`,
+                    suggestions: ["Search Google", "Contact Support"]
+                };
+            }
+        } catch (e) {
+            console.warn("Wiki fetch failed", e);
+        }
+
         const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
         
         return { 
-            text: "I couldn't find a direct match in our catalog or knowledge base. However, I can help you search for this information externally.",
+            text: "I couldn't find a direct match in our catalog. However, I can help you search for this information externally.",
             html: `<div class="bot-product-card">
                     <h4>External Search</h4>
                     <p>Find answers for: "<strong>${query}</strong>"</p>
@@ -1321,6 +1558,53 @@ document.addEventListener('DOMContentLoaded', function() {
                    </div>`,
             suggestions: ["Contact Support", "View All Products", "WhatsApp Us"]
         };
+    }
+
+    async function fetchWikipediaSummary(query) {
+        // Clean query: remove common question phrases
+        let cleanQuery = query.replace(/^(what|who|where|when|why|how)(?:'s|'re| is| are| was| were| do| does| did)\s+/i, '')
+            .replace(/^(define|meaning of|tell me about)\s+/i, '')
+            .replace(/^the\s+/i, '')
+            .replace(/[?]/g, '') // Remove question marks
+            .trim();
+            
+        if (cleanQuery.length < 2) return null;
+
+        // Use standard Query API for better summaries (handles redirects and exact matches better than opensearch)
+        const url = `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${encodeURIComponent(cleanQuery)}&origin=*`;
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            // data.query.pages is an object with pageId keys
+            const pages = data.query?.pages;
+            if (!pages) return null;
+
+            const pageId = Object.keys(pages)[0];
+            if (pageId === "-1") return null; // No article found
+
+            const page = pages[pageId];
+            if (page.extract) {
+                // Limit length to ~300 chars
+                let extract = page.extract;
+                if (extract.length > 300) {
+                    extract = extract.substring(0, 300) + '...';
+                }
+                
+                // Filter out "may refer to" disambiguation pages if they slipped through
+                if (extract.includes("may refer to:")) return null;
+
+                return { 
+                    title: page.title, 
+                    extract: extract, 
+                    url: `https://en.wikipedia.org/wiki/${encodeURIComponent(page.title.replace(/ /g, '_'))}` 
+                };
+            }
+        } catch (e) {
+            console.error("Wiki fetch failed", e);
+        }
+        return null;
     }
 
     // Helper to generate product card HTML
@@ -1436,6 +1720,135 @@ document.addEventListener('DOMContentLoaded', function() {
                    </div>`,
             suggestions: ["View Details", "Contact Support"]
         };
+    }
+
+    // Helper for Dynamic Reasoning
+    function generateComparativeReasoning(subject, object) {
+        // 1. Define Abstract Traits & Knowledge
+        const traits = {
+            portable: { keywords: ['portable', 'handy', 'small', 'light', 'mini'], pros: "mobility, ease of transport, and single-phase power usage", cons: "lower capacity" },
+            stationary: { keywords: ['stationary', 'heavy', 'standard', 'normal', 'big', 'yard', 'sbb', 'sbc', 'machine', 'bender', 'cutter'], pros: "high capacity, durability, and speed for heavy-duty tasks", cons: "lack of mobility" },
+            diesel: { keywords: ['diesel', 'engine'], pros: "operation in areas without electricity and high torque", cons: "noise and fumes" },
+            electric: { keywords: ['electric', 'motor'], pros: "low noise, low maintenance, and zero emissions", cons: "dependency on power supply" },
+            manual: { keywords: ['manual', 'hand'], pros: "low cost and simplicity", cons: "labor intensity and slowness" },
+            automatic: { keywords: ['auto', 'cnc', 'program'], pros: "precision, speed, and automation", cons: "higher cost" }
+        };
+
+        function getTrait(phrase) {
+            for (const [key, data] of Object.entries(traits)) {
+                if (data.keywords.some(k => phrase.includes(k))) return key;
+            }
+            // Contextual Defaults: If 'bender' or 'cutter' is mentioned without 'portable', assume stationary
+            if ((phrase.includes('bender') || phrase.includes('cutter')) && !phrase.includes('portable')) {
+                return 'stationary';
+            }
+            return null;
+        }
+
+        const sTrait = getTrait(subject);
+        const oTrait = getTrait(object);
+
+        // 2. Trait-based Comparison
+        if (sTrait && oTrait && sTrait !== oTrait) {
+            const sData = traits[sTrait];
+            const oData = traits[oTrait];
+            return `<strong>${subject.charAt(0).toUpperCase() + subject.slice(1)}</strong> is generally preferred over <strong>${object}</strong> when you need <strong>${sData.pros}</strong>. Conversely, ${object} is chosen for ${oData.pros}.`;
+        }
+
+        // 3. Dynamic Category Comparison (Intelligent Aggregation)
+        if (window.productData) {
+            // Map common terms to data keys
+            const categoryMap = {
+                'portable': ['portable-bar-processing-models'],
+                'handy': ['handy-vibration-models', 'mechanical-poker-models'],
+                'bender': ['bar-bending-models', 'portable-bar-processing-models'],
+                'bar bender': ['bar-bending-models'],
+                'stationary': ['bar-bending-models', 'bar-cutting-models'],
+                'cutter': ['bar-cutting-models', 'industrial-cutting-tools'],
+                'bar cutter': ['bar-cutting-models'],
+                'mixer': ['concrete-mixer-models'],
+                'compactor': ['plate-compactor-models'],
+                'roller': ['road-roller-models'],
+                'vibrator': ['vibrators', 'handy-vibration-models', 'shutter-vibrator-models'],
+                'lift': ['mini-lift-models', 'scissor-lift-models']
+            };
+
+            const getCategoryKey = (text) => {
+                for (const [keyword, keys] of Object.entries(categoryMap)) {
+                    if (text.includes(keyword)) {
+                        // Refine: if text is "portable bender", prioritize portable key
+                        if (text.includes('portable') && keys.some(k => k.includes('portable'))) return keys.find(k => k.includes('portable'));
+                        return keys[0]; // Default to first key (usually the main/stationary one)
+                    }
+                }
+                return null;
+            };
+
+            const catKey1 = getCategoryKey(subject);
+            const catKey2 = getCategoryKey(object);
+
+            if (catKey1 && catKey2 && catKey1 !== catKey2) {
+                // Helper to get max capacity/power from a category dynamically
+                const getCategoryStats = (key) => {
+                    const items = flattenProducts({ [key]: window.productData[key] });
+                    let maxCap = 0;
+                    items.forEach(p => {
+                        if (p.compare) {
+                            const capStr = p.compare.capacity || p.compare['bend-dia'] || '';
+                            const capMatch = capStr.match(/(\d+(\.\d+)?)/);
+                            if (capMatch) maxCap = Math.max(maxCap, parseFloat(capMatch[1]));
+                        }
+                    });
+                    return { maxCap, name: key.replace(/-/g, ' ').replace('models', '').trim() };
+                };
+
+                const stats1 = getCategoryStats(catKey1);
+                const stats2 = getCategoryStats(catKey2);
+
+                if (stats1.maxCap > 0 && stats2.maxCap > 0) {
+                    if (stats1.maxCap > stats2.maxCap) {
+                        return `<strong>${subject}</strong> (Category: ${stats1.name}) offers higher capacity (up to ${stats1.maxCap}mm) compared to <strong>${object}</strong> (up to ${stats2.maxCap}mm), making it better for heavy-duty tasks.`;
+                    } else {
+                        return `<strong>${object}</strong> offers higher capacity (up to ${stats2.maxCap}mm) compared to <strong>${subject}</strong> (up to ${stats1.maxCap}mm). Choose ${subject} if you prioritize portability or lower power consumption.`;
+                    }
+                }
+            }
+        }
+
+        // 4. Product Spec Comparison (Fallback to specific models with improved scoring)
+        if (window.productData) {
+            const products = flattenProducts(window.productData);
+            
+            // Improved Finder: Score based on match quality to find the BEST product, not just the first
+            const findProduct = (text) => {
+                return products.map(p => {
+                    let score = 0;
+                    if (text.includes(p.model.toLowerCase())) score += 100;
+                    if (text.includes(p.name.toLowerCase())) score += 50;
+                    // Partial match for words > 3 chars
+                    text.split(' ').forEach(w => {
+                        if (w.length > 3 && (p.name.toLowerCase().includes(w) || p.model.toLowerCase().includes(w))) score += 10;
+                    });
+                    return { p, score };
+                })
+                .filter(x => x.score > 0)
+                .sort((a, b) => b.score - a.score)[0]?.p;
+            };
+            
+            const p1 = findProduct(subject);
+            const p2 = findProduct(object);
+
+            if (p1 && p2) {
+                // Compare Capacity/Power
+                const getVal = (p) => { if(p.compare) { const v = p.compare.capacity || p.compare['bend-dia'] || p.compare.power || ''; const m = v.match(/(\d+(\.\d+)?)/); return m ? parseFloat(m[1]) : 0; } return 0; };
+                const v1 = getVal(p1);
+                const v2 = getVal(p2);
+                
+                if (v1 > v2 && v2 > 0) return `<strong>${p1.name}</strong> is preferred over <strong>${p2.name}</strong> if you need higher capacity/power (${v1} vs ${v2}).`;
+                if (v2 > v1 && v1 > 0) return `<strong>${p1.name}</strong> has lower capacity than <strong>${p2.name}</strong> (${v1} vs ${v2}), so it might be preferred for lighter tasks or lower cost.`;
+            }
+        }
+        return null;
     }
 
     // Helper to generate comparison HTML
