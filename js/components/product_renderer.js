@@ -98,7 +98,7 @@ window.createProductCard = function(product) {
     // Card classes and structure
     const imageClass = product.imageClass || 'object-contain';
     const imageContainerClass = product.imageContainerClass || 'h-32 md:h-64';
-    const cardWrapperClass = product.cardWrapperClass || 'bg-white rounded-xl border border-gray-200 hover:border-primary hover:shadow-[0_0_20px_rgba(30,58,138,0.6)] transition-all duration-300 group flex flex-col';
+    const cardWrapperClass = product.cardWrapperClass || 'bg-white rounded-xl border border-gray-200 hover:border-primary hover:shadow-[0_0_20px_rgba(30,58,138,0.6)] transition-all duration-300 group flex flex-col h-full';
     const contentClass = product.contentClass || 'p-2 md:p-6 text-center flex flex-col flex-grow';
 
     let mediaHTML;
@@ -143,7 +143,7 @@ window.createProductCard = function(product) {
             <div class="${contentClass}">
                 ${compareCheckboxHTML}
                 <h3 class="text-sm md:text-2xl font-bold text-gray-900 mb-1 md:mb-2 leading-tight">${product.name}</h3>
-                ${product.description ? `<p class="text-xs md:text-sm text-gray-600 mb-2 md:mb-4 flex-grow line-clamp-2">${product.description}</p>` : ''}
+                ${product.description ? `<p class="text-xs md:text-sm text-gray-600 mb-2 md:mb-4 line-clamp-2">${product.description}</p>` : ''}
                 <div class="relative group/specs w-full mb-1">
                     <button onclick="window.copyProductSpecs(this)" class="absolute top-0 right-0 md:right-2 text-gray-400 hover:text-secondary p-1.5 opacity-100 transition-opacity duration-200 z-10 bg-white/80 md:bg-transparent rounded-full md:rounded-none shadow-sm md:shadow-none" title="Copy Specifications">
                         <i class="fa-regular fa-copy"></i>
@@ -296,14 +296,14 @@ document.addEventListener('keydown', function (event) {
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3 border-b pb-2 border-gray-200">
                                 <i class="fa-solid fa-bolt text-secondary"></i> Standard Handy Vibrators
                             </h2>
-                            <div id="hv-standard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-product-key="handy-vibration-models.standard"></div>
+                            <div id="hv-standard" class="flex flex-wrap justify-center gap-6 [&>*]:w-full [&>*]:sm:w-[22rem]" data-product-key="handy-vibration-models.standard"></div>
                         </div>
                         
                         <div class="mb-12">
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3 border-b pb-2 border-gray-200">
                                 <i class="fa-solid fa-wave-square text-secondary"></i> High Frequency Hand-Held Vibrator
                             </h2>
-                            <div id="hv-hf" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-product-key="handy-vibration-models.highFrequency"></div>
+                            <div id="hv-hf" class="flex flex-wrap justify-center gap-6 [&>*]:w-full [&>*]:sm:w-[22rem]" data-product-key="handy-vibration-models.highFrequency"></div>
                         </div>
                     </div>
                 `;

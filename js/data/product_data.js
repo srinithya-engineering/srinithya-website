@@ -677,9 +677,10 @@ window.productData = {
                 description: "Lightweight bender for bars up to 25mm.",
                 specs: [
                     { icon: "fa-solid fa-ruler-combined", text: "Capacity: 25mm" },
-                    { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" }],
+                    { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" },
+                    { icon: "fa-solid fa-weight-hanging", text: "Weight: 22 kg" }],
 
-                compare: { model: "SPB25", category: "portable-bar-equipment", type: "Portable Bender", capacity: "25mm", voltage: "220V/110V" },
+                compare: { model: "SPB25", category: "portable-bar-equipment", type: "Portable Bender", capacity: "25mm", voltage: "220V/110V", weight: "22 kg" },
                 actions: [{ type: 'cart', name: 'SPB25 Portable Bender' }]
             },
             {
@@ -689,9 +690,10 @@ window.productData = {
                 description: "Powerful portable unit for bending bars up to 32mm.",
                 specs: [
                     { icon: "fa-solid fa-ruler-combined", text: "Capacity: 32mm" },
-                    { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" }],
+                    { icon: "fa-solid fa-bolt", text: "Type: Electric Portable" },
+                    { icon: "fa-solid fa-weight-hanging", text: "Weight: 28 kg" }],
 
-                compare: { model: "SPB32", category: "portable-bar-equipment", type: "Portable Bender", capacity: "32mm", voltage: "220V/110V" },
+                compare: { model: "SPB32", category: "portable-bar-equipment", type: "Portable Bender", capacity: "32mm", voltage: "220V/110V", weight: "28 kg" },
                 actions: [{ type: 'cart', name: 'SPB32 Portable Bender' }]
             },
             {
@@ -825,24 +827,42 @@ window.productData = {
             actions: [{ type: 'cart', name: 'SWR30 FH Walk behind' }]
         }
     ],
+    'excavator-drum-compactor': [
+        {
+            model: "Excavator Drum Compactor",
+            name: "Excavator Drum Compactor",
+            image: "./Assets/Product Images/drum compactor.png",
+            imageWebp: "./Assets/Product Images/drum compactor.webp",
+            description: "Efficient compaction attachment designed for excavators, ensuring high density soil compaction.",
+            specs: [
+                { icon: "fa-solid fa-weight-hanging", text: "Operating Weight: Customizable" },
+                { icon: "fa-solid fa-compress-arrows-alt", text: "Compaction Force: High" },
+                { icon: "fa-solid fa-gears", text: "Compatibility: Various Excavators" }
+            ],
+            compare: { model: "Excavator Drum Compactor", category: "excavator-attachments", weight: "Customizable", force: "High", compatibility: "Universal" },
+            actions: [{ type: 'enquire', name: 'Excavator Drum Compactor' }]
+        }
+    ],
     'scrap-straightener-models': [
         {
-            model: "GX8-25 Eco Model",
-            name: "GX8-25",
+            model: "GX6-14 Eco Model",
+            name: "GX6-14 Eco Model",
             image: "./Assets/Product Images/sss.png",
+            imageWebp: "./Assets/Product Images/sss.webp",
             description: "Cost-effective solution for straightening coils and lighter scrap.",
             specs: [
                 { icon: "fa-solid fa-arrow-right-long", text: "Range: 4mm - 12mm" },
                 { icon: "fa-solid fa-gauge", text: "Speed: 25 meters/min" },
                 { icon: "fa-solid fa-recycle", text: "Usage: Coil & Light Scrap" }
             ],
-            compare: { model: "GX8-25 Eco Model", category: "scrap-straightener-models", range: "4mm - 12mm", "speed-feature": "25 meters/min", "usage-accuracy": "Coil & Light Scrap" },
-            actions: [{ type: 'cart', name: 'GX8-25 Eco Model' }]
+            compare: { model: "GX6-14 Eco Model", category: "scrap-straightener-models", range: "4mm - 12mm", "speed-feature": "25 meters/min", "usage-accuracy": "Coil & Light Scrap" },
+            actions: [{ type: 'cart', name: 'GX6-14 Eco Model' }]
         },
         {
             model: "GX6-25 Pro Model",
-            name: "GX6-25 Pro (+ Cutter)",
+            name: "GX6-25 Pro",
             image: "./Assets/Product Images/sss.png",
+            imageWebp: "./Assets/Product Images/sss.webp",
             description: "Advanced straightener with integrated hydraulic cutter for precise lengths.",
             specs: [
                 { icon: "fa-solid fa-arrow-right-long", text: "Range: 6mm - 16mm" },

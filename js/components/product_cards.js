@@ -40,6 +40,14 @@
             features: ["Ride-on & Walk-behind", "Heavy Duty Compaction", "Single & Double Drum Options"],
             link: "Product_details/road_roller_models.html"
         },
+        {
+            title: "Excavator Drum Compactor",
+            image: "./Assets/Product Images/drum compactor.png",
+            imageWebp: "./Assets/Product Images/drum compactor.webp",
+            description: "High-performance compaction attachment for excavators.",
+            features: ["High Compaction Force", "Easy Attachment", "Durable Design"],
+            link: "Product_details/excavator_drum_compactor.html"
+        }
         
           
     ];

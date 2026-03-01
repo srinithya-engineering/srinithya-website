@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excavator Drum Compactor | Srinithya Engineering</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#d97706',
+                        dark: '#111827',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            // Replace with your actual public key if needed, or keep placeholder if configured elsewhere
+            if(window.emailjs) emailjs.init("YOUR_PUBLIC_KEY"); 
+        })();
+    </script>
+    <!-- PDF Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body class="bg-slate-50 text-gray-800">
+    
+    <!-- Loader (Handled by navbar.js/CSS) -->
+    <div id="loader-wrapper"><div class="loader-section section-top"></div><div class="loader-section section-bottom"></div><div id="loader-logo-container"><div class="logo-light-container"><div class="logo-light-spinner"></div></div><img src="../Assets/Others/logo.png" alt="Loading..." class="w-32 h-auto relative z-20"></div></div>
+
+    <main class="pt-48 pb-12 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-4">
+                <nav class="flex text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                        <li class="inline-flex items-center">
+                            <a href="../index.html" class="inline-flex items-center hover:text-primary"><i class="fa-solid fa-house mr-2"></i>Home</a>
+                        </li>
+                        <li>
+                            <div class="flex items-center"><i class="fa-solid fa-chevron-right text-gray-300 mx-2"></i><a href="../index.html#products" class="hover:text-primary">Products</a></div>
+                        </li>
+                        <li aria-current="page">
+                            <div class="flex items-center"><i class="fa-solid fa-chevron-right text-gray-300 mx-2"></i><span class="text-gray-800 font-medium">Excavator Drum Compactor</span></div>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="text-center mb-12 animate-fade-in-up">
+                <h1 class="text-3xl md:text-4xl font-bold text-primary mb-4">Excavator Drum Compactor</h1>
+                <p class="text-gray-600 max-w-2xl mx-auto">High-performance compaction attachment designed for excavators.</p>
+                <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="excavator-compactor-grid" class="flex flex-wrap justify-center gap-6 [&>*]:w-full [&>*]:sm:w-[22rem]" data-product-key="excavator-drum-compactor">
+                <!-- Products rendered via JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/data/product_data.js"></script>
+    <script src="../js/core/cart.js"></script>
+    <script src="../js/components/navbar.js"></script>
+    <script src="../js/components/footer.js"></script>
+    <script src="../js/components/product_renderer.js"></script>
+    <script src="../js/components/whatsapp.js"></script>
+    <script src="../js/core/router.js"></script>
+    <script src="../js/data/chatbot.js"></script>
+</body>
+</html>

@@ -1257,8 +1257,8 @@ document.addEventListener('DOMContentLoaded', function() {
             'machine', 'machinery', 'equipment', 'tool', 'unit', 'device', 'product', 'item',
             'i', 'you', 'we', 'my', 'your', 'asked', 'about', 'act', 'according', 'previous', 'messages', 'chat', 
             'meant', 'actually', 'please', 'tell', 'me', 'show', 'find', 'search', 'looking', 'want', 'know',
-            'model', 'type', 'version', 'series', 'weight', 'price', 'cost', 'specs', 'specification',
-            'how', 'much', 'many', 'can', 'do', 'does', 'will', 'would', 'should', 'details', 'detail',
+            'model', 'type', 'version', 'series',
+            'how', 'much', 'many', 'can', 'do', 'does', 'will', 'would', 'should',
             'who', 'where', 'when', 'why',
             'better', 'than', 'prefer', 'difference', 'vs', 'compare'
         ]);
@@ -1423,14 +1423,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // --- Attribute & Usage Query ---
         const attributeMap = {
-            'weight': ['weight', 'weighs', 'heavy', 'kg'],
-            'power': ['power', 'motor', 'engine', 'hp', 'voltage', 'watts', 'electric', 'supply'],
-            'capacity': ['capacity', 'dimension', 'size', 'dia', 'diameter', 'mm', 'range', 'depth', 'width', 'height', 'output', 'volume', 'tank'],
-            'speed': ['speed', 'rpm', 'fast', 'velocity', 'rate', 'time'],
+            'weight': ['weight', 'weighs', 'heavy', 'kg', 'mass', 'operating weight'],
+            'power': ['power', 'motor', 'engine', 'hp', 'voltage', 'watts', 'electric', 'supply', 'phase', 'current', 'amp', 'frequency', 'hz', 'input', 'output'],
+            'capacity': ['capacity', 'dimension', 'size', 'dia', 'diameter', 'mm', 'range', 'depth', 'width', 'height', 'output', 'volume', 'tank', 'lift', 'load', 'mesh', 'core', 'length', 'discharge'],
+            'speed': ['speed', 'rpm', 'fast', 'velocity', 'rate', 'time', 'bends/min', 'times/min', 'vpm'],
             'warranty': ['warranty', 'guarantee'],
             'price': ['price', 'cost', 'rate', 'how much', 'quote'],
-            'usage': ['usage', 'use', 'function', 'work', 'application', 'do', 'purpose'],
-            'specs': ['spec', 'specification', 'feature', 'detail', 'config']
+            'usage': ['usage', 'use', 'function', 'work', 'application', 'do', 'purpose', 'role', 'type'],
+            'specs': ['spec', 'specification', 'feature', 'detail', 'config', 'data', 'info', 'description'],
+            'safety': ['safety', 'emergency', 'guard', 'protection', 'shield'],
+            'maintenance': ['maintenance', 'service', 'oil', 'lubrication', 'repair'],
+            'control': ['control', 'pedal', 'pin', 'operation', 'drive', 'system', 'manual', 'auto', 'hydraulic', 'reversible'],
+            'mobility': ['mobility', 'towable', 'chassis', 'wheel', 'portable', 'move', 'gradeability', 'climb'],
+            'components': ['gearbox', 'gear', 'rope', 'blade', 'fan', 'drum', 'mount', 'insulation', 'vibration', 'force']
         };
 
         // Determine target product based on score confidence
@@ -1459,6 +1464,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (!lastContextProduct && targetProduct) updateContext(targetProduct);
                     
                     return getAttributeResponse(targetProduct, attr, keywords);
+                }
+            }
+
+            // Direct Spec Search (Catch-all for specific technical terms not in attributeMap)
+            if (targetProduct.specs) {
+                // Filter query tokens that are significant (length > 2) and not common verbs
+                const significantTokens = tokens.filter(t => t.length > 2 && !['what', 'does', 'have', 'show', 'give', 'tell', 'is', 'are'].includes(t));
+                
+                if (significantTokens.length > 0) {
+                    const directMatches = targetProduct.specs.filter(s => {
+                        return significantTokens.some(token => s.text.toLowerCase().includes(token));
+                    });
+
+                    if (directMatches.length > 0) {
+                        if (contextSwitch) updateContext(targetProduct);
+                        if (!lastContextProduct && targetProduct) updateContext(targetProduct);
+
+                        const specHtml = directMatches.map(s => `<p style="font-size: 13px; color: #374151; margin: 4px 0; border-bottom: 1px dashed #eee; padding-bottom: 2px;">${s.icon ? `<i class="${s.icon} text-secondary"></i> ` : ''}${s.text}</p>`).join('');
+                        return {
+                            text: `I found this information for <strong>${targetProduct.name}</strong>:`,
+                            html: `<div class="bot-product-card"><h4>${targetProduct.name}</h4>${specHtml}<a href="${getProductLink(targetProduct)}" class="text-secondary font-bold text-xs mt-2 inline-block hover:underline">View Full Specs</a></div>`,
+                            suggestions: ["View Details", "Get Quote"]
+                        };
+                    }
                 }
             }
         }
@@ -1623,6 +1652,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Helper to generate attribute response
     function getAttributeResponse(p, attr, keywords) {
         const link = getProductLink(p);
+        const safeName = p.name.replace(/'/g, "\\'");
         
         if (attr === 'price') {
              return { 
@@ -1630,7 +1660,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  html: `<div class="bot-product-card">
                             <h4>${p.name}</h4>
                             <a href="${link}" class="text-secondary font-bold text-xs mt-1 inline-block hover:underline">View Product</a>
-                            <button onclick="window.addToCart('${p.name.replace(/'/g, "\\'")}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
+                            <button onclick="window.addToCart('${safeName}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
                         </div>`
              };
         }
@@ -1646,6 +1676,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'roller': "Road Rollers are used to compact concrete, soil, gravel, or asphalt in the construction of roads and foundations.",
                 'straightener': "Scrap Straighteners are used to straighten used or bent steel bars so they can be reused, reducing wastage.",
                 'trowel': "Power Trowels are used to create a smooth, level finish on large, flat concrete areas.",
+                'excavator': "Excavator Drum Compactors are attachments used for soil compaction in trenches and slopes where standard rollers cannot reach.",
                 'converter': "High Frequency Converters are used to power high-frequency vibrators for efficient concrete compaction."
             };
 
@@ -1675,19 +1706,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Search in specs
         if (p.specs) {
-            const foundSpec = p.specs.find(s => {
+            const matchingSpecs = p.specs.filter(s => {
                 const specText = s.text.toLowerCase();
                 return keywords.some(k => specText.includes(k));
             });
             
-            if (foundSpec) {
+            if (matchingSpecs.length > 0) {
+                const specHtml = matchingSpecs.map(s => `<p style="font-size: 13px; color: #374151; margin: 4px 0; border-bottom: 1px dashed #eee; padding-bottom: 2px;">${s.icon ? `<i class="${s.icon} text-secondary"></i> ` : ''}${s.text}</p>`).join('');
+                
                 return {
                     text: `Here is the ${attr} detail for <strong>${p.name}</strong>:`,
                     html: `<div class="bot-product-card">
                             <h4>${p.name}</h4>
-                            <p style="font-size: 14px; color: #1f2937;">${foundSpec.text}</p>
+                            ${specHtml}
                             <a href="${link}" class="text-secondary font-bold text-xs mt-2 inline-block hover:underline">View Full Specs</a>
-                            <button onclick="window.addToCart('${p.name.replace(/'/g, "\\'")}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
+                            <button onclick="window.addToCart('${safeName}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
                            </div>`,
                     suggestions: ["Get Quote", "Compare"]
                 };
@@ -1696,14 +1729,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Search in Compare object (often has structured data like weight/power)
         if (p.compare) {
-            const compareKey = Object.keys(p.compare).find(k => keywords.some(kw => k.toLowerCase().includes(kw)));
-            if (compareKey) {
+            const matchingKeys = Object.keys(p.compare).filter(k => keywords.some(kw => k.toLowerCase().includes(kw)));
+            if (matchingKeys.length > 0) {
+                const compareHtml = matchingKeys.map(key => `<p style="font-size: 13px; color: #374151; margin: 4px 0;"><strong>${key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, ' ')}:</strong> ${p.compare[key]}</p>`).join('');
                 return {
-                    text: `The ${compareKey} of <strong>${p.name}</strong> is <strong>${p.compare[compareKey]}</strong>.`,
+                    text: `Here is the information for <strong>${p.name}</strong>:`,
                     html: `<div class="bot-product-card">
                             <h4>${p.name}</h4>
-                            <p><strong>${compareKey.charAt(0).toUpperCase() + compareKey.slice(1)}:</strong> ${p.compare[compareKey]}</p>
-                            <button onclick="window.addToCart('${p.name.replace(/'/g, "\\'")}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
+                            ${compareHtml}
+                            <button onclick="window.addToCart('${safeName}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
                            </div>`,
                     suggestions: ["View Full Specs", "Compare"]
                 };
@@ -1716,7 +1750,7 @@ document.addEventListener('DOMContentLoaded', function() {
             html: `<div class="bot-product-card">
                     <h4>${p.name}</h4>
                     <a href="${link}" class="text-secondary font-bold text-xs mt-1 inline-block hover:underline">View Product Details</a>
-                    <button onclick="window.addToCart('${p.name.replace(/'/g, "\\'")}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
+                    <button onclick="window.addToCart('${safeName}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
                    </div>`,
             suggestions: ["View Details", "Contact Support"]
         };
@@ -1925,6 +1959,7 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (cat.includes('converter')) page = 'Product_details/high_frequency_converter_models.html';
         else if (cat.includes('vibrator')) page = 'Product_details/Vibrators.html';
         else if (cat.includes('straightener')) page = 'Product_details/scrap_straightener_models.html';
+        else if (cat.includes('excavator') || cat.includes('drum compactor')) page = 'Product_details/excavator_drum_compactor.html';
         
         const productId = (product.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         return `${rootPath}${page}#${productId}`;
@@ -1992,4 +2027,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return null;
     }
+
+
 });
