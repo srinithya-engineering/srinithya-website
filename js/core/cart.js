@@ -247,7 +247,7 @@ window.confirmSendWhatsapp = function() {
         });
     }
 
-    const phoneNumber = "919032069819";
+    const phoneNumber = "919059239819";
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
     

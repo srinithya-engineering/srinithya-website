@@ -385,22 +385,6 @@ const rootPath = getRootPath(),
             </div>
         </div>
     </div>
-`,
-    scrollButtonsHTML = `
-    <div id="back-to-top-container" class="fixed bottom-24 right-7 z-40 hidden md:flex flex-col gap-3 transition-opacity duration-300 opacity-0 pointer-events-none">
-        <div class="relative group">
-            <button id="scroll-up-btn" class="bg-primary text-white w-12 h-12 rounded-full shadow-lg hover:bg-blue-700 transition flex items-center justify-center opacity-90 hover:opacity-100 border-2 border-white">
-                <i class="fa-solid fa-arrow-up"></i>
-            </button>
-            <span class="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Back to Top</span>
-        </div>
-        <div class="relative group">
-            <button id="scroll-down-btn" class="bg-primary text-white w-12 h-12 rounded-full shadow-lg hover:bg-blue-700 transition flex items-center justify-center opacity-90 hover:opacity-100 border-2 border-white">
-                <i class="fa-solid fa-arrow-down"></i>
-            </button>
-            <span class="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">Scroll Down</span>
-        </div>
-    </div>
 `;
 
 window.openClearCartModal = function() {
@@ -433,34 +417,6 @@ window.openEmptyCartModal = function() {
 window.closeEmptyCartModal = function() {
     const modal = document.getElementById('empty-cart-modal');
     if (modal) modal.classList.add('hidden');
-}
-
-function initScrollButtons() {
-    const container = document.getElementById("back-to-top-container");
-    const t = document.getElementById("scroll-up-btn"),
-        e = document.getElementById("scroll-down-btn");
-
-    if (container) {
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 300) {
-                container.classList.remove("opacity-0", "pointer-events-none");
-            } else {
-                container.classList.add("opacity-0", "pointer-events-none");
-            }
-        });
-    }
-
-    t && t.addEventListener("click", () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        })
-    }), e && e.addEventListener("click", () => {
-        window.scrollBy({
-            top: window.innerHeight / 2,
-            behavior: "smooth"
-        })
-    })
 }
 
 function initSmoothScroll() {
@@ -811,7 +767,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.insertAdjacentHTML("beforeend", clearCartModalHTML);
     document.body.insertAdjacentHTML("beforeend", emptyCartModalHTML);
     document.body.insertAdjacentHTML("beforeend", nameInputModalHTML);
-    document.body.insertAdjacentHTML("beforeend", scrollButtonsHTML);
     
     // Upgrade static images (Loader, Appreciation Letters, etc.) to WebP
     const staticImages = document.querySelectorAll('#loader-wrapper img, #appreciation-letters img, .appreciation-section img, section[id*="appreciation"] img, #apc-carousel img');
@@ -834,7 +789,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     initNavbar();
-    initScrollButtons();
     initSmoothScroll();
     initCartAnimation();
     initBreadcrumbs();
