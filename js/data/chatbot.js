@@ -510,11 +510,40 @@ document.addEventListener('DOMContentLoaded', function() {
     let chatHistory = JSON.parse(sessionStorage.getItem('sepl_chat_history')) || [];
     let lastContextProduct = JSON.parse(sessionStorage.getItem('sepl_chat_context_product')) || null;
 
+    // Hint Rotation Logic
+    const hintMessages = [
+        "Hi! Need help?",
+        "Looking for machinery?",
+        "Get a quick quote",
+        "Need spare parts?"
+    ];
+    let hintIndex = 0;
+    let hintInterval;
+
+    function rotateHint() {
+        const hint = document.getElementById('sepl-chatbot-hint');
+        if (!hint || isOpen || sessionStorage.getItem('sepl_chat_auto_opened')) {
+            if (hintInterval) clearInterval(hintInterval);
+            return;
+        }
+
+        hint.classList.remove('show');
+        
+        setTimeout(() => {
+            if (isOpen || sessionStorage.getItem('sepl_chat_auto_opened')) return;
+            
+            hintIndex = (hintIndex + 1) % hintMessages.length;
+            hint.textContent = hintMessages[hintIndex];
+            hint.classList.add('show');
+        }, 500);
+    }
+
     // Show hint after delay
     setTimeout(() => {
         const hint = document.getElementById('sepl-chatbot-hint');
         if (hint && !isOpen && !sessionStorage.getItem('sepl_chat_auto_opened')) {
             hint.classList.add('show');
+            hintInterval = setInterval(rotateHint, 4000);
         }
     }, 1500);
 
@@ -527,6 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hide hint on interaction
         const hint = document.getElementById('sepl-chatbot-hint');
         if (hint) hint.classList.remove('show');
+        if (hintInterval) clearInterval(hintInterval);
         
         // Mark as opened so auto-open doesn't trigger if user manually opens
         sessionStorage.setItem('sepl_chat_auto_opened', 'true');
