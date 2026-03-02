@@ -228,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
             white-space: nowrap;
             transition: all 0.2s;
             flex-shrink: 0;
+            //hidden on mobile to save space
         }
         .sepl-quick-btn:hover {
             background-color: ${config.colors.secondary};
