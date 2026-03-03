@@ -198,7 +198,10 @@ window.renderProductCards = function(containerId, products) {
 
         // Check for shared product highlight
         if (window.location.hash) {
-            setTimeout(window.highlightSharedProduct, 500);
+            setTimeout(() => {
+                window.highlightSharedProduct();
+                if (window.updateMetaTags) window.updateMetaTags();
+            }, 500);
         }
 
         // Announce that products have been rendered so other components (like Compare Bar) can sync
@@ -385,11 +388,17 @@ function showCopyToast() {
 // --- Share Logic ---
 window.shareProduct = function(productName) {
     const productId = productName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
+    // Point to the specific generated share page
+    const shareUrl = `${window.location.origin}/Product_details/share/${productId}.html`;
+
     const shareData = {
         title: 'Check out this product from Srinithya Engineering',
         text: `I found this ${productName} interesting:`,
-        url: `${window.location.origin}${window.location.pathname}#${productId}`
+        url: shareUrl
     };
+
+    console.log('🔗 Sharing Product URL:', shareUrl);
 
     if (navigator.share) {
         navigator.share(shareData).catch(console.error);
@@ -482,7 +491,105 @@ if (document.readyState === 'loading') {
     window.initRecentlyViewed();
 }
 
-// Listen for hash changes to trigger highlight (e.g. same-page navigation)
+// --- Dynamic Meta Tags Logic ---
+window.findProductByHash = function(hash) {
+    if (!window.productData || !hash) return null;
+    const cleanHash = hash.replace('#', '');
+    const generateId = (name) => (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    for (const category in window.productData) {
+        const items = window.productData[category];
+        if (Array.isArray(items)) {
+            const found = items.find(p => generateId(p.name) === cleanHash);
+            if (found) return found;
+        } else if (typeof items === 'object') {
+            for (const subCat in items) {
+                const subItems = items[subCat];
+                if (Array.isArray(subItems)) {
+                    const found = subItems.find(p => generateId(p.name) === cleanHash);
+                    if (found) return found;
+                }
+            }
+        }
+    }
+    return null;
+};
+
+window.updateMetaTags = function() {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const product = window.findProductByHash(hash);
+    if (!product) return;
+
+    // Update Title
+    document.title = `${product.name} | Srinithya Engineering`;
+
+    // Helper to set meta tag
+    const setMeta = (property, content) => {
+        if (!content) return;
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        if (!tag) {
+            tag = document.createElement('meta');
+            tag.setAttribute('property', property);
+            document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
+    };
+
+    // Resolve Image URL (Absolute)
+    // Use current origin (localhost/ngrok/production) dynamically
+    const productionDomain = window.location.origin;
+    const defaultImage = `${productionDomain}/Assets/Others/logo.png`;
+    let imageUrl = product.image;
+    
+    if (imageUrl && !imageUrl.startsWith('http')) {
+        // Normalize path to be relative to root (remove ./ or ../)
+        const cleanPath = imageUrl.replace(/^(\.\/|\.\.\/)/, '');
+        imageUrl = `${productionDomain}/${cleanPath}`;
+    } else if (!imageUrl) {
+        imageUrl = defaultImage;
+    }
+
+    // Construct Canonical URL
+    let path = window.location.pathname;
+    if (path.includes('/Product_details/')) {
+        path = '/Product_details/' + path.split('/Product_details/')[1];
+    } else if (path.includes('/Service_details/')) {
+        path = '/Service_details/' + path.split('/Service_details/')[1];
+    } else {
+        path = '/' + path.split('/').pop();
+    }
+    const pageUrl = `${productionDomain}${path}${hash}`;
+
+    setMeta('og:title', product.name);
+    setMeta('og:description', product.description);
+    setMeta('og:image', imageUrl);
+    setMeta('og:url', pageUrl);
+    setMeta('og:type', 'product');
+
+    // Update standard description as well
+    let descTag = document.querySelector('meta[name="description"]');
+    if (descTag) {
+        descTag.setAttribute('content', product.description || '');
+    }
+
+    console.log('Open Graph Updated:', { title: product.name, url: pageUrl, image: imageUrl });
+};
+
+// Listen for hash changes to trigger highlight and meta update
 window.addEventListener('hashchange', () => {
-    setTimeout(window.highlightSharedProduct, 100);
+    setTimeout(() => {
+        window.highlightSharedProduct();
+        window.updateMetaTags();
+    }, 100);
 });
+
+// Initial call if hash exists
+if (window.location.hash) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(window.updateMetaTags, 1000));
+    } else {
+        setTimeout(window.updateMetaTags, 1000);
+    }
+}
