@@ -34,11 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
             right: 20px;
             z-index: 9999;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-end;
         }
+
         #sepl-chatbot-window {
             display: none;
             width: 350px;
@@ -231,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
             white-space: nowrap;
             transition: all 0.2s;
             flex-shrink: 0;
+            //hidden on mobile to save space
         }
         .sepl-quick-btn:hover {
             background-color: ${config.colors.secondary};
@@ -239,77 +237,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         #sepl-chatbot-hint {
             position: absolute;
-            left: 70px;
-            bottom: 18px;
+            right: 75px;
+            top: 12px;
             background-color: ${config.colors.white};
             color: ${config.colors.text};
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-radius: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             font-size: 13px;
             font-weight: 600;
             white-space: nowrap;
-            opacity: 1;
-            transition: opacity 0.3s;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
         }
-        #sepl-chatbot-hint::before {
+        #sepl-chatbot-hint.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        #sepl-chatbot-hint::after {
             content: '';
             position: absolute;
-            left: -6px;
+            right: -6px;
             top: 50%;
             transform: translateY(-50%);
-            border-width: 6px 6px 6px 0;
+            border-width: 6px 0 6px 6px;
             border-style: solid;
-            border-color: transparent ${config.colors.white} transparent transparent;
+            border-color: transparent transparent transparent ${config.colors.white};
         }
 
-        /* --- Unified FAB Styles --- */
-        #sepl-fab-trigger {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            color: ${config.colors.primary};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10000;
-            position: relative;
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
-        #sepl-fab-trigger:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
-            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
-        }
-        #sepl-fab-trigger.active {
-            transform: rotate(180deg);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-            color: ${config.colors.primary};
-            border-color: rgba(255, 255, 255, 0.18);
-        }
-
-        @keyframes sepl-icon-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        #sepl-fab-trigger #sepl-fab-icon i, #sepl-fab-trigger #sepl-fab-icon .sepl-css-bot {
-            animation: sepl-icon-bounce 2s ease-in-out infinite;
-        }
-        #sepl-fab-trigger #sepl-fab-icon :nth-child(2) { animation-delay: 0.2s; }
-
-        /* CSS Bot Icon */
+        /* CSS Bot Icon Definitions */
         .sepl-css-bot {
             position: relative;
             width: 36px;
@@ -387,42 +345,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
         .sepl-fab-options {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             gap: 15px;
-            margin-right: 15px;
             align-items: center;
-            height: 80px; /* Match trigger height for perfect alignment */
+            position: absolute;
+            bottom: 0;
+            right: 0;
         }
-
         .sepl-fab-btn {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: 28px;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            transform: translateX(20px) scale(0.8);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
+            transition: transform 0.2s ease-out;
             padding: 0;
             margin: 0;
             box-sizing: border-box;
+            position: relative; /* For tooltip */
         }
-        
-        .sepl-fab-options.show .sepl-fab-btn {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-            pointer-events: all;
+        .sepl-fab-btn:hover {
+            transform: scale(1.1);
         }
-        
-        .sepl-fab-options.show .sepl-fab-btn:nth-child(1) { transition-delay: 0.05s; }
-        .sepl-fab-options.show .sepl-fab-btn:nth-child(2) { transition-delay: 0.1s; }
 
         .sepl-fab-btn-chat { background-color: white; }
         .sepl-fab-btn-whatsapp { background-color: #25D366; }
@@ -471,58 +421,20 @@ document.addEventListener('DOMContentLoaded', function() {
             transform: translateX(-50%) translateY(-2px); 
         }
 
-        /* Align External Scroll/Back-to-Top Buttons (Desktop Default) */
-        #back-to-top-container, .scroll-to-top {
-            right: 20px !important;
-            bottom: 110px !important;
-            width: 80px !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            z-index: 9900 !important;
-        }
-
         @media (max-width: 480px) {
-            #sepl-chatbot-container {
-                right: 10px;
-                bottom: 10px;
-            }
             #sepl-chatbot-window {
                 width: calc(100vw - 20px);
                 height: 60vh;
                 bottom: 10px;
                 right: 10px;
             }
-            
-            /* Mobile Bubble Sizing */
-            #sepl-fab-trigger {
-                width: 72px;
-                height: 72px;
-                font-size: 24px;
-            }
             .sepl-fab-options {
-                height: 72px;
                 gap: 10px;
-                margin-right: 10px;
             }
             .sepl-fab-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-            }
-            /* Adjust Tooltips for smaller buttons */
-            .sepl-fab-btn::after { bottom: 58px; }
-            .sepl-fab-btn::before { bottom: 52px; }
-
-            /* Adjust Icons Scale */
-            #sepl-fab-trigger .sepl-css-bot { transform: scale(0.75); }
-            #sepl-fab-trigger .fa-whatsapp { font-size: 24px !important; }
-
-            /* Align Scroll Buttons for Mobile */
-            #back-to-top-container, .scroll-to-top {
-                right: 10px !important;
-                bottom: 92px !important; /* 10px bottom + 72px height + 10px gap */
-                width: 60px !important;
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
             }
         }
     `;
@@ -567,9 +479,9 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         
         <div class="sepl-fab-options" id="sepl-fab-options">
-            <button class="sepl-fab-btn sepl-fab-btn-whatsapp" id="sepl-fab-whatsapp" data-tooltip="WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+            <div id="sepl-chatbot-hint">Hi! Need help?</div>
             <button class="sepl-fab-btn sepl-fab-btn-chat" id="sepl-fab-chat" data-tooltip="Chat Assistant">
-                <div class="sepl-css-bot" style="transform: scale(0.8);">
+                <div class="sepl-css-bot" style="transform: scale(1);">
                     <div class="sepl-bot-antenna"></div>
                     <div class="sepl-bot-head">
                         <div class="sepl-bot-eyes"><div class="sepl-bot-eye"></div><div class="sepl-bot-eye"></div></div>
@@ -577,21 +489,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             </button>
+            <button class="sepl-fab-btn sepl-fab-btn-whatsapp" id="sepl-fab-whatsapp" data-tooltip="WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
         </div>
-
-        <button id="sepl-fab-trigger" title="Need Help?">
-            <div id="sepl-fab-icon" style="display:flex; align-items:center; justify-content:center; gap:6px; width:100%; height:100%;">
-                <i class="fa-brands fa-whatsapp" style="font-size: 28px; color: #25D366; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));"></i>
-                <div class="sepl-css-bot" style="filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));">
-                    <div class="sepl-bot-antenna"></div>
-                    <div class="sepl-bot-head">
-                        <div class="sepl-bot-eyes"><div class="sepl-bot-eye"></div><div class="sepl-bot-eye"></div></div>
-                        <div class="sepl-bot-ear left"></div><div class="sepl-bot-ear right"></div>
-                    </div>
-                </div>
-            </div>
-            <i class="fa-solid fa-xmark" id="sepl-fab-close-icon" style="display:none;"></i>
-        </button>
     `;
     document.body.appendChild(container);
 
@@ -604,44 +503,60 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputField = document.getElementById("sepl-chatbot-input");
     const sendBtn = document.getElementById("sepl-chatbot-send");
     
-    // FAB Logic
-    const fabTrigger = document.getElementById('sepl-fab-trigger');
     const fabOptions = document.getElementById('sepl-fab-options');
-    const fabIcon = document.getElementById('sepl-fab-icon');
-    const fabCloseIcon = document.getElementById('sepl-fab-close-icon');
 
     let isOpen = false;
     // Load history and context from session storage
     let chatHistory = JSON.parse(sessionStorage.getItem('sepl_chat_history')) || [];
     let lastContextProduct = JSON.parse(sessionStorage.getItem('sepl_chat_context_product')) || null;
 
-    function toggleFab() {
-        const isActive = fabTrigger.classList.toggle('active');
-        fabOptions.classList.toggle('show');
-        
-        if (isActive) {
-            fabIcon.style.display = 'none';
-            fabCloseIcon.style.display = 'block';
-        } else {
-            fabIcon.style.display = 'flex';
-            fabCloseIcon.style.display = 'none';
+    // Hint Rotation Logic
+    const hintMessages = [
+        "Hi! Need help?",
+        "Looking for machinery?",
+        "Get a quick quote",
+        "Need spare parts?"
+    ];
+    let hintIndex = 0;
+    let hintInterval;
+
+    function rotateHint() {
+        const hint = document.getElementById('sepl-chatbot-hint');
+        if (!hint || isOpen || sessionStorage.getItem('sepl_chat_auto_opened')) {
+            if (hintInterval) clearInterval(hintInterval);
+            return;
         }
+
+        hint.classList.remove('show');
+        
+        setTimeout(() => {
+            if (isOpen || sessionStorage.getItem('sepl_chat_auto_opened')) return;
+            
+            hintIndex = (hintIndex + 1) % hintMessages.length;
+            hint.textContent = hintMessages[hintIndex];
+            hint.classList.add('show');
+        }, 500);
     }
 
-    fabTrigger.addEventListener('click', toggleFab);
+    // Show hint after delay
+    setTimeout(() => {
+        const hint = document.getElementById('sepl-chatbot-hint');
+        if (hint && !isOpen && !sessionStorage.getItem('sepl_chat_auto_opened')) {
+            hint.classList.add('show');
+            hintInterval = setInterval(rotateHint, 4000);
+        }
+    }, 1500);
 
     function toggleChat() {
         isOpen = !isOpen;
         chatWindow.style.display = isOpen ? "flex" : "none";
         
-        // Toggle FAB visibility so chat takes its place
-        fabTrigger.style.display = isOpen ? 'none' : 'flex';
         fabOptions.style.display = isOpen ? 'none' : 'flex';
-
-        // If opening chat, close FAB menu logic if open (reset state)
-        if (isOpen && fabTrigger.classList.contains('active')) {
-            toggleFab();
-        }
+        
+        // Hide hint on interaction
+        const hint = document.getElementById('sepl-chatbot-hint');
+        if (hint) hint.classList.remove('show');
+        if (hintInterval) clearInterval(hintInterval);
         
         // Mark as opened so auto-open doesn't trigger if user manually opens
         sessionStorage.setItem('sepl_chat_auto_opened', 'true');
@@ -661,8 +576,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('sepl-fab-whatsapp').addEventListener('click', () => {
         const message = "Hi, I visited your website and would like to know more about your products.";
-        window.open(`https://wa.me/919032069819?text=${encodeURIComponent(message)}`, '_blank');
-        toggleFab();
+        window.open(`https://wa.me/919059239819?text=${encodeURIComponent(message)}`, '_blank');
     });
     
     // Attempt to remove standalone WhatsApp widgets to prevent duplicates
