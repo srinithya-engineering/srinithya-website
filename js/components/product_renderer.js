@@ -14,6 +14,18 @@
             position: relative;
             border-color: #d97706 !important;
         }
+        @keyframes iconSwap1 {
+            0%, 45% { opacity: 1; transform: scale(1); }
+            50%, 95% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes iconSwap2 {
+            0%, 45% { opacity: 0; transform: scale(0.5); }
+            50%, 95% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+        .icon-swap-primary { animation: iconSwap1 3s infinite; }
+        .icon-swap-secondary { animation: iconSwap2 3s infinite; }
     `;
     document.head.appendChild(style);
 })();
@@ -86,6 +98,16 @@ window.createProductCard = function(product) {
         return '';
     }).join('');
 
+    // Generate PDF Download Button
+    const safeIdentifier = (product.model || product.name).replace(/'/g, "\\'");
+    const pdfButtonHTML = `
+        <button onclick="window.downloadProductCatalogue(event, '${safeIdentifier}')" class="absolute top-16 left-4 bg-white/90 hover:bg-white text-gray-600 hover:text-secondary p-2 rounded-full shadow-md transition-all duration-200 z-10" title="Download this product">
+            <div class="relative w-4 h-4 flex items-center justify-center">
+                <i class="fa-solid fa-file-pdf absolute icon-swap-primary"></i>
+                <i class="fa-solid fa-download absolute icon-swap-secondary"></i>
+            </div>
+        </button>`;
+
     // Determine if compare functionality should be enabled for this card
     const compareCheckboxHTML = product.compare ? `
         <div class="flex justify-end -mt-2 -mr-2">
@@ -139,6 +161,7 @@ window.createProductCard = function(product) {
                 ${mediaHTML}
                 ${badgeHTML}
                 ${shareHTML}
+                ${pdfButtonHTML}
             </div>
             <div class="${contentClass}">
                 ${compareCheckboxHTML}
@@ -484,5 +507,144 @@ if (document.readyState === 'loading') {
 
 // Listen for hash changes to trigger highlight (e.g. same-page navigation)
 window.addEventListener('hashchange', () => {
-    setTimeout(window.highlightSharedProduct, 100);
+    setTimeout(window.highlightSharedProduct, 500);
 });
+
+// --- PDF Generation for Single Product Catalogue ---
+
+function loadPdfLibs() {
+    // Check if both jspdf and autotable plugin are loaded
+    if (window.jspdf && window.jspdf.jsPDF && typeof window.jspdf.jsPDF.API.autoTable === 'function') {
+        return Promise.resolve();
+    }
+    return new Promise((resolve, reject) => {
+        const script1 = document.createElement('script');
+        script1.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+        script1.onload = () => {
+            const script2 = document.createElement('script');
+            script2.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js";
+            script2.onload = resolve;
+            script2.onerror = reject;
+            document.head.appendChild(script2);
+        };
+        script1.onerror = reject;
+        document.head.appendChild(script1);
+    });
+}
+
+function flattenProductsForCatalogue(data) {
+    let all = [];
+    for (const [category, items] of Object.entries(data)) {
+        if (Array.isArray(items)) {
+            items.forEach(item => {
+                item.category = category;
+                all.push(item);
+            });
+        } else if (typeof items === 'object' && items !== null) {
+            for (const [subCat, subItems] of Object.entries(items)) {
+                if (Array.isArray(subItems)) {
+                    subItems.forEach(item => {
+                        item.category = `${category} - ${subCat}`;
+                        all.push(item);
+                    });
+                }
+            }
+        }
+    }
+    return all;
+}
+
+window.downloadProductCatalogue = async function(event, productIdentifier) {
+    const btn = event.target.closest('button');
+    if (!btn) return;
+
+    const originalText = btn.innerHTML;
+    const isIconBtn = btn.classList.contains('rounded-full');
+    btn.innerHTML = isIconBtn ? '<i class="fa-solid fa-spinner fa-spin"></i>' : '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+    btn.disabled = true;
+
+    try {
+        await loadPdfLibs();
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const products = flattenProductsForCatalogue(window.productData);
+        const product = products.find(p => p.model === productIdentifier || p.name === productIdentifier);
+
+        if (!product) {
+            alert("Could not find product data to generate PDF.");
+            throw new Error("Product not found");
+        }
+
+        const rootPath = (window.location.pathname.includes('/Product_details/') || window.location.pathname.includes('/Service_details/')) ? '../' : './';
+
+        // 1. Header: Logo & Company Name
+        const logoUrl = rootPath + "Assets/Others/logo.png";
+        const companyName = "SRINITHYA ENGINEERING PRIVATE LIMITED";
+        let yPos = 20;
+
+        const loadImage = (url) => new Promise(resolve => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            img.src = url;
+        });
+
+        const logoImg = await loadImage(logoUrl);
+        if (logoImg) {
+            doc.addImage(logoImg, 'PNG', 15, 15, 30, 15);
+        }
+
+        doc.setFont("times", "bold");
+        doc.setFontSize(20);
+        doc.setTextColor('#1e3a8a');
+        doc.text(companyName, doc.internal.pageSize.getWidth() / 2, 25, { align: "center" });
+        yPos = 45;
+
+        // 2. Product Photo (Centered)
+        if (product.image) {
+            const productImageUrl = product.image.startsWith('http') ? product.image : rootPath + product.image.replace('./', '');
+            const pImg = await loadImage(productImageUrl);
+            if (pImg) {
+                const maxW = 100;
+                const maxH = 80;
+                const ratio = Math.min(maxW / pImg.width, maxH / pImg.height);
+                const imgW = pImg.width * ratio;
+                const imgH = pImg.height * ratio;
+                const xPos = (doc.internal.pageSize.getWidth() - imgW) / 2;
+                doc.addImage(pImg, 'JPEG', xPos, yPos, imgW, imgH);
+                yPos += imgH + 15;
+            }
+        }
+
+        // 3. Product Name & Specs Table
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text(product.name, doc.internal.pageSize.getWidth() / 2, yPos, { align: "center" });
+        yPos += 10;
+
+        const tableBody = (product.specs || []).map(spec => [spec.text.replace(/<[^>]*>/g, '')]); // Strip any HTML from spec text
+        doc.autoTable({
+            startY: yPos,
+            head: [['Specifications']],
+            body: tableBody,
+            theme: 'grid',
+            headStyles: { fillColor: '#1e3a8a', halign: 'center' },
+            styles: { fontSize: 11, cellPadding: 3 },
+        });
+
+        const fileName = `${product.name.replace(/[^a-z0-9]/gi, '_')}_Catalogue.pdf`;
+        doc.save(fileName);
+
+    } catch (error) {
+        console.error("PDF Generation Failed:", error);
+        alert("Sorry, there was an error generating the PDF catalogue.");
+    } finally {
+        if (btn) {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+}
