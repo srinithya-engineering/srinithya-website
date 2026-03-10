@@ -381,3 +381,21 @@ a, button, input, select, textarea {
     opacity: 1 !important;
     visibility: visible !important;
 }
+/* --- In c:\Users\store\OneDrive\Desktop\SRINITHYA\css\style.css --- */
+
+/* Sticky Phase Titles on Index Page */
+.sticky-phase-title-wrapper {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    /* This value should be the height of your shrunken/scrolled navbar + a small gap.
+       55px is a good starting point. */
+    top: 55px; 
+    z-index: 20; /* Must be below the navbar (z-50) */
+    
+    /* Padding to create space when it becomes sticky */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    /* Replaces the margin that was on the h2 tag */
+    margin-bottom: 2rem; 
+}

@@ -1,43 +1,12 @@
 (function() {
-    const heavyMachinery = [
-        {
-            title: "Bar Bending Machine",
-            image: "./Assets/Product Images/bender.png",
-            imageWebp: "./Assets/Product Images/bender.webp",
-            description: "Automatic bending with digital control panel. Angles range 0-360 degrees.",
-            features: ["Preset Angle Options", "Emergency Stop Safety", "Durable Construction"],
-            link: "Product_details/bar_bending_models.html"
-        },
-        {
-            title: "Bar Cutting Machine",
-            image: "./Assets/Product Images/sbc.png",
-            imageWebp: "./Assets/Product Images/sbc.webp",
-            description: "Precise cutting for TMT bars up to 40mm. Low noise, high efficiency.",
-            features: ["Heavy Duty Gearbox", "ISO Certified Components", "Low Noise Operation"],
-            link: "Product_details/bar_cutting_models.html"
-        },
-        {
-            title: "Suspended Scaffold Solution",
-            image: ["./Assets/Product Images/srp.png", "./Assets/Product Images/srp2.webp"],
-            imageWebp: ["./Assets/Product Images/srp.webp", "./Assets/Product Images/srp2.webp"],
-            description: "Customizable high-safety suspended platforms for facade work.",
-            features: ["Model: ZLP800", "Customizable Platform Size", "Adjustable Rope Length"],
-            link: "Product_details/suspended_rope_platform.html"
-        },
-        {
-            title: "Scrap Straightener",
-            image: "./Assets/Product Images/sss.png",
-            imageWebp: "./Assets/Product Images/sss.webp",
-            description: "Now your scrap is no more scrap.",
-            features: ["Multiple models", "Overload Protection", "High Efficiency"],
-            link: "Product_details/scrap_straightener_models.html"
-        },
+    // --- Phase 1: Soil & Foundation ---
+    const soilFoundation = [
         {
             title: "Road Rollers",
             image: ["./Assets/Product Images/srr.png", "./Assets/Product Images/swr.png", "./Assets/Product Images/swr fh.png"],
             imageWebp: ["./Assets/Product Images/srr.webp", "./Assets/Product Images/swr.webp", "./Assets/Product Images/swr fh.webp"],
             description: "Ride-on and Walk-behind rollers for road construction.",
-            features: ["Ride-on & Walk-behind", "Heavy Duty Compaction", "Single & Double Drum Options"],
+            models: ["Ride-on", "Walk-behind", "Fully-Hydraulic"],
             link: "Product_details/road_roller_models.html"
         },
         {
@@ -45,76 +14,71 @@
             image: "./Assets/Product Images/drum compactor.png",
             imageWebp: "./Assets/Product Images/drum compactor.webp",
             description: "High-performance compaction attachment for excavators.",
-            features: ["High Compaction Force", "Easy Attachment", "Durable Design"],
+            models: ["Drum Compactor"],
             link: "Product_details/excavator_drum_compactor.html"
+        },
+        {
+            title: "Plate Compactors",
+            image: ["./Assets/Product Images/sfpc-2p.png", "./Assets/Product Images/srpc-3d.png", "./Assets/Product Images/srpc-3e.png","./Assets/Product Images/sfpc-5e.png", "./Assets/Product Images/sfpc-5d.png"],
+            imageWebp: ["./Assets/Product Images/sfpc-2p.webp", "./Assets/Product Images/srpc-3d.webp", "./Assets/Product Images/srpc-3e.webp", "./Assets/Product Images/sfpc-5e.webp", "./Assets/Product Images/sfpc-5d.webp"],
+            description: "For soil, asphalt, and paving stone compaction.",
+            models: ["Forward", "Reversible", "Electric", "Diesel"],
+            link: "Product_details/plate_compactor_models.html"
         }
-        
-          
     ];
 
-const lightEquipment = [
+    // --- Phase 2: Rebar Processing ---
+    const rebarProcessing = [
+        {
+            title: "Bar Bending Machine",
+            image: "./Assets/Product Images/bender.png",
+            imageWebp: "./Assets/Product Images/bender.webp",
+            description: "Automatic bending with digital control panel. Angles range 0-360 degrees.",
+            models: ["SBB 42", "SBB 52", "SBB 55"],
+            link: "Product_details/bar_bending_models.html"
+        },
+        {
+            title: "Bar Cutting Machine",
+            image: "./Assets/Product Images/sbc.png",
+            imageWebp: "./Assets/Product Images/sbc.webp",
+            description: "Precise cutting for TMT bars up to 40mm. Low noise, high efficiency.",
+            models: ["SBC 42", "SBC 52", "SBC 55"],
+            link: "Product_details/bar_cutting_models.html"
+        },
+        {
+            title: "Scrap Straightener",
+            image: "./Assets/Product Images/sss.png",
+            imageWebp: "./Assets/Product Images/sss.webp",
+            description: "Now your scrap is no more scrap.",
+            models: ["SSS 6-14", "SSS 8-25"],
+            link: "Product_details/scrap_straightener_models.html"
+        },
         {
             title: "Portable Bar Equipment",
             image: ["./Assets/Product Images/spb.png", "./Assets/Product Images/spc.png"],
             imageWebp: ["./Assets/Product Images/spb.webp", "./Assets/Product Images/spc.webp"],
             description: "Lightweight, on-site solutions for rebar cutting and bending.",
-            features: ["Portable Cutters up to 32mm", "Portable Benders up to 32mm", "Durable Construction"],
+            models: ["Portable Bender", "Portable Cutter"],
             link: "Product_details/portable_bar_processing_models.html"
-        },
+        }
+    ];
+
+    // --- Phase 3: Lifting Solutions ---
+    const liftingSolutions = [
         {
-            title: "High Frequency Converters",
-            image: ["./Assets/Product Images/shfc35.png", "./Assets/Product Images/shfc90.png"],
-            imageWebp: ["./Assets/Product Images/shfc35.webp", "./Assets/Product Images/shfc90.webp"],
-            description: "Reliable power conversion for high-frequency concrete vibrators.",
-            features: ["2 & 4 Outlet Models", "Converts 415V to 42V/200Hz", "Robust Design"],
-            link: "Product_details/high_frequency_converter_models.html"
-        },
-        {
-            title: "High Frequency Pokers",
-            image: ["./Assets/Product Images/shfn60_12m.png", "./Assets/Product Images/shfn40_12m.png", "./Assets/Product Images/shfn60_5m.png", "./Assets/Product Images/shfn40_5m.png","./Assets/Product Images/shiv40.png", "./Assets/Product Images/shiv60.png"],
-            imageWebp: ["./Assets/Product Images/shfn60_12m.webp", "./Assets/Product Images/shfn40_12m.webp", "./Assets/Product Images/shfn60_5m.webp", "./Assets/Product Images/shfn40_5m.webp", "./Assets/Product Images/shiv40.webp", "./Assets/Product Images/shiv60.webp"],
-            description: "Internal concrete vibration needles for superior consolidation.",
-            features: ["40mm & 60mm Diameters", "Hose lengths up to 12 meters", "Multiple Power Options"],
-            link: "Product_details/high_frequency_poker_models.html"
-        },
-        {
-            title: "Vibrators",
-            image: ["./Assets/Product Images/sdv.png", "./Assets/Product Images/sev33.png", "./Assets/Product Images/spv.png", "./Assets/Product Images/sev31.png"],
-            imageWebp: ["./Assets/Product Images/sdv.webp", "./Assets/Product Images/sev33.webp", "./Assets/Product Images/spv.webp", "./Assets/Product Images/sev31.webp"],
-            description: "A wide range of concrete vibrators for perfect consolidation.",
-            features: ["High Frequency Pokers", "Electric & Petrol Engines", "Multiple Power Options"],
-            link: "Product_details/Vibrators.html"
-        },
-        {
-            title: "Mechanical Pokers",
-            image: ["./Assets/Product Images/smp25.png", "./Assets/Product Images/smp40.png", "./Assets/Product Images/smp60.png"],
-            imageWebp: ["./Assets/Product Images/smp25.webp", "./Assets/Product Images/smp40.webp", "./Assets/Product Images/smp60.webp"],
-            description: "High-quality vibration needles for various applications.",
-            features: ["Handy & Hand-Held Needles", "Mechanical Needles", "Durable Construction"],
-            link: "Product_details/mechanical_poker_models.html"
-        },
-        {
-            title: "Shutter Vibrators",
-            image: ["./Assets/Product Images/shfs.png", "./Assets/Product Images/shfs-4215.png", "./Assets/Product Images/ssv-305.png", "./Assets/Product Images/ssv-310.png", "./Assets/Product Images/ssv-320.png"],
-            imageWebp: ["./Assets/Product Images/shfs.webp", "./Assets/Product Images/shfs-4215.webp", "./Assets/Product Images/ssv-305.webp", "./Assets/Product Images/ssv-310.webp", "./Assets/Product Images/ssv-320.webp"],
-            description: "External vibrators for formwork, ensuring void-free concrete.",
-            features: ["High Frequency Models", "3-Phase Power Options", "Durable Construction"],
-            link: "Product_details/shutter_vibrator_models.html"
-        },
-        {
-            title: "Handy Vibrator Solution",
-            image: ["./Assets/Product Images/shm800.png", "./Assets/Product Images/shm1200.png", "./Assets/Product Images/shm1600.png"],
-            imageWebp: ["./Assets/Product Images/shm800.webp", "./Assets/Product Images/shm1200.webp", "./Assets/Product Images/shm1600.webp"],
-            description: "Portable and efficient vibration solutions.",
-            features: ["Hand Held Motors", "800W - 1600W Options", "High Frequency Vibrators"],
-            link: "Product_details/handy_vibration_models.html"
+            title: "Suspended Scaffold Solution",
+            image: ["./Assets/Product Images/srp.png", "./Assets/Product Images/srp2.webp"],
+            imageWebp: ["./Assets/Product Images/srp.webp", "./Assets/Product Images/srp2.webp"],
+            description: "Customizable high-safety suspended platforms for facade work.",
+            models: ["ZLP 800"],
+            link: "Product_details/suspended_rope_platform.html"
         },
         {
             title: "Mini Lift / Crane",
             image: ["./Assets/Product Images/sml.png","./Assets/Product Images/sml-500.png"],
             imageWebp: ["./Assets/Product Images/sml.webp", "./Assets/Product Images/sml-500.webp"],
             description: "Compact mini crane for lifting materials up to 30m.",
-            features: ["300Kg & 500Kg Capacity", "360 degree rotation", "Electric Motor"],
+            models: ["300 Kg", "500 Kg"],
             link: "Product_details/mini_lift_models.html"
         },
         {
@@ -122,47 +86,95 @@ const lightEquipment = [
             image: "./Assets/Product Images/scissorlift.png",
             imageWebp: "./Assets/Product Images/scissorlift.webp",
             description: "Safe and stable platforms for elevated work.",
-            features: ["Max Height: 14m", "Battery / Electric", "Hydraulic Operation"],
+            models: ["6m - 14m"],
             link: "Product_details/scissorlift_models.html"
+        }
+    ];
+
+    // --- Phase 4: Concreting ---
+    const concretingEquipment = [
+        {
+            title: "Concrete Handling Equipment",
+            image: ["./Assets/Product Images/scme.png", "./Assets/Product Images/scpb.png", "./Assets/Product Images/scme-220.png"],
+            imageWebp: ["./Assets/Product Images/scme.webp", "./Assets/Product Images/scpb.webp", "./Assets/Product Images/scme-220.webp"],
+            description: "Portable 1-bag and 2-bag mixers for any site.",
+            models: ["1 Bag Mixer", "2 Bag Mixer", "Buckets"],
+            link: "Product_details/concrete_mixer_models.html"
         },
         {
-            title: "Plate Compactors",
-            image: ["./Assets/Product Images/sfpc-2p.png", "./Assets/Product Images/srpc-3d.png", "./Assets/Product Images/srpc-3e.png","./Assets/Product Images/sfpc-5e.png", "./Assets/Product Images/sfpc-5d.png"],
-            imageWebp: ["./Assets/Product Images/sfpc-2p.webp", "./Assets/Product Images/srpc-3d.webp", "./Assets/Product Images/srpc-3e.webp", "./Assets/Product Images/sfpc-5e.webp", "./Assets/Product Images/sfpc-5d.webp"],
-            description: "For soil, asphalt, and paving stone compaction.",
-            features: ["Forward & Reversible", "Electric & Petrol & Diesel Engines", "Various Weight Options"],
-            link: "Product_details/plate_compactor_models.html"
+            title: "High Frequency Converters",
+            image: ["./Assets/Product Images/shfc35.png", "./Assets/Product Images/shfc90.png"],
+            imageWebp: ["./Assets/Product Images/shfc35.webp", "./Assets/Product Images/shfc90.webp"],
+            description: "Reliable power conversion for high-frequency concrete vibrators.",
+            models: ["2 Outlet", "4 Outlet"],
+            link: "Product_details/high_frequency_converter_models.html"
+        },
+        {
+            title: "Vibrators",
+            image: ["./Assets/Product Images/sdv.png", "./Assets/Product Images/sev33.png", "./Assets/Product Images/spv.png", "./Assets/Product Images/sev31.png"],
+            imageWebp: ["./Assets/Product Images/sdv.webp", "./Assets/Product Images/sev33.webp", "./Assets/Product Images/spv.webp", "./Assets/Product Images/sev31.webp"],
+            description: "A wide range of concrete vibrators for perfect consolidation.",
+            models: ["Electric", "Petrol", "Diesel"],
+            link: "Product_details/Vibrators.html"
+        },
+        {
+            title: "High Frequency Pokers",
+            image: ["./Assets/Product Images/shfn60_12m.png", "./Assets/Product Images/shfn40_12m.png", "./Assets/Product Images/shfn60_5m.png", "./Assets/Product Images/shfn40_5m.png","./Assets/Product Images/shiv40.png", "./Assets/Product Images/shiv60.png"],
+            imageWebp: ["./Assets/Product Images/shfn60_12m.webp", "./Assets/Product Images/shfn40_12m.webp", "./Assets/Product Images/shfn60_5m.webp", "./Assets/Product Images/shfn40_5m.webp", "./Assets/Product Images/shiv40.webp", "./Assets/Product Images/shiv60.webp"],
+            description: "Internal concrete vibration needles for superior consolidation.",
+            models: ["40mm", "60mm"],
+            link: "Product_details/high_frequency_poker_models.html"
+        },
+        {
+            title: "Mechanical Pokers",
+            image: ["./Assets/Product Images/smp25.png", "./Assets/Product Images/smp40.png", "./Assets/Product Images/smp60.png"],
+            imageWebp: ["./Assets/Product Images/smp25.webp", "./Assets/Product Images/smp40.webp", "./Assets/Product Images/smp60.webp"],
+            description: "High-quality vibration needles for various applications.",
+            models: ["25mm", "40mm", "60mm"],
+            link: "Product_details/mechanical_poker_models.html"
+        },
+        {
+            title: "Shutter Vibrators",
+            image: ["./Assets/Product Images/shfs.png", "./Assets/Product Images/shfs-4215.png", "./Assets/Product Images/ssv-305.png", "./Assets/Product Images/ssv-310.png", "./Assets/Product Images/ssv-320.png"],
+            imageWebp: ["./Assets/Product Images/shfs.webp", "./Assets/Product Images/shfs-4215.webp", "./Assets/Product Images/ssv-305.webp", "./Assets/Product Images/ssv-310.webp", "./Assets/Product Images/ssv-320.webp"],
+            description: "External vibrators for formwork, ensuring void-free concrete.",
+            models: ["High Frequency", "Standalone"],
+            link: "Product_details/shutter_vibrator_models.html"
+        },
+        {
+            title: "Handy Vibrator Solution",
+            image: ["./Assets/Product Images/shm800.png", "./Assets/Product Images/shm1200.png", "./Assets/Product Images/shm1600.png", "./Assets/Product Images/hand-held.png"],
+            imageWebp: ["./Assets/Product Images/shm800.webp", "./Assets/Product Images/shm1200.webp", "./Assets/Product Images/shm1600.webp", "./Assets/Product Images/hand-held.webp"],
+            description: "Portable and efficient vibration solutions.",
+            models: ["800W", "1200W", "1600W", "2200W"],
+            link: "Product_details/handy_vibration_models.html"
         },
         {
             title: "Surface Smootheners",
             image: ["./Assets/Product Images/screed vibrator.png", "./Assets/Product Images/sptp.png", "./Assets/Product Images/spte.png"],
             imageWebp: ["./Assets/Product Images/screed vibrator.webp", "./Assets/Product Images/sptp.webp", "./Assets/Product Images/spte.webp"],
             description: "High-quality finishing with Power Trowels and Screed Vibrators.",
-            features: ["Power Trowels (Petrol/Electric)", "Screed Vibrators & Blades","Durable Build"],
+            models: ["Screed Vibrator", "Power Trowel"],
             link: "Product_details/surface_smootheners.html"
-        },
+        }
+    ];
+
+    // --- Phase 5: Miscellaneous & Finishing ---
+    const miscellaneous = [
         {
             title: "Industrial Cutting Tools",
             image: ["./Assets/Product Images/scc-90.png","./Assets/Product Images/scc-200.png", "./Assets/Product Images/groove.png"],
             imageWebp: ["./Assets/Product Images/scc-90.webp","./Assets/Product Images/scc-200.webp", "./Assets/Product Images/groove.webp"],
             description: "Precision tools for groove and core cutting applications.",
-            features: ["Groove Cutters", "Core Cutters", "Electric & Petrol Options"],
+            models: ["Groove Cutter", "Core Cutter"],
             link: "Product_details/industrial_cutting_tools.html"
-        },
-        {
-            title: "Concrete Handling Equipment",
-            image: ["./Assets/Product Images/scme.png", "./Assets/Product Images/scpb.png", "./Assets/Product Images/scme-220.png"],
-            imageWebp: ["./Assets/Product Images/scme.webp", "./Assets/Product Images/scpb.webp", "./Assets/Product Images/scme-220.webp"],
-            description: "Portable 1-bag and 2-bag mixers for any site.",
-            features: ["Heavy-Duty Chassis", "Electric & Diesel Options", "Easy Mobility"],
-            link: "Product_details/concrete_mixer_models.html"
         },
         {
             title: "Dewatering Pumps",
             image: ["./Assets/Product Images/sdwp2.png", "./Assets/Product Images/sdwp3.png"],
             imageWebp: ["./Assets/Product Images/sdwp2.webp", "./Assets/Product Images/sdwp3.webp"],
             description: "Submersible flexible shaft pumps for efficient water removal.",
-            features: ["2 inch & 3 inch pumps", "Petrol/Diesel/Electric", "High Flow Rates"],
+            models: ["2 Inch", "3 Inch"],
             link: "Product_details/dewatering_pump.html"
         },
         {
@@ -170,7 +182,7 @@ const lightEquipment = [
             image: ["./Assets/Product Images/cabin.png", "./Assets/Product Images/container.png", "./Assets/Product Images/toilet.png"],
             imageWebp: ["./Assets/Product Images/cabin.webp", "./Assets/Product Images/container.webp", "./Assets/Product Images/toilet.webp"],
             description: "Customizable portable cabins, containers, and toilets.",
-            features: ["Portable Office Cabins", "Shipping Containers", "FRP Toilets"],
+            models: ["Cabins", "Containers", "Toilets"],
             link: "Product_details/prefab_structures.html"
         },
         {
@@ -178,7 +190,7 @@ const lightEquipment = [
             image: ["./Assets/Product Images/heavybarrow.png", "./Assets/Product Images/screener.png", "./Assets/Product Images/fogger.png", "./Assets/Product Images/welding.png","./Assets/Product Images/weights.png"],
             imageWebp: ["./Assets/Product Images/heavybarrow.webp", "./Assets/Product Images/screener.webp", "./Assets/Product Images/fogger.webp", "./Assets/Product Images/welding.webp","./Assets/Product Images/weights.webp"],
             description: "Essential utility tools for civic maintenance and construction.",
-            features: ["Wheel Barrows", "Sand Screeners", "Fogger Machines", "Welding Machines", "Weights & Measures"],
+            models: ["Wheel Barrows", "Screeners", "Foggers"],
             link: "Product_details/civic_utility_products.html"
         }
     ];
@@ -210,15 +222,15 @@ const lightEquipment = [
                 const encodedWebpSrc = webpSrc ? webpSrc.replace(/ /g, '%20') : '';
                 const srcsetAttr = isFirst ? `srcset="${encodedWebpSrc}"` : `data-srcset="${encodedWebpSrc}"`;
 
-                const singleImgTag = `<img ${srcAttr} alt="${product.title}" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110" loading="lazy" decoding="async">`;
+                const singleImgTag = `<img ${srcAttr} alt="${product.title}" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" loading="lazy" decoding="async">`;
 
                 if (webpSrc) {
-                    return `<picture class="absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${isFirst ? 'opacity-100' : 'opacity-0'}">
+                    return `<picture class="absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${isFirst ? 'opacity-100' : 'opacity-0'} p-4">
                                 <source ${srcsetAttr} type="image/webp">
                                 ${singleImgTag}
                             </picture>`;
                 }
-                return singleImgTag.replace('class="', `class="absolute inset-0 transition-opacity duration-700 ease-in-out ${isFirst ? 'opacity-100' : 'opacity-0'} `);
+                return singleImgTag.replace('class="', `class="absolute inset-0 transition-opacity duration-700 ease-in-out ${isFirst ? 'opacity-100' : 'opacity-0'} p-4 `);
             }).join('');
 
             const dotsTags = images.map((_, index) => 
@@ -247,25 +259,42 @@ const lightEquipment = [
                 webpSrc = imgSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
             }
 
-            const singleImgTag = `<img onclick="openImageModal('${imgSrc}')" src="${imgSrc}" alt="${product.title}" loading="lazy" decoding="async" class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110 cursor-pointer" width="300" height="200">`;
+            const singleImgTag = `<img onclick="openImageModal('${imgSrc}')" src="${imgSrc}" alt="${product.title}" loading="lazy" decoding="async" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 cursor-pointer" width="300" height="200">`;
 
             imageHTML = webpSrc
-                ? `<picture class="w-full h-full block"><source srcset="${webpSrc.replace(/ /g, '%20')}" type="image/webp">${singleImgTag}</picture>`
-                : singleImgTag;
+                ? `<picture class="w-full h-full block p-4"><source srcset="${webpSrc.replace(/ /g, '%20')}" type="image/webp">${singleImgTag}</picture>`
+                : `<div class="w-full h-full p-4">${singleImgTag}</div>`;
         }
 
         return `
-        <div class="border border-gray-200 rounded-xl overflow-hidden hover:border-primary hover:shadow-[0_0_20px_rgba(30,58,138,0.6)] transition-all duration-300 flex flex-col h-full group bg-white">
-            <div class="h-32 md:h-64 bg-white flex items-center justify-center overflow-hidden relative">
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 flex flex-col h-full group overflow-hidden hover:-translate-y-1">
+            <div class="h-48 md:h-56 bg-white relative overflow-hidden flex items-center justify-center">
                 ${imageHTML}
+                <!-- Gradient Overlay for depth -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
             </div>
-            <div class="p-3 md:p-6 flex flex-col flex-grow">
-                <h3 class="text-base md:text-xl font-bold mb-2 text-gray-900">${product.title}</h3>
-                <p class="text-gray-600 text-xs md:text-sm mb-4">${product.description}</p>
-                <ul class="text-xs md:text-sm text-gray-600 mb-4 space-y-1 flex-grow">
-                    ${product.features.map(feature => `<li><i class="fa-solid fa-check text-green-600 mr-2" aria-hidden="true"></i> ${feature}</li>`).join('')}
-                </ul>
-                <a href="${product.link}" class="block text-center w-full border border-primary text-primary py-1.5 md:py-2 rounded hover:bg-primary hover:text-white transition mt-auto text-sm md:text-base" aria-label="View details for ${product.title}">Details</a>
+            
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="mb-2">
+                    <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1" title="${product.title}">${product.title}</h3>
+                    <div class="h-0.5 w-12 bg-secondary rounded-full mt-1 group-hover:w-20 transition-all duration-300"></div>
+                </div>
+                
+                <p class="text-sm text-gray-600 mb-4 line-clamp-2 min-h-[2.5rem]">${product.description}</p>
+                
+                <div class="flex flex-wrap gap-2 mb-6">
+                    ${(product.models || []).slice(0, 3).map(model => 
+                        `<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                            ${model}
+                        </span>`
+                    ).join('')}
+                    ${(product.models || []).length > 3 ? `<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-500 border border-gray-100">+${(product.models || []).length - 3}</span>` : ''}
+                </div>
+                
+                <a href="${product.link}" class="mt-auto w-full group/btn relative flex items-center justify-center gap-2 bg-white border-2 border-gray-100 text-gray-700 font-semibold py-2.5 px-4 rounded-xl hover:border-primary hover:bg-primary hover:text-white transition-all duration-300 overflow-hidden" aria-label="View details for ${product.title}">
+                    <span class="relative z-10">View Details</span>
+                    <i class="fa-solid fa-arrow-right relative z-10 transform group-hover/btn:translate-x-1 transition-transform"></i>
+                </a>
             </div>
         </div>
         `;
@@ -273,16 +302,20 @@ const lightEquipment = [
 
     window.initAppreciationCarousel = function() {
         const carousel = document.getElementById('apc-carousel');
-        if (!carousel) return;
+        // Guard against re-initialization from router
+        if (!carousel || carousel.dataset.jsInitialized) return;
 
+        const styleId = 'apc-carousel-style';
+        if (!document.getElementById(styleId)) {
         const style = document.createElement('style');
+            style.id = styleId;
         style.innerHTML = `
             #apc-carousel {
                 display: flex;
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
                 gap: 20px;
-                padding: 20px 10%;
+                padding: 20px 15%; /* Peek effect on mobile */
                 scrollbar-width: none;
                 -ms-overflow-style: none;
             }
@@ -290,22 +323,35 @@ const lightEquipment = [
                 display: none;
             }
             #apc-carousel > * {
-                flex: 0 0 80%;
+                flex: 0 0 70%; /* On mobile, card is 70% of container */
                 scroll-snap-align: center;
             }
             @media (min-width: 768px) {
                 #apc-carousel { padding: 20px 30%; }
-                #apc-carousel > * { flex: 0 0 40%; }
+                #apc-carousel > * { flex: 0 0 100%; } /* Card fills the central 40% area */
             }
         `;
         document.head.appendChild(style);
+        }
+
+        // Defer the JS initialization to ensure styles are applied
+        setTimeout(() => {
+            if (window.initInfiniteCarousel) {
+                window.initInfiniteCarousel('apc-carousel', 'apc-prev', 'apc-next', 3000);
+                carousel.dataset.jsInitialized = 'true';
+            }
+        }, 0);
     };
 
     window.renderHomeCards = function() {
-    const heavyContainer = document.getElementById('heavy-machinery-grid');
-    const lightContainer = document.getElementById('light-machinery-grid');
+    // New phase-based containers
+    const soilContainer = document.getElementById('soil-foundation-grid');
+    const rebarContainer = document.getElementById('rebar-processing-grid');
+    const liftingContainer = document.getElementById('lifting-solutions-grid');
+    const concretingContainer = document.getElementById('concreting-equipment-grid');
+    const miscContainer = document.getElementById('miscellaneous-grid');
     
-    if (!heavyContainer && !lightContainer) return;
+    if (!soilContainer && !rebarContainer && !liftingContainer && !concretingContainer && !miscContainer) return;
 
     let contentUpdated = false;
 
@@ -326,8 +372,11 @@ const lightEquipment = [
         }
     };
 
-    processContainer(heavyContainer, heavyMachinery);
-    processContainer(lightContainer, lightEquipment);
+    processContainer(soilContainer, soilFoundation);
+    processContainer(rebarContainer, rebarProcessing);
+    processContainer(liftingContainer, liftingSolutions);
+    processContainer(concretingContainer, concretingEquipment);
+    processContainer(miscContainer, miscellaneous);
 
     // Only setup animations if content was actually updated (prevents double-reset glitch)
     if (!contentUpdated) return;
@@ -355,6 +404,20 @@ const lightEquipment = [
         });
     }, 100);
 }
+    // This function will be the main entry point for rendering home cards.
+    // It's safe to call multiple times because renderHomeCards has its own internal guard.
+    function checkAndRenderHomeCards() {
+        const soilContainer = document.getElementById('soil-foundation-grid');
+        const rebarContainer = document.getElementById('rebar-processing-grid');
+        const liftingContainer = document.getElementById('lifting-solutions-grid');
+        const concretingContainer = document.getElementById('concreting-equipment-grid');
+        const miscContainer = document.getElementById('miscellaneous-grid');
+
+        if (soilContainer || rebarContainer || liftingContainer || concretingContainer || miscContainer) {
+            renderHomeCards();
+        }
+    }
+
 
     // Expose for manual calls if needed (Router compatibility)
     window.initProductCards = function() {
@@ -499,9 +562,12 @@ const lightEquipment = [
 
     // Initialization Logic
     function init() {
-        window.initProductCards();
-        CarouselManager.start();
+        checkAndRenderHomeCards();
+        window.initAppreciationCarousel();
+        // The router will re-trigger card rendering on navigation via `initProductCards`.
+        // The MutationObserver was removed to prevent conflicts and performance issues.
     }
+    
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
