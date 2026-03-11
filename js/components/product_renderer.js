@@ -119,7 +119,7 @@ window.createProductCard = function(product) {
 
     // Card classes and structure
     const imageClass = product.imageClass || 'object-contain';
-    const imageContainerClass = product.imageContainerClass || 'h-32 md:h-64';
+    const imageContainerClass = product.imageContainerClass || 'h-40 md:h-64';
     const cardWrapperClass = product.cardWrapperClass || 'bg-white rounded-xl border border-gray-200 hover:border-primary hover:shadow-[0_0_20px_rgba(30,58,138,0.6)] transition-all duration-300 group flex flex-col h-full';
     const contentClass = product.contentClass || 'p-2 md:p-6 text-center flex flex-col flex-grow';
 
@@ -439,6 +439,15 @@ window.highlightSharedProduct = function() {
             top: offsetPosition,
             behavior: "smooth"
         });
+
+        // Fix: Prevent "wobbling" effect on main sections (e.g., when clicking Breadcrumbs or Navbar links)
+        // We only want this effect when a specific product card is targeted via a share link.
+        const isStructuralSection = element.tagName === 'SECTION' || 
+                                  element.tagName === 'MAIN' || 
+                                  element.id === 'products' || 
+                                  element.id === 'contact' || 
+                                  element.id === 'home';
+        if (isStructuralSection) return;
 
         // Add highlight effect
         element.classList.add('product-highlight-pulse');

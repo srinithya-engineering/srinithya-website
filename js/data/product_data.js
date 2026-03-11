@@ -1,5 +1,5 @@
 window.productData = {
-    'bar-bending-models': [
+    'bar-bending-models': [ 
         {
             model: "SBB52",
             name: "SBB52",

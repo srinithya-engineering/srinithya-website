@@ -267,31 +267,31 @@
         }
 
         return `
-        <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 flex flex-col h-full group overflow-hidden hover:-translate-y-1">
-            <div class="h-48 md:h-56 bg-white relative overflow-hidden flex items-center justify-center">
+        <div class="bg-white rounded-xl md:rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 flex flex-col h-full group overflow-hidden hover:-translate-y-1">
+            <div class="h-40 md:h-56 bg-white relative overflow-hidden flex items-center justify-center">
                 ${imageHTML}
                 <!-- Gradient Overlay for depth -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
             </div>
             
-            <div class="p-5 flex flex-col flex-grow">
+            <div class="p-3 md:p-5 flex flex-col flex-grow">
                 <div class="mb-2">
-                    <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1" title="${product.title}">${product.title}</h3>
-                    <div class="h-0.5 w-12 bg-secondary rounded-full mt-1 group-hover:w-20 transition-all duration-300"></div>
+                    <h3 class="text-sm md:text-lg font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1" title="${product.title}">${product.title}</h3>
+                    <div class="h-0.5 w-8 md:w-12 bg-secondary rounded-full mt-1 group-hover:w-12 md:group-hover:w-20 transition-all duration-300"></div>
                 </div>
                 
-                <p class="text-sm text-gray-600 mb-4 line-clamp-2 min-h-[2.5rem]">${product.description}</p>
+                <p class="text-xs md:text-sm text-gray-600 mb-2 md:mb-4 line-clamp-2 min-h-[2rem] md:min-h-[2.5rem]">${product.description}</p>
                 
-                <div class="flex flex-wrap gap-2 mb-6">
+                <div class="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-6">
                     ${(product.models || []).slice(0, 3).map(model => 
-                        `<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                        `<span class="inline-flex items-center px-1.5 py-0.5 md:px-2 md:py-1 rounded-md text-[10px] md:text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
                             ${model}
                         </span>`
                     ).join('')}
                     ${(product.models || []).length > 3 ? `<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-500 border border-gray-100">+${(product.models || []).length - 3}</span>` : ''}
                 </div>
                 
-                <a href="${product.link}" class="mt-auto w-full group/btn relative flex items-center justify-center gap-2 bg-white border-2 border-gray-100 text-gray-700 font-semibold py-2.5 px-4 rounded-xl hover:border-primary hover:bg-primary hover:text-white transition-all duration-300 overflow-hidden" aria-label="View details for ${product.title}">
+                <a href="${product.link}" class="mt-auto w-full group/btn relative flex items-center justify-center gap-2 bg-white border-2 border-gray-100 text-gray-700 font-semibold py-2 px-3 md:py-2.5 md:px-4 rounded-lg md:rounded-xl hover:border-primary hover:bg-primary hover:text-white transition-all duration-300 overflow-hidden text-xs md:text-base" aria-label="View details for ${product.title}">
                     <span class="relative z-10">View Details</span>
                     <i class="fa-solid fa-arrow-right relative z-10 transform group-hover/btn:translate-x-1 transition-transform"></i>
                 </a>
@@ -315,7 +315,7 @@
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
                 gap: 20px;
-                padding: 20px 15%; /* Peek effect on mobile */
+                padding: 20px 0; /* Adjusted to match video carousel layout */
                 scrollbar-width: none;
                 -ms-overflow-style: none;
             }
@@ -323,7 +323,7 @@
                 display: none;
             }
             #apc-carousel > * {
-                flex: 0 0 70%; /* On mobile, card is 70% of container */
+                flex: 0 0 100%; /* Full width on mobile */
                 scroll-snap-align: center;
             }
             @media (min-width: 768px) {
