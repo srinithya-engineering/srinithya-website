@@ -221,7 +221,10 @@ window.renderProductCards = function(containerId, products) {
 
         // Check for shared product highlight
         if (window.location.hash) {
-            setTimeout(window.highlightSharedProduct, 500);
+            setTimeout(() => {
+                window.highlightSharedProduct();
+                if (window.updateMetaTags) window.updateMetaTags();
+            }, 500);
         }
 
         // Announce that products have been rendered so other components (like Compare Bar) can sync
@@ -408,11 +411,17 @@ function showCopyToast() {
 // --- Share Logic ---
 window.shareProduct = function(productName) {
     const productId = productName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
+    // Point to the specific generated share page
+    const shareUrl = `${window.location.origin}/Product_details/share/${productId}.html`;
+
     const shareData = {
         title: 'Check out this product from Srinithya Engineering',
         text: `I found this ${productName} interesting:`,
-        url: `${window.location.origin}${window.location.pathname}#${productId}`
+        url: shareUrl
     };
+
+    console.log('🔗 Sharing Product URL:', shareUrl);
 
     if (navigator.share) {
         navigator.share(shareData).catch(console.error);
@@ -514,363 +523,105 @@ if (document.readyState === 'loading') {
     window.initRecentlyViewed();
 }
 
-// Listen for hash changes to trigger highlight (e.g. same-page navigation)
+// --- Dynamic Meta Tags Logic ---
+window.findProductByHash = function(hash) {
+    if (!window.productData || !hash) return null;
+    const cleanHash = hash.replace('#', '');
+    const generateId = (name) => (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    for (const category in window.productData) {
+        const items = window.productData[category];
+        if (Array.isArray(items)) {
+            const found = items.find(p => generateId(p.name) === cleanHash);
+            if (found) return found;
+        } else if (typeof items === 'object') {
+            for (const subCat in items) {
+                const subItems = items[subCat];
+                if (Array.isArray(subItems)) {
+                    const found = subItems.find(p => generateId(p.name) === cleanHash);
+                    if (found) return found;
+                }
+            }
+        }
+    }
+    return null;
+};
+
+window.updateMetaTags = function() {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const product = window.findProductByHash(hash);
+    if (!product) return;
+
+    // Update Title
+    document.title = `${product.name} | Srinithya Engineering`;
+
+    // Helper to set meta tag
+    const setMeta = (property, content) => {
+        if (!content) return;
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        if (!tag) {
+            tag = document.createElement('meta');
+            tag.setAttribute('property', property);
+            document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
+    };
+
+    // Resolve Image URL (Absolute)
+    // Use current origin (localhost/ngrok/production) dynamically
+    const productionDomain = window.location.origin;
+    const defaultImage = `${productionDomain}/Assets/Others/logo.png`;
+    let imageUrl = product.image;
+    
+    if (imageUrl && !imageUrl.startsWith('http')) {
+        // Normalize path to be relative to root (remove ./ or ../)
+        const cleanPath = imageUrl.replace(/^(\.\/|\.\.\/)/, '');
+        imageUrl = `${productionDomain}/${cleanPath}`;
+    } else if (!imageUrl) {
+        imageUrl = defaultImage;
+    }
+
+    // Construct Canonical URL
+    let path = window.location.pathname;
+    if (path.includes('/Product_details/')) {
+        path = '/Product_details/' + path.split('/Product_details/')[1];
+    } else if (path.includes('/Service_details/')) {
+        path = '/Service_details/' + path.split('/Service_details/')[1];
+    } else {
+        path = '/' + path.split('/').pop();
+    }
+    const pageUrl = `${productionDomain}${path}${hash}`;
+
+    setMeta('og:title', product.name);
+    setMeta('og:description', product.description);
+    setMeta('og:image', imageUrl);
+    setMeta('og:url', pageUrl);
+    setMeta('og:type', 'product');
+
+    // Update standard description as well
+    let descTag = document.querySelector('meta[name="description"]');
+    if (descTag) {
+        descTag.setAttribute('content', product.description || '');
+    }
+
+    console.log('Open Graph Updated:', { title: product.name, url: pageUrl, image: imageUrl });
+};
+
+// Listen for hash changes to trigger highlight and meta update
 window.addEventListener('hashchange', () => {
-    setTimeout(window.highlightSharedProduct, 500);
+    setTimeout(() => {
+        window.highlightSharedProduct();
+        window.updateMetaTags();
+    }, 100);
 });
 
-// --- PDF Generation for Single Product Catalogue ---
-
-function loadPdfLibs() {
-    // Check if both jspdf and autotable plugin are loaded
-    if (window.jspdf && window.jspdf.jsPDF && typeof window.jspdf.jsPDF.API.autoTable === 'function') {
-        return Promise.resolve();
-    }
-    return new Promise((resolve, reject) => {
-        const script1 = document.createElement('script');
-        script1.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
-        script1.onload = () => {
-            const script2 = document.createElement('script');
-            script2.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js";
-            script2.onload = resolve;
-            script2.onerror = reject;
-            document.head.appendChild(script2);
-        };
-        script1.onerror = reject;
-        document.head.appendChild(script1);
-    });
-}
-
-function flattenProductsForCatalogue(data) {
-    let all = [];
-    for (const [category, items] of Object.entries(data)) {
-        if (Array.isArray(items)) {
-            items.forEach(item => {
-                item.category = category;
-                all.push(item);
-            });
-        } else if (typeof items === 'object' && items !== null) {
-            for (const [subCat, subItems] of Object.entries(items)) {
-                if (Array.isArray(subItems)) {
-                    subItems.forEach(item => {
-                        item.category = `${category} - ${subCat}`;
-                        all.push(item);
-                    });
-                }
-            }
-        }
-    }
-    return all;
-}
-
-window.downloadProductCatalogue = async function(event, productIdentifier) {
-    const btn = event.target.closest('button');
-    if (!btn) return;
-
-    const originalText = btn.innerHTML;
-    const isIconBtn = btn.classList.contains('rounded-full');
-    btn.innerHTML = isIconBtn ? '<i class="fa-solid fa-spinner fa-spin"></i>' : '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
-    btn.disabled = true;
-
-    try {
-        await loadPdfLibs();
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        console.log("Generating PDF for:", productIdentifier);
-
-        const getAbsolutePath = (path) => {
-            if (!path) return null;
-            if (path.startsWith('http')) return path;
-            const rootPath = (window.location.pathname.includes('/Product_details/') || window.location.pathname.includes('/Service_details/')) ? '../' : './';
-            const cleanPath = path.replace(/^(\.\/|\.\.\/)/, '');
-            return rootPath + cleanPath;
-        };
-
-        const getFontDataUrl = (url) => new Promise((resolve, reject) => {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error(`Network response was not ok for ${url}`);
-                    return response.blob();
-                })
-                .then(blob => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        const base64data = reader.result.split(',')[1];
-                        resolve(base64data);
-                    };
-                    reader.onerror = (error) => reject(error);
-                    reader.readAsDataURL(blob);
-                })
-                .catch(error => {
-                    console.error('Fetching font failed:', error);
-                    reject(error);
-                });
-        });
-
-        const getImageDataUrl = (url) => new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                resolve({
-                    dataUrl: canvas.toDataURL('image/png'),
-                    width: img.width,
-                    height: img.height
-                });
-            };
-            img.onerror = () => {
-                console.warn('Could not load image for PDF:', url);
-                resolve(null);
-            };
-            img.src = url;
-        });
-
-        // --- Add Custom Font ---
-        const fontUrl = getAbsolutePath('Assets/Fonts/masque.ttf');
-        let customFontLoaded = false;
-        if (fontUrl) {
-            try {
-                const fontData = await getFontDataUrl(fontUrl);
-                doc.addFileToVFS('Masque.ttf', fontData);
-                doc.addFont('Masque.ttf', 'Masque', 'normal');
-                customFontLoaded = true;
-            } catch (e) {
-                console.warn("Could not load custom font, falling back to default.", e);
-            }
-        }
-
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        const margin = 12;
-        let y = margin;
-
-        const products = flattenProductsForCatalogue(window.productData);
-        const product = products.find(p => p.model === productIdentifier || p.name === productIdentifier);
-
-        if (!product) {
-            alert("Could not find product data to generate PDF.");
-            throw new Error("Product not found");
-        }
-
-        // --- Brand Colors ---
-        const headerGreen = [28, 100, 28]; // Dark Green, matches SPB Proforma
-        const textGrey = [50, 50, 50];
-        const lineGrey = [220, 220, 220];
-
-        // --- 1. Header Section ---
-        const logoUrl = getAbsolutePath('Assets/Others/logo.png');
-        const logoImageData = await getImageDataUrl(logoUrl);
-        if (logoImageData && logoImageData.dataUrl) {
-            doc.addImage(logoImageData.dataUrl, 'PNG', margin, y, 25, 25);
-        }
-        
-        const headerX = margin + 30;
-        doc.setFontSize(20);
-        doc.setTextColor(headerGreen[0], headerGreen[1], headerGreen[2]);
-        if (customFontLoaded) {
-            doc.setFont("Masque", "normal");
-        } else {
-            doc.setFont("helvetica", "bold");
-        }
-        // Vertically align the text block to be more centered with the logo
-        doc.text("SRINITHYA ENGINEERING PVT. LTD.", headerX, y + 10);
-        
-        doc.setFontSize(9);
-        doc.setTextColor(textGrey[0], textGrey[1], textGrey[2]);
-        doc.setFont("helvetica", "normal"); // Reset font for address
-        doc.text("# 9-95/8 Jyothi Nagar Colony, Balaji Nagar, Jawahar Nagar Municipality, Kapra Mandal,", headerX, y + 16);
-        doc.text("Hyderabad, Telangana - 500087, India.", headerX, y + 21);
-
-        y += 30;
-        doc.setDrawColor(lineGrey[0], lineGrey[1], lineGrey[2]);
-        doc.setLineWidth(0.5);
-        doc.line(margin, y, pageWidth - margin, y);
-        y += 10;
-
-        // --- 2. Document Title ---
-        doc.setFontSize(16);
-        doc.setTextColor(0, 0, 0);
-        doc.setFont("helvetica", "bold");
-        doc.text("PRODUCT BROCHURE", pageWidth / 2, y, { align: 'center' });
-        y += 10;
-
-        // --- 3. Meta Information ---
-        const categoryCode = (product.category || 'GEN').replace(/-models/g, '').split('-').map(w => w[0]).join('').toUpperCase();
-        const metaBody = [
-            [{content: 'Reference No:', styles: {fontStyle: 'bold'}}, `SEPL/${categoryCode}/${product.model || 'NA'}`],
-            [{content: 'Date:', styles: {fontStyle: 'bold'}}, new Date().toLocaleDateString('en-GB')],
-            [{content: 'Product:', styles: {fontStyle: 'bold'}}, product.name],
-            [{content: 'Model / SKU:', styles: {fontStyle: 'bold'}}, product.model || 'N/A'],
-        ];
-        doc.autoTable({
-            body: metaBody,
-            startY: y,
-            theme: 'grid',
-            styles: { fontSize: 9, cellPadding: 2 },
-            didDrawPage: (data) => {
-                // Remove borders to make it look like a definition list
-                doc.setDrawColor(255, 255, 255);
-            }
-        });
-        y = doc.lastAutoTable.finalY + 10;
-
-        // --- 4. Content Section (Image & Description) ---
-        const contentStartY = y;
-        const maxImgWidth = 85;
-        const maxImgHeight = 75;
-        let finalImgHeight = maxImgHeight; // Default height if image fails to load
-        let rightColY = contentStartY;
-
-        if (product.image) {
-            const productImgUrl = getAbsolutePath(product.image);
-            const imageData = await getImageDataUrl(productImgUrl);
-            
-            if (imageData && imageData.dataUrl) {
-                const aspectRatio = imageData.width / imageData.height;
-                let displayWidth = maxImgWidth;
-                let displayHeight = displayWidth / aspectRatio;
-
-                // If the calculated height is too tall, constrain by height and recalculate width
-                if (displayHeight > maxImgHeight) {
-                    displayHeight = maxImgHeight;
-                    displayWidth = displayHeight * aspectRatio;
-                }
-                
-                finalImgHeight = displayHeight;
-
-                doc.addImage(imageData.dataUrl, 'PNG', margin, y, displayWidth, displayHeight);
-            }
-        }
-        
-        // Description Column (Right)
-        const textX = margin + maxImgWidth + 8;
-        const textWidth = pageWidth - textX - margin;
-        
-        doc.setFontSize(11);
-        doc.setTextColor(headerGreen[0], headerGreen[1], headerGreen[2]);
-        doc.setFont("helvetica", "bold");
-        doc.text("Product Overview", textX, rightColY);
-        rightColY += 6;
-        
-        doc.setFontSize(9);
-        doc.setTextColor(textGrey[0], textGrey[1], textGrey[2]);
-        doc.setFont("helvetica", "normal");
-        const splitDesc = doc.splitTextToSize(product.description || 'No description available.', textWidth);
-        doc.text(splitDesc, textX, rightColY);
-        rightColY += splitDesc.length * 3.5 + 4; // Adjust line height factor
-
-        // Add Key Features
-        const features = product.specs || product.features;
-        if (features && features.length > 0) {
-            rightColY += 5; // spacing
-            doc.setFontSize(10);
-            doc.setTextColor(headerGreen[0], headerGreen[1], headerGreen[2]);
-            doc.setFont("helvetica", "bold");
-            doc.text("Key Features", textX, rightColY);
-            rightColY += 5;
-
-            doc.setFontSize(9);
-            doc.setTextColor(textGrey[0], textGrey[1], textGrey[2]);
-            doc.setFont("helvetica", "normal");
-            features.slice(0, 5).forEach(feature => {
-                if (rightColY < contentStartY + finalImgHeight) { // Don't overflow past image height
-                    const featureText = (feature.text || feature).replace(/<[^>]*>/g, '');
-                    doc.text(`• ${featureText}`, textX, rightColY, { maxWidth: textWidth });
-                    rightColY += 5;
-                }
-            });
-        }
-        
-        y = Math.max(contentStartY + finalImgHeight + 12, rightColY + 12);
-
-        // --- 5. Specifications Table ---
-        const tableBody = [];
-        if (product.compare) {
-            Object.entries(product.compare).forEach(([key, val]) => {
-                if (key !== 'model' && key !== 'image' && key !== 'category' && key !== 'previewImage') {
-                    const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).replace(/-/g, ' ');
-                    tableBody.push([label, val]);
-                }
-            });
-        }
-        if (product.specs && tableBody.length === 0) {
-            product.specs.forEach(spec => {
-                const text = (spec.text || spec).replace(/<[^>]*>/g, '');
-                if (text.includes(':')) {
-                    const parts = text.split(':');
-                    tableBody.push([parts[0].trim(), parts.slice(1).join(':').trim()]);
-                } else {
-                    tableBody.push([text, '']);
-                }
-            });
-        }
-
-        if (tableBody.length > 0) {
-            doc.autoTable({
-                startY: y,
-                head: [['Specification', 'Details']],
-                body: tableBody,
-                theme: 'grid',
-                headStyles: { fillColor: headerGreen, textColor: 255, fontStyle: 'bold', fontSize: 10 },
-                styles: { fontSize: 9, cellPadding: 2.5, lineColor: lineGrey },
-                alternateRowStyles: { fillColor: [248, 249, 250] },
-                margin: { left: margin, right: margin }
-            });
-            y = doc.lastAutoTable.finalY;
-        }
-
-        // --- 6. Footer & Signature ---
-        const footerStartY = Math.max(y + 15, pageHeight - 50);
-
-        doc.setFontSize(7);
-        doc.setTextColor(150, 150, 150);
-        doc.setFont("helvetica", "italic");
-        const termsText = "Disclaimer: Specifications and design are subject to change without prior notice for product improvement. The images shown are for illustration purposes only and may not be an exact representation of the product.";
-        const splitTerms = doc.splitTextToSize(termsText, pageWidth - (margin * 2));
-        doc.text(splitTerms, margin, footerStartY);
-
-        const signatureX = pageWidth - margin - 70;
-        const signatureY = footerStartY + 15;
-
-        doc.setFontSize(9);
-        doc.setTextColor(textGrey[0], textGrey[1], textGrey[2]);
-        doc.setFont("helvetica", "bold");
-        doc.text("For, Srinithya Engineering Pvt. Ltd.", signatureX, signatureY);
-        
-        const signatureLineY = signatureY + 15;
-        doc.line(signatureX, signatureLineY, signatureX + 70, signatureLineY); // Signature line
-        
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "normal");
-        doc.text("(Authorised Signatory)", signatureX, signatureLineY + 4);
-
-        // Page Footer Bar
-        doc.setLineWidth(0.5);
-        doc.setDrawColor(lineGrey[0], lineGrey[1], lineGrey[2]);
-        doc.line(margin, pageHeight - 10, pageWidth - margin, pageHeight - 10);
-        
-        doc.setFontSize(8);
-        doc.setTextColor(150, 150, 150);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, margin, pageHeight - 6);
-
-        const footerCenterText = `Email: sales@srinithyaepl.in | Web: www.srinithyaepl.in`;
-        doc.text(footerCenterText, pageWidth / 2, pageHeight - 6, { align: 'center' });
-
-        doc.text(`Page 1 of 1`, pageWidth - margin, pageHeight - 6, { align: 'right' });
-
-        const fileName = `${(product.model || product.name).replace(/[^a-z0-9]/gi, '_')}_SpecSheet.pdf`;
-        doc.save(fileName);
-
-    } catch (error) {
-        console.error("PDF Generation Failed:", error);
-        alert("Sorry, there was an error generating the PDF catalogue.");
-    } finally {
-        if (btn) {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }
+// Initial call if hash exists
+if (window.location.hash) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(window.updateMetaTags, 1000));
+    } else {
+        setTimeout(window.updateMetaTags, 1000);
     }
 }
