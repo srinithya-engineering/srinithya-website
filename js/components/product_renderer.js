@@ -14,6 +14,18 @@
             position: relative;
             border-color: #d97706 !important;
         }
+        @keyframes iconSwap1 {
+            0%, 45% { opacity: 1; transform: scale(1); }
+            50%, 95% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes iconSwap2 {
+            0%, 45% { opacity: 0; transform: scale(0.5); }
+            50%, 95% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+        .icon-swap-primary { animation: iconSwap1 3s infinite; }
+        .icon-swap-secondary { animation: iconSwap2 3s infinite; }
     `;
     document.head.appendChild(style);
 })();
@@ -86,6 +98,16 @@ window.createProductCard = function(product) {
         return '';
     }).join('');
 
+    // Generate PDF Download Button
+    const safeIdentifier = (product.model || product.name).replace(/'/g, "\\'");
+    const pdfButtonHTML = `
+        <button onclick="window.downloadProductCatalogue(event, '${safeIdentifier}')" class="absolute top-16 left-4 bg-white/90 hover:bg-white text-gray-600 hover:text-secondary p-2 rounded-full shadow-md transition-all duration-200 z-10" title="Download this product">
+            <div class="relative w-4 h-4 flex items-center justify-center">
+                <i class="fa-solid fa-file-pdf absolute icon-swap-primary"></i>
+                <i class="fa-solid fa-download absolute icon-swap-secondary"></i>
+            </div>
+        </button>`;
+
     // Determine if compare functionality should be enabled for this card
     const compareCheckboxHTML = product.compare ? `
         <div class="flex justify-end -mt-2 -mr-2">
@@ -97,7 +119,7 @@ window.createProductCard = function(product) {
 
     // Card classes and structure
     const imageClass = product.imageClass || 'object-contain';
-    const imageContainerClass = product.imageContainerClass || 'h-32 md:h-64';
+    const imageContainerClass = product.imageContainerClass || 'h-40 md:h-64';
     const cardWrapperClass = product.cardWrapperClass || 'bg-white rounded-xl border border-gray-200 hover:border-primary hover:shadow-[0_0_20px_rgba(30,58,138,0.6)] transition-all duration-300 group flex flex-col h-full';
     const contentClass = product.contentClass || 'p-2 md:p-6 text-center flex flex-col flex-grow';
 
@@ -139,6 +161,7 @@ window.createProductCard = function(product) {
                 ${mediaHTML}
                 ${badgeHTML}
                 ${shareHTML}
+                ${pdfButtonHTML}
             </div>
             <div class="${contentClass}">
                 ${compareCheckboxHTML}
@@ -425,6 +448,15 @@ window.highlightSharedProduct = function() {
             top: offsetPosition,
             behavior: "smooth"
         });
+
+        // Fix: Prevent "wobbling" effect on main sections (e.g., when clicking Breadcrumbs or Navbar links)
+        // We only want this effect when a specific product card is targeted via a share link.
+        const isStructuralSection = element.tagName === 'SECTION' || 
+                                  element.tagName === 'MAIN' || 
+                                  element.id === 'products' || 
+                                  element.id === 'contact' || 
+                                  element.id === 'home';
+        if (isStructuralSection) return;
 
         // Add highlight effect
         element.classList.add('product-highlight-pulse');

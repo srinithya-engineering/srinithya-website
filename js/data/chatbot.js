@@ -128,6 +128,22 @@ document.addEventListener('DOMContentLoaded', function() {
         #sepl-chatbot-send:hover {
             background-color: #1e40af;
         }
+        #sepl-chatbot-mic {
+            background-color: transparent;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        #sepl-chatbot-mic:hover { background-color: #f3f4f6; color: ${config.colors.primary}; }
+        #sepl-chatbot-mic.listening { color: #ef4444; border-color: #ef4444; animation: sepl-pulse 1.5s infinite; }
+        @keyframes sepl-pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         .bot-product-card {
             border: 1px solid #e5e7eb;
             border-radius: 8px;
@@ -460,6 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ${config.companyName}
                 </span>
                 <div>
+                    <button id="sepl-chatbot-tts" title="Text to Speech" style="background:none;border:none;color:white;cursor:pointer;font-size:14px;margin-right:10px;opacity:0.7;"><i class="fa-solid fa-volume-xmark"></i></button>
                     <button id="sepl-chatbot-clear" title="Clear Chat" style="background:none;border:none;color:white;cursor:pointer;font-size:14px;margin-right:10px;"><i class="fa-solid fa-trash-can"></i></button>
                     <button id="sepl-chatbot-close" style="background:none;border:none;color:white;cursor:pointer;font-size:20px;">&times;</button>
                 </div>
@@ -474,6 +491,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div id="sepl-chatbot-input-area">
                 <input type="text" id="sepl-chatbot-input" placeholder="Ask about machines, models...">
+                <button type="button" id="sepl-chatbot-mic" title="Speak to Search"><i class="fa-solid fa-microphone"></i></button>
                 <button id="sepl-chatbot-send"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
@@ -497,11 +515,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 3. Chatbot Logic
     const chatWindow = document.getElementById("sepl-chatbot-window");
     const closeBtn = document.getElementById("sepl-chatbot-close");
+    const ttsBtn = document.getElementById("sepl-chatbot-tts");
     const clearBtn = document.getElementById("sepl-chatbot-clear");
     const quickActionsDiv = document.getElementById("sepl-chatbot-quick-actions");
     const messagesDiv = document.getElementById("sepl-chatbot-messages");
     const inputField = document.getElementById("sepl-chatbot-input");
     const sendBtn = document.getElementById("sepl-chatbot-send");
+    const micBtn = document.getElementById("sepl-chatbot-mic");
     
     const fabOptions = document.getElementById('sepl-fab-options');
 
@@ -598,6 +618,7 @@ document.addEventListener('DOMContentLoaded', function() {
     clearBtn.addEventListener("click", () => {
         messagesDiv.innerHTML = '';
         lastContextProduct = null;
+        if (synth) synth.cancel();
         chatHistory = [];
         sessionStorage.removeItem('sepl_chat_history');
         sessionStorage.removeItem('sepl_chat_context_product');
@@ -705,6 +726,7 @@ document.addEventListener('DOMContentLoaded', function() {
             hideTyping();
             const response = await generateResponse(text);
             addMessage("bot", response.text, response.html, response.suggestions);
+            speakText(response.text);
         }, delay);
     }
 
@@ -712,6 +734,79 @@ document.addEventListener('DOMContentLoaded', function() {
     inputField.addEventListener("keypress", (e) => {
         if (e.key === "Enter") processInput();
     });
+
+    // --- Voice Recognition Logic ---
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        recognition.maxAlternatives = 1;
+        
+        let isRecognizing = false;
+        
+        micBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isRecognizing) {
+                recognition.stop();
+            } else {
+                inputField.value = '';
+                try { 
+                    recognition.start(); 
+                } catch(e) { 
+                    console.error("Mic start error:", e);
+                }
+            }
+        });
+
+        recognition.onstart = () => {
+            isRecognizing = true;
+            micBtn.classList.add('listening');
+            inputField.placeholder = "Listening... Speak now";
+        };
+
+        recognition.onend = () => {
+            isRecognizing = false;
+            micBtn.classList.remove('listening');
+            inputField.placeholder = "Ask about machines, models...";
+        };
+
+        recognition.onerror = (event) => {
+            isRecognizing = false;
+            micBtn.classList.remove('listening');
+            if (event.error === 'no-speech') {
+                inputField.placeholder = "No speech detected. Try again.";
+            } else if (event.error === 'not-allowed') {
+                inputField.placeholder = "Mic permission denied.";
+            } else {
+                inputField.placeholder = "Error: " + event.error;
+            }
+        };
+
+        recognition.onresult = (event) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+
+            if (finalTranscript) {
+                inputField.value = finalTranscript;
+                recognition.stop();
+                processInput();
+            } else if (interimTranscript) {
+                inputField.value = interimTranscript;
+            }
+        };
+    } else {
+        micBtn.style.display = 'none';
+    }
 
     function updateContext(product) {
         lastContextProduct = product;

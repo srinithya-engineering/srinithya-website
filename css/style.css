@@ -63,6 +63,22 @@ a, button, input, select, textarea {
     animation: bounce-subtle 2s infinite ease-in-out;
 }
 
+/* Breadcrumb Animation */
+@keyframes breadcrumb-slide-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-breadcrumb {
+    animation: breadcrumb-slide-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Scroll-triggered animation styles */
 .fade-in-section {
     opacity: 0;
@@ -380,4 +396,101 @@ a, button, input, select, textarea {
 .product-actions-container {
     opacity: 1 !important;
     visibility: visible !important;
+}
+
+/* Sticky Phase Titles on Index Page */
+.sticky-phase-title-wrapper {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    /* This value should be the height of your shrunken/scrolled navbar + a small gap.
+       55px is a good starting point. */
+    top: 55px; 
+    z-index: 20; /* Must be below the navbar (z-50) */
+    
+    /* Padding to create space when it becomes sticky */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    /* Replaces the margin that was on the h2 tag */
+    margin-bottom: 2rem; 
+}
+ 
+/* --- Subtle Panel Phase Section Style --- */
+.phase-subtle-panel,
+.phase-subtle-panel-alt {
+    position: relative;
+    margin: 4rem 0;
+    padding: 3rem 2rem;
+    background-color: #ffffff;
+    border-radius: 24px;
+    border: 1px solid #e2e8f0; /* slate-200 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* Primary Style (Blue) */
+.phase-subtle-panel {
+    border-left: 5px solid #1e3a8a;
+}
+
+/* Alternate Style (Orange/Secondary) */
+.phase-subtle-panel-alt {
+    border-left: 5px solid #d97706; 
+    background-color: #fcfcfc; /* Very subtle off-white difference */
+}
+ 
+/* Sticky Title inside both panel types */
+.phase-subtle-panel .sticky-phase-title-wrapper,
+.phase-subtle-panel-alt .sticky-phase-title-wrapper {
+    /* Frosted glass effect */
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    
+    top: 55px; /* Stick below navbar */
+    
+    border-bottom: 1px solid #e2e8f0; /* slate-200 */
+    
+    /* Adjust margins to align with the panel's padding */
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+ 
+/* Title text style - Primary */
+.phase-subtle-panel .sticky-phase-title-wrapper h2 {
+    color: #1e3a8a; /* primary color */
+    text-shadow: none; /* Remove glow from previous style */
+}
+
+/* Title text style - Alternate */
+.phase-subtle-panel-alt .sticky-phase-title-wrapper h2 {
+    color: #d97706; /* secondary color */
+    text-shadow: none;
+}
+
+/* --- Mobile Optimization for Phase Panels --- */
+@media (max-width: 640px) {
+    .phase-subtle-panel,
+    .phase-subtle-panel-alt {
+        padding: 2rem 0.75rem; /* Reduced horizontal padding */
+        margin: 2rem 0; /* Reduced vertical spacing */
+    }
+    /* Fix: Constrain sticky title to card width on mobile by matching parent padding */
+    .phase-subtle-panel .sticky-phase-title-wrapper,
+    .phase-subtle-panel-alt .sticky-phase-title-wrapper {
+        margin-left: -0.75rem;
+        margin-right: -0.75rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    .phase-subtle-panel .sticky-phase-title-wrapper h2,
+    .phase-subtle-panel-alt .sticky-phase-title-wrapper h2 {
+        font-size: 1.5rem; /* 24px, equivalent to text-2xl */
+        line-height: 2rem; /* 32px */
+    }
 }
