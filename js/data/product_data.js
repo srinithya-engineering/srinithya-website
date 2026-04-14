@@ -2,7 +2,7 @@ window.productData = {
     'bar-bending-models': [ 
         {
             model: "SBB52",
-            name: "SBB52",
+            name: "Bar Bender - <i>SBB52</i>",
             image: "./Assets/Product Images/bender.png",
             
             description: "High-precision bending with programmable angles for complex shapes.",
@@ -26,7 +26,7 @@ window.productData = {
         },
         {
             model: "SBB42", 
-            name: "SBB42",
+            name: "Bar Bender - <i>SBB42</i>",
             image: "./Assets/Product Images/sbb-42.png",
             description: "Reliable bending for stirrups and standard angles with pin-type control.",
             specs: [
@@ -52,7 +52,7 @@ window.productData = {
     'bar-cutting-models': [
         {
             model: "SBC52",
-            name: "SBC52",
+            name: "Bar Cutter - <i>SBC52</i>",
             image: "./Assets/Product Images/sbc.png",
             description: "Engineered for infrastructure projects requiring high-volume processing.",
             specs: [
@@ -71,7 +71,7 @@ window.productData = {
         },
         {
             model: "SBC42",
-            name: "SBC42",
+            name: "Bar Cutter - <i>SBC42</i>",
             image: "./Assets/Product Images/sbc.png",
             description: "The industry standard for residential and commercial construction sites.",
             specs: [
@@ -92,7 +92,7 @@ window.productData = {
     'concrete-mixer-models': [
         {
             model: "SCME-220L Electric",
-            name: "SCME-220L (Electric)",
+            name: "Electric Concrete Mixer - <i>SCME-220L</i>",
             image: "./Assets/Product Images/scme-220.png",
             description: "Standard 1-bag mixer ideal for small jobs and indoor sites with electrical access.",
             specs: [
@@ -106,7 +106,7 @@ window.productData = {
         },
         {
             model: "SCME-350L Electric",
-            name: "SCME-350L (Electric)",
+            name: "Electric Concrete Mixer - <i>SCME-350L</i>",
             image: "./Assets/Product Images/scme-350.png",
             description: "High-capacity 2-bag mixer for medium-sized projects requiring higher output.",
             specs: [
@@ -121,8 +121,8 @@ window.productData = {
     ],
     'concrete-pouring-buckets': [
         {
-            model: "SCCB25",
-            name: "SCCB25",
+            model: "SCPB25",
+            name: "Concrete Bucket - <i>SCPB25</i>",
             image: "./Assets/Product Images/scpb.png",
             description: "Heavy duty concrete pouring bucket for crane operation.",
             specs: [
@@ -134,8 +134,8 @@ window.productData = {
             actions: [{ type: 'cart', name: 'SCCB25 Bucket' }]
         },
         {
-            model: "SCCB50",
-            name: "SCCB50",
+            model: "SCPB50",
+            name: "Concrete Bucket - <i>SCPB50</i>",
             image: "./Assets/Product Images/scpb.png",
             description: "Large capacity concrete pouring bucket for efficient placement.",
             specs: [
@@ -149,8 +149,8 @@ window.productData = {
     ],
     'dewatering-pump': [
         {
-            model: "2 Inch Dewatering Pump",
-            name: "2 Inch Dewatering Pump",
+            model: "SDWP20",
+            name: "Dewatering Pump - <i>SDWP20</i>",
             image: "./Assets/Product Images/sdwp2.png",
             description: "Versatile pump for general dewatering tasks.",
             specs: [
@@ -162,8 +162,8 @@ window.productData = {
             actions: [{ type: 'cart', name: '2 Inch Dewatering Pump' }]
         },
         {
-            model: "3 Inch Dewatering Pump",
-            name: "3 Inch Dewatering Pump",
+            model: "SDWP30",
+            name: "Dewatering Pump - <i>SDWP30</i>",
             image: "./Assets/Product Images/sdwp3.png",
             description: "Higher capacity pump for faster water removal.",
             specs: [
@@ -179,7 +179,7 @@ window.productData = {
         standard: [
             {
                 model: "SHM 800",
-                name: "Handy Vibrator Motor 800W",
+                name: "Handy Vibrator - <i>SHM800</i>",
                 image: "./Assets/Product Images/shm800.png",
                 description: "Compact 800W motor for light duty tasks.",
                 specs: [
@@ -192,7 +192,7 @@ window.productData = {
             },
             {
                 model: "SHM 1200",
-                name: "Handy Vibrator Motor 1200W",
+                name: "Handy Vibrator - <i>SHM1200</i>",
                 image: "./Assets/Product Images/shm1200.png",
                 description: "Versatile 1200W motor for general concrete vibration.",
                 specs: [
@@ -205,7 +205,7 @@ window.productData = {
             },
             {
                 model: "SHM 1600",
-                name: "Handy Vibrator Motor 1600W",
+                name: "Handy Vibrator - <i>SHM1600</i>",
                 image: "./Assets/Product Images/shm1600.png",
                 description: "High-performance 1600W motor for demanding tasks.",
                 specs: [
@@ -219,8 +219,8 @@ window.productData = {
         ],
         highFrequency: [
             {
-                model: "SHHM Hand Held",
-                name: "High Frequency Hand-Held Vibrator",
+                model: "SHHM",
+                name: "High Frequency Hand-Held Vibrator - <i>SHHM</i>",
                 image: "./Assets/Product Images/hand-held.png",
                 description: "Powerful hand-held motor for high frequency applications.",
                 specs: [
@@ -235,8 +235,8 @@ window.productData = {
     },
     'high-frequency-converter-models': [
         {
-            model: "SHFC 35",
-            name: "High Frequency Converter SHFC 35",
+            model: "SHFC35",
+            name: "High Frequency Converter - <i>SHFC35</i>",
             image: "./Assets/Product Images/shfc35.png",
             description: "Compact converter designed for efficiency.",
             specs: [
@@ -250,7 +250,7 @@ window.productData = {
         },
         {
             model: "SHFC90P",
-            name: "High Frequency Converter SHFC90P",
+            name: "High Frequency Converter - <i>SHFC90P</i>",
             image: "./Assets/Product Images/shfc90.png",
             description: "Heavy-duty converter for multiple connections.",
             specs: [
@@ -266,8 +266,8 @@ window.productData = {
     'high-frequency-poker-models': {
         standalone: [
             {
-                model: "40IV Poker",
-                name: "40IV High Frequency Poker",
+                model: "SHIV40",
+                name: "High Frequency Poker - <i>SHIV40</i>",
                 image: "./Assets/Product Images/shiv40.png",
                 description: "Standalone poker with inbuilt frequency converter.",
                 specs: [
@@ -279,8 +279,8 @@ window.productData = {
                 actions: [{ type: 'cart', name: '40IV High Frequency Poker' }]
             },
             {
-                model: "60IV Poker",
-                name: "60IV High Frequency Poker",
+                model: "SHIV60",
+                name: "High Frequency Poker - <i>SHIV60</i>",
                 image: "./Assets/Product Images/shiv60.png",
                 description: "High performance 60mm poker with inbuilt converter.",
                 specs: [
@@ -295,7 +295,7 @@ window.productData = {
         compatible: [
             {
                 model: "SHFN 60 (5Mtr)",
-                name: "SHFN 60 - 5Mtr Hose",
+                name: "High Frequency Needle - <i>SHFN60/5</i>",
                 image: "./Assets/Product Images/shfn60_5m.png",
                 description: "",
                 specs: [
@@ -309,7 +309,7 @@ window.productData = {
             },
             {
                 model: "SHFN 60 (12Mtr)",
-                name: "SHFN 60 - 12Mtr Hose",
+                name: "High Frequency Needle - <i>SHFN60/12</i>",
                 image: "./Assets/Product Images/shfn60_12m.png",
                 description: "",
                 specs: [
@@ -324,7 +324,7 @@ window.productData = {
         
             {
                 model: "40MM Needle 5Mtr",
-                name: "40MM Needle - 5Mtr Hose",
+                name: "High Frequency Needle - <i>SHFN40/5</i>",
                 image: "./Assets/Product Images/shfn40_5m.png",
                 description: "",
                 specs: [
@@ -338,7 +338,7 @@ window.productData = {
             },
             {
                 model: "40MM Needle 12Mtr",
-                name: "40MM Needle - 12Mtr Hose",
+                name: "High Frequency Needle - <i>SHFN40/12</i>",
                 image: "./Assets/Product Images/shfn40_12m.png",
                 description: "",
                 specs: [
@@ -356,7 +356,7 @@ window.productData = {
         grooveCutters: [
             {
                 model: "Groove Cutter 125mm",
-                name: "Groove Cutter (125mm)",
+                name: "Groove Cutter (125mm) - <i>SGC125</i>",
                 image: "./Assets/Product Images/groove.png",
                 description: "",
                 specs: [
@@ -370,7 +370,7 @@ window.productData = {
         coreCutters: [
             {
                 model: "Core Cutter SCC-90",
-                name: "Core Cutter SCC-90",
+                name: "Core Cutter - <i>SCC90</i>",
                 image: "./Assets/Product Images/scc-90.png",
                 description: "",
                 specs: [
@@ -383,7 +383,7 @@ window.productData = {
             },
             {
                 model: "Core Cutter SCC-160",
-                name: "Core Cutter SCC-160",
+                name: "Core Cutter - <i>SCC160</i>",
                 image: "./Assets/Product Images/scc-160.png",
                 description: "",
                 specs: [
@@ -396,7 +396,7 @@ window.productData = {
             },
             {
                 model: "Core Cutter SCC-200",
-                name: "Core Cutter SCC-200",
+                name: "Core Cutter - <i>SCC200</i>",
                 image: "./Assets/Product Images/scc-200.png",
                 description: "",
                 specs: [
@@ -413,7 +413,7 @@ window.productData = {
         handyNeedles: [
             { 
                 model: "Handy Needle 25mm (3M)", 
-                name: "25MM Needle (3Mtr)", 
+                name: "25MM Needle - <i>SHP25/3</i>", 
                 image: "./Assets/Product Images/shp25_3m.png", 
                 description: "Compact needle for handy vibrators.", 
                 specs: [
@@ -426,7 +426,7 @@ window.productData = {
             },
             { 
                 model: "Handy Needle 25mm (6M)", 
-                name: "25MM Needle (6Mtr)", 
+                name: "25MM Needle - <i>SHP25/6</i>", 
                 image: "./Assets/Product Images/shp25_6m.png", 
                 description: "Extended reach needle for handy vibrators.", 
                 specs: [
@@ -439,7 +439,7 @@ window.productData = {
             },
             { 
                 model: "Handy Needle 40mm (3M)", 
-                name: "40MM Needle (3Mtr)", 
+                name: "40MM Needle - <i>SHP40/3</i>", 
                 image: "./Assets/Product Images/shp40_3m.png", 
                 description: "Standard size needle for general use.", 
                 specs: [
@@ -452,7 +452,7 @@ window.productData = {
             },
             { 
                 model: "Handy Needle 40mm (6M)", 
-                name: "40MM Needle (6Mtr)", 
+                name: "40MM Needle - <i>SHP40/6</i>", 
                 image: "./Assets/Product Images/shp40_6m.png", 
                 description: "Long hose needle for deep pours.", 
                 specs: [
@@ -465,7 +465,7 @@ window.productData = {
             },
             { 
                 model: "Handy Needle 60mm (3M)", 
-                name: "60MM Needle (3Mtr)", 
+                name: "60MM Needle - <i>SHP60/3</i>", 
                 image: "./Assets/Product Images/shp60_3m.png", 
                 description: "Large diameter for heavy consolidation.", 
                 specs: [
@@ -478,7 +478,7 @@ window.productData = {
             },
             { 
                 model: "Handy Needle 60mm (6M)", 
-                name: "60MM Needle (6Mtr)", 
+                name: "60MM Needle - <i>SHP60/6</i>", 
                 image: "./Assets/Product Images/shp60_6m.png", 
                 description: "Maximum reach and power.", 
                 specs: [
@@ -493,7 +493,7 @@ window.productData = {
         handHeldNeedles: [
             { 
                 model: "Hand-Held Needle 25mm", 
-                name: "25MM Needle", 
+                name: "25MM Needle - <i>SHHN25</i>", 
                 image: "./Assets/Product Images/shhn25.png", 
                 description: "Precision needle for high frequency motor.", 
                 specs: [
@@ -505,7 +505,7 @@ window.productData = {
             },
             { 
                 model: "Hand-Held Needle 40mm", 
-                name: "40MM Needle", 
+                name: "40MM Needle - <i>SHHN40</i>", 
                 image: "./Assets/Product Images/shhn40.png", 
                 description: "Versatile needle for high frequency motor.", 
                 specs: [
@@ -517,7 +517,7 @@ window.productData = {
             },
             { 
                 model: "Hand-Held Needle 60mm", 
-                name: "60MM Needle", 
+                name: "60MM Needle - <i>SHHN60</i>", 
                 image: "./Assets/Product Images/shhn60.png", 
                 description: "Heavy duty needle for high frequency motor.", 
                 specs: [
@@ -531,7 +531,7 @@ window.productData = {
         mechanicalNeedles: [
             { 
                 model: "Mechanical Needle 25mm", 
-                name: "25MM Needles", 
+                name: "25MM Needles - <i>SMP25</i>", 
                 image: "./Assets/Product Images/smp25.png", 
                 description: "Robust mechanical needle for standard vibrators.", 
                 specs: [
@@ -544,7 +544,7 @@ window.productData = {
             },
             { 
                 model: "Mechanical Needle 40mm", 
-                name: "40MM Needles", 
+                name: "40MM Needles - <i>SMP40</i>", 
                 image: "./Assets/Product Images/smp40.png", 
                 description: "Standard mechanical needle for efficient compaction.", 
                 specs: [
@@ -557,7 +557,7 @@ window.productData = {
             },
             { 
                 model: "Mechanical Needle 60mm", 
-                name: "60MM Needles", 
+                name: "60MM Needles - <i>SMP60</i>", 
                 image: "./Assets/Product Images/smp60.png", 
                 description: "High capacity mechanical needle for large jobs.", 
                 specs: [
@@ -573,7 +573,7 @@ window.productData = {
     'mini-lift-models': [
         {
             model: "Mini Lift 300Kg",
-            name: "300Kg Mini Lift",
+            name: "300Kg Mini Lift - <i>SML300</i>",
             image: "./Assets/Product Images/sml.png",
             description: "Versatile and compact, ideal for lifting materials on small to medium-sized sites.",
             specs: [
@@ -587,7 +587,7 @@ window.productData = {
         },
         {
             model: "Mini Lift 500Kg",
-            name: "500Kg Mini Lift",
+            name: "500Kg Mini Lift - <i>SML500</i>",
             image: "./Assets/Product Images/sml-500.png",
             description: "Heavy-duty lifting capacity for demanding construction environments.",
             specs: [
@@ -603,7 +603,7 @@ window.productData = {
     'plate-compactor-models': [
         {
             model: "SFPC-5E",
-            name: "SFPC-5E (Electric)",
+            name: "Electrical Plate Compactor - <i>SFPC-5E</i>",
             image: "./Assets/Product Images/sfpc-5e.png",
             description: "Ideal for walkways, small patches, and general light repair work. Forward travel only.",
             specs: [
@@ -616,7 +616,7 @@ window.productData = {
         },
         {
             model: "SFPC-5D",
-            name: "SFPC-5D (Diesel)",
+            name: "Diesel Plate Compactor - <i>SFPC-5D</i>",
             image: "./Assets/Product Images/sfpc-5d.png",
             description: "Higher compaction depth suitable for medium bases, gravel, and utility trenches.",
             specs: [
@@ -630,7 +630,7 @@ window.productData = {
 
         {
             model: "SRPC-3E",
-            name: "SRPC-3E (Reversible Electric)",
+            name: "Reversible Plate Compactor - <i>SRPC-3E</i>",
             image: "./Assets/Product Images/srpc-3e.png",
             description: "Reversible control for maximum maneuverability in confined backfill areas and trenches.",
             specs: [
@@ -643,7 +643,7 @@ window.productData = {
         },
         {
             model: "SRPC-3D",
-            name: "SRPC-3D (Diesel Reversible)",
+            name: "Diesel Plate Compactor - <i>SRPC-3D</i>",
             image: "./Assets/Product Images/srpc-3d.png",
             description: "Hydraulic system for superior deep compaction and smooth directional changes.",
             specs: [
@@ -656,7 +656,7 @@ window.productData = {
         },
         {
             model: "SFPC-2P",
-            name: "SFPC-2P (Petrol)",
+            name: "Petrol Plate Compactor - <i>SFPC-2P</i>",
             image: "./Assets/Product Images/sfpc-2p.png",
             description: "Hydraulic system for superior deep compaction and smooth directional changes.",
             specs: [
@@ -672,7 +672,7 @@ window.productData = {
         benders: [
             {
                 model: "SPB25",
-                name: "Portable Bender 25 - SPB25",
+                name: "Portable Bender 25 - <i>SPB25</i>",
                 image: "./Assets/Product Images/spb.png",
                 description: "Lightweight bender for bars up to 25mm.",
                 specs: [
@@ -685,7 +685,7 @@ window.productData = {
             },
             {
                 model: "SPB32",
-                name: "Portable Bender 32 - SPB32",
+                name: "Portable Bender 32 - <i>SPB32</i>",
                 image: "./Assets/Product Images/spb.png",
                 description: "Powerful portable unit for bending bars up to 32mm.",
                 specs: [
@@ -698,7 +698,7 @@ window.productData = {
             },
             {
                 model: "SPS 32",
-                name: "Bender & Straightener - SPS 32",
+                name: "Bender & Straightener - <i>SPS 32</i>",
                 image: "./Assets/Product Images/spb.png",
                 description: "Dual function machine: Bends and Straightens bars up to 32mm.",
                 specs: [
@@ -713,7 +713,7 @@ window.productData = {
         cutters: [
             {
                 model: "SPC25",
-                name: "Portable Cutter 25 - SPC25",
+                name: "Portable Cutter 25 - <i>SPC25</i>",
                 image: "./Assets/Product Images/spc.png",
                 description: "Fast and safe hydraulic cutting for bars up to 25mm.",
                 specs: [{ icon: "fa-solid fa-ruler-combined", text: "Capacity: 25mm" }, { icon: "fa-solid fa-bolt", text: "Type: Hydraulic Cutter" }],
@@ -722,7 +722,7 @@ window.productData = {
             },
             {
                 model: "SPC 32",
-                name: "Portable Cutter 32 - SPC 32",
+                name: "Portable Cutter 32 - <i>SPC 32</i>",
                 image: "./Assets/Product Images/spc.png",
                 description: "Heavy-duty portable cutter for bars up to 32mm.",
                 specs: [{ icon: "fa-solid fa-ruler-combined", text: "Capacity: 32mm" }, { icon: "fa-solid fa-bolt", text: "Type: Hydraulic Cutter" }],
@@ -734,7 +734,7 @@ window.productData = {
     'power-trowel-models': [
         {
             model: "SPTP",
-            name: "SPTP (Petrol Powered)",
+            name: "Petrol PowerTrowel - <i>SPTP</i>",
             image: "./Assets/Others/logo.png",
             description: "",
             specs: [
@@ -750,7 +750,7 @@ window.productData = {
         },
         {
             model: "SPTE Electric",
-            name: "SPTE (Electric Powered)",
+            name: "Electrical PowerTrowel - <i>SPTE</i>",
             image: "./Assets/Others/logo.png",
             description: "",
             specs: [
@@ -768,7 +768,7 @@ window.productData = {
     'road-roller-models': [
         {
             model: "SRR30",
-            name: "Ride on Roller - SRR30",
+            name: "Ride on Roller - <i>SRR30</i>",
             image: "./Assets/Product Images/srr.png",
             description: "Heavy-duty ride-on roller designed for large scale road construction projects.",
             specs: [
@@ -788,7 +788,7 @@ window.productData = {
         },
         {
             model: "SWR 30",
-            name: "SWR 30 Walk Behind Roller",
+            name: "Walk Behind Roller - <i>SWR30</i>",
             image: "./Assets/Product Images/swr.png",
             description: "Compact walk-behind roller ideal for tight spaces and patch work.",
             specs: [
@@ -808,7 +808,7 @@ window.productData = {
         },
         {
             model: "SWR30 FH",
-            name: "Walk behind roller - SWR30 FH",
+            name: "Walk behind roller - <i>SWR30FH</i>",
             image: "./Assets/Product Images/swr fh.png",
             description: "Enhanced walk-behind roller with superior compaction force.",
             specs: [
@@ -830,7 +830,7 @@ window.productData = {
     'excavator-drum-compactor': [
         {
             model: "Excavator Drum Compactor",
-            name: "Excavator Drum Compactor",
+            name: "Excavator Drum Compactor - <i>SSDC</i>",
             image: "./Assets/Product Images/drum compactor.png",
             imageWebp: "./Assets/Product Images/drum compactor.webp",
             description: "Efficient compaction attachment designed for excavators, ensuring high density soil compaction.",
@@ -846,7 +846,7 @@ window.productData = {
     'scrap-straightener-models': [
         {
             model: "GX6-14 Eco Model",
-            name: "GX6-14 Eco Model",
+            name: "Bar Scrap Straightener - <i>GX6-14</i>",
             image: "./Assets/Product Images/sss.png",
             imageWebp: "./Assets/Product Images/sss.webp",
             description: "Cost-effective solution for straightening coils and lighter scrap.",
@@ -860,7 +860,7 @@ window.productData = {
         },
         {
             model: "GX6-25 Pro Model",
-            name: "GX6-25 Pro",
+            name: "Bar Scrap Straightener - <i>GX6-25</i>",
             image: "./Assets/Product Images/sss.png",
             imageWebp: "./Assets/Product Images/sss.webp",
             description: "Advanced straightener with integrated hydraulic cutter for precise lengths.",
@@ -877,7 +877,7 @@ window.productData = {
         highFrequency: [
             {
                 model: "SHFS-4215",
-                name: "SHFS-4215",
+                name: "High Frequency Shutter Vibrator - <i>SHFS-4215</i>",
                 image: "./Assets/Product Images/shfs-4215.png",
                 description: "High-frequency model for superior performance.",
                 specs: [
@@ -890,7 +890,7 @@ window.productData = {
             },
             {
                 model: "SHFS-4210",
-                name: "SHFS-4210",
+                name: "High Frequency Shutter Vibrator - <i>SHFS-4210</i>",
                 image: "./Assets/Product Images/shfs.png",
                 description: "Reliable high-frequency performance.",
                 specs: [
@@ -905,7 +905,7 @@ window.productData = {
         threePhase: [
             {
                 model: "SSV-305",
-                name: "SSV-305",
+                name: "Three phase Shutter Vibrator - <i>SSV-305</i>",
                 image: "./Assets/Product Images/ssv-305.png",
                 description: "Compact 3-phase model for smaller precast elements.",
                 specs: [
@@ -918,7 +918,7 @@ window.productData = {
             },
             {
                 model: "SSV-310",
-                name: "SSV-310",
+                name: "Three phase Shutter Vibrator - <i>SSV-310</i>",
                 image: "./Assets/Product Images/ssv-310.png",
                 description: "Standard 3-phase model for general formwork.",
                 specs: [
@@ -931,7 +931,7 @@ window.productData = {
             },
             {
                 model: "SSV-320",
-                name: "SSV-320",
+                name: "Three phase Shutter Vibrator - <i>SSV-320</i>",
                 image: "./Assets/Product Images/ssv-320.png",
                 description: "Powerful 3-phase motor for heavy-duty applications.",
                 specs: [
@@ -948,7 +948,7 @@ window.productData = {
         screedVibrators: [
             {
                 model: "SSVE-2",
-                name: "Screed Vibrator SSVE-2",
+                name: "Screed Vibrator - <i>SSVE-2</i>",
                 image: "./Assets/Product Images/screed vibrator.png",
                 description: "Electric vibrator for leveling concrete surfaces. Blades sold separately.",
                 specs: [
@@ -963,7 +963,7 @@ window.productData = {
         powerTrowels: [
             {
                 model: "SPTP",
-                name: "SPTP (Petrol Powered)",
+                name: "Petrol Powertrowel - <i>SPTP</i>",
                 image: "./Assets/Product Images/sptp.png",
                 description: "",
                 specs: [
@@ -979,7 +979,7 @@ window.productData = {
             },
             {
                 model: "SPTE Electric",
-                name: "SPTE (Electric Powered)",
+                name: "Electric Powertrowel - <i>SPTE</i>",
                 image: "./Assets/Product Images/spte.png",
                 description: "",
                 specs: [
@@ -998,7 +998,7 @@ window.productData = {
     'suspended-rope-platform': [
         {
             model: "ZLP800",
-            name: "ZLP800 Suspended Platform",
+            name: "Suspended Rope Platform - <i>ZLP800</i>",
             image: "./Assets/Product Images/srp.png",
             description: "The industry-standard for safety and reliability in high-rise access.",
             specs: [
@@ -1016,7 +1016,7 @@ window.productData = {
     'vibrators': [
         {
             model: "3HP 1PH Vibrator",
-            name: "3HP 1PH Electrical Vibrators",
+            name: "Electrical Vibrator - <i>SEV31</i>",
             image: "./Assets/Product Images/sev31.png",
             description: "Single-phase 3HP motor with high centrifugal force for medium-sized pours.",
             specs: [
@@ -1034,7 +1034,7 @@ window.productData = {
         },
         {
             model: "3HP 3PH Vibrator",
-            name: "3HP 3PH Electrical Vibrators",
+            name: "Electrical Vibrator - <i>SEV33</i>",
             image: "./Assets/Product Images/sev33.png",
             description: "Three-phase 3HP for continuous heavy-duty consolidation on large pours.",
             specs: [
@@ -1053,7 +1053,7 @@ window.productData = {
         },
         {
             model: "2HP Vibrator",
-            name: "2HP Electrical Vibrators",
+            name: "Electrical Vibrator - <i>SEV21</i>",
             image: "./Assets/Product Images/sev31.png",
             description: "Compact 2HP units ideal for small pours and repair works.",
             specs: [
@@ -1072,7 +1072,7 @@ window.productData = {
         },
         {
             model: "Diesel Vibrator",
-            name: "Diesel Vibrator",
+            name: "Diesel Vibrator - <i>SDV50</i>",
             image: "./Assets/Product Images/sdv.png",
             description: "Robust diesel-powered vibrator for heavy-duty site applications.",
             specs: [
@@ -1089,7 +1089,7 @@ window.productData = {
         },
         {
             model: "Petrol Vibrator",
-            name: "Petrol Vibrator",
+            name: "Petrol Vibrator - <i>SPV20</i>",
             image: "./Assets/Product Images/spv.png",
             description: "Versatile petrol-powered vibrator for sites without electricity.",
             specs: [
@@ -1108,7 +1108,7 @@ window.productData = {
     'scissor-lift-models': [
         {
             model: "Hydraulic Scissor Lift",
-            name: "Hydraulic Scissor Lift",
+            name: "Hydraulic Scissor Lift - <i>SSL</i>",
             image: "./Assets/Product Images/scissorlift.png",
             description: "Self-propelled and stationary scissor lifts for working at heights.",
             specs: [
@@ -1247,6 +1247,12 @@ window.productData = {
             image: "./Assets/Product Images/roller_sketch.png",
             description: "Suspended platforms and material lifts available for rent.",
             actions: [{ type: 'rent', name: 'Walk Behind Roller' }]
+        },
+        {
+            name: "Suspended Rope Platform",
+            image: "./Assets/Product Images/srprental.webp",
+            description: "Safe and reliable suspended platforms available for high-rise access and construction rental.",
+            actions: [{ type: 'rent', name: 'Suspended Rope Platform' }]
         }
     ],
     'maintenance-services': [

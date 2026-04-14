@@ -351,6 +351,32 @@ document.addEventListener('keydown', function (event) {
     window.addEventListener('router:navigation-complete', window.initHandyVibratorPage);
 })();
 
+// --- Page Specific Logic: Rental Equipment ---
+// This ensures the layout is injected and data is pulled from product_data.js automatically
+(function() {
+    window.initRentalEquipmentPage = function() {
+        if (window.location.pathname.includes('rental_equipment.html')) {
+            const grid = document.getElementById('rental-grid');
+            if (grid && window.productData && window.productData['rental-services']) {
+                // Force render the rental services directly into the existing grid
+                window.renderProductCards(grid.id, window.productData['rental-services']);
+                grid.style.display = ''; // Reset any hidden state just in case
+                grid.setAttribute('data-rendered', 'true');
+            }
+        }
+    };
+
+    // Initialize on load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.initRentalEquipmentPage);
+    } else {
+        window.initRentalEquipmentPage();
+    }
+
+    // Initialize on Router navigation
+    window.addEventListener('router:navigation-complete', window.initRentalEquipmentPage);
+})();
+
 // --- Specs Copy Logic ---
 window.handleSpecsLongPress = function(element, event) {
     event.preventDefault();
