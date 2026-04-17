@@ -100,7 +100,10 @@ window.createProductCard = function(product) {
 
     // Generate PDF Download Button
     const safeIdentifier = (product.model || product.name).replace(/'/g, "\\'");
-    const pdfButtonHTML = `
+    const isServicePage = window.location.pathname.includes('/Service_details/');
+    const hasNoTechDetails = !product.specs && !product.compare;
+    const hidePdfButton = isServicePage || hasNoTechDetails || (product.actions && product.actions.some(a => ['rent', 'repair'].includes(a.type)));
+    const pdfButtonHTML = hidePdfButton ? '' : `
         <button onclick="window.downloadProductCatalogue(event, '${safeIdentifier}')" class="absolute top-16 left-4 bg-white/90 hover:bg-white text-gray-600 hover:text-secondary p-2 rounded-full shadow-md transition-all duration-200 z-10" title="Download this product">
             <div class="relative w-4 h-4 flex items-center justify-center">
                 <i class="fa-solid fa-file-pdf absolute icon-swap-primary"></i>
@@ -728,7 +731,7 @@ window.downloadProductCatalogue = async function(event, productIdentifier) {
         const metaBody = [
             [{content: 'Reference No:', styles: {fontStyle: 'bold'}}, `SEPL/${categoryCode}/${product.model || 'NA'}`],
             [{content: 'Date:', styles: {fontStyle: 'bold'}}, new Date().toLocaleDateString('en-GB')],
-            [{content: 'Product:', styles: {fontStyle: 'bold'}}, product.name],
+            [{content: 'Product:', styles: {fontStyle: 'bold'}}, {content: product.name.replace(/<[^>]*>/g, ''), styles: {fontStyle: 'bold'}}],
             [{content: 'Model / SKU:', styles: {fontStyle: 'bold'}}, product.model || 'N/A'],
         ];
         doc.autoTable({
@@ -814,22 +817,35 @@ window.downloadProductCatalogue = async function(event, productIdentifier) {
 
         // --- 5. Specifications Table ---
         const tableBody = [];
-        if (product.compare) {
-            Object.entries(product.compare).forEach(([key, val]) => {
-                if (key !== 'model' && key !== 'image' && key !== 'category' && key !== 'previewImage') {
-                    const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).replace(/-/g, ' ');
-                    tableBody.push([label, val]);
-                }
-            });
-        }
-        if (product.specs && tableBody.length === 0) {
+        const specKeys = new Set();
+
+        // First, add all detailed specs
+        if (product.specs && product.specs.length > 0) {
             product.specs.forEach(spec => {
                 const text = (spec.text || spec).replace(/<[^>]*>/g, '');
                 if (text.includes(':')) {
                     const parts = text.split(':');
-                    tableBody.push([parts[0].trim(), parts.slice(1).join(':').trim()]);
+                    const key = parts[0].trim();
+                    const val = parts.slice(1).join(':').trim();
+                    tableBody.push([key, val]);
+                    specKeys.add(key.toLowerCase());
                 } else {
                     tableBody.push([text, '']);
+                    specKeys.add(text.toLowerCase());
+                }
+            });
+        }
+
+        // Then, supplement with any missing specs from the compare object
+        if (product.compare) {
+            Object.entries(product.compare).forEach(([key, val]) => {
+                if (key !== 'model' && key !== 'image' && key !== 'category' && key !== 'previewImage') {
+                    const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).replace(/-/g, ' ');
+                    const isCovered = Array.from(specKeys).some(specKey => specKey.includes(label.toLowerCase()) || label.toLowerCase().includes(specKey));
+                    if (!isCovered) {
+                        tableBody.push([label, val]);
+                        specKeys.add(label.toLowerCase());
+                    }
                 }
             });
         }
@@ -887,7 +903,8 @@ window.downloadProductCatalogue = async function(event, productIdentifier) {
 
         doc.text(`Page 1 of 1`, pageWidth - margin, pageHeight - 6, { align: 'right' });
 
-        const fileName = `${(product.model || product.name).replace(/[^a-z0-9]/gi, '_')}_SpecSheet.pdf`;
+        const safeFileName = (product.model || product.name).replace(/<[^>]*>/g, '').replace(/[^a-z0-9]/gi, '_');
+        const fileName = `${safeFileName}_SpecSheet.pdf`;
         doc.save(fileName);
 
     } catch (error) {
