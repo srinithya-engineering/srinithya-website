@@ -128,13 +128,19 @@ window.createProductCard = function(product) {
         mediaHTML = `<div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-500 font-bold text-xl p-4 text-center group-hover:text-secondary transition-colors duration-300">${product.placeholderText}</div>`;
     } else if (product.image && typeof product.image === 'string') {
         const imageSrc = product.image.startsWith('http') ? product.image : rootPath + product.image.replace('./', '');
-        
+
         // Try to use explicit WebP or infer it from the image path
         let webpSrc = product.imageWebp ? (product.imageWebp.startsWith('http') ? product.imageWebp : rootPath + product.imageWebp.replace('./', '')) : null;
-        
-        if (!webpSrc && !imageSrc.startsWith('http')) {
+
+        if (!webpSrc && !imageSrc.startsWith('http') && /\.(png)$/i.test(imageSrc)) {
             // Infer WebP path: replace extension with .webp
             webpSrc = imageSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+            if (webpSrc === imageSrc) webpSrc = null;
+        }
+
+        let pngSrc = null;
+        if (product.imagePng) {
+            pngSrc = product.imagePng.startsWith('http') ? product.imagePng : rootPath + product.imagePng.replace('./', '');
         }
 
         // Determine click action: Service pages trigger enquiry, others open image modal
@@ -145,9 +151,12 @@ window.createProductCard = function(product) {
         }
 
         const imgTag = `<img onclick="${clickAction}" src="${imageSrc}" alt="${product.name}" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full ${imageClass} transition-transform duration-300 group-hover:scale-110 cursor-pointer">`;
-        
-        // Wrap in picture tag if WebP source is available (or inferred)
-        mediaHTML = webpSrc ? `<picture class="w-full h-full block"><source srcset="${webpSrc.replace(/ /g, '%20')}" type="image/webp">${imgTag}</picture>` : imgTag;
+
+        // Wrap in picture tag when an alternate format is available.
+        const sources = [];
+        if (webpSrc) sources.push(`<source srcset="${webpSrc.replace(/ /g, '%20')}" type="image/webp">`);
+        if (pngSrc) sources.push(`<source srcset="${pngSrc.replace(/ /g, '%20')}" type="image/png">`);
+        mediaHTML = sources.length ? `<picture class="w-full h-full block">${sources.join('')}${imgTag}</picture>` : imgTag;
     } else if (product.icon) {
         mediaHTML = `<div class="w-full h-full flex items-center justify-center bg-gray-50"><i class="${product.icon} text-6xl md:text-7xl text-gray-400 group-hover:text-secondary transition-colors duration-300"></i></div>`;
     } else {
@@ -354,6 +363,32 @@ document.addEventListener('keydown', function (event) {
     window.addEventListener('router:navigation-complete', window.initHandyVibratorPage);
 })();
 
+// --- Page Specific Logic: Rental Equipment ---
+// This ensures the layout is injected and data is pulled from product_data.js automatically
+(function() {
+    window.initRentalEquipmentPage = function() {
+        if (window.location.pathname.includes('rental_equipment.html')) {
+            const grid = document.getElementById('rental-grid');
+            if (grid && window.productData && window.productData['rental-services']) {
+                // Force render the rental services directly into the existing grid
+                window.renderProductCards(grid.id, window.productData['rental-services']);
+                grid.style.display = ''; // Reset any hidden state just in case
+                grid.setAttribute('data-rendered', 'true');
+            }
+        }
+    };
+
+    // Initialize on load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.initRentalEquipmentPage);
+    } else {
+        window.initRentalEquipmentPage();
+    }
+
+    // Initialize on Router navigation
+    window.addEventListener('router:navigation-complete', window.initRentalEquipmentPage);
+})();
+
 // --- Specs Copy Logic ---
 window.handleSpecsLongPress = function(element, event) {
     event.preventDefault();
@@ -407,6 +442,241 @@ function showCopyToast() {
         toast.classList.add('opacity-0', 'translate-y-4');
     }, 2000);
 }
+
+// --- Single Product Catalogue Download ---
+function loadProductImageForPdf(imagePath, outputFormat = 'image/jpeg') {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = image.naturalWidth;
+                canvas.height = image.naturalHeight;
+                const context = canvas.getContext('2d');
+                if (!context) {
+                    reject(new Error('Could not prepare the product image for the PDF.'));
+                    return;
+                }
+                context.fillStyle = '#ffffff';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0);
+                resolve({
+                    data: canvas.toDataURL(outputFormat, outputFormat === 'image/jpeg' ? 0.92 : undefined),
+                    width: image.naturalWidth,
+                    height: image.naturalHeight,
+                    format: outputFormat === 'image/png' ? 'PNG' : 'JPEG'
+                });
+            } catch (error) {
+                reject(error);
+            }
+        };
+        image.onerror = () => reject(new Error(`Could not load product image: ${imagePath}`));
+        const isProductPage = window.location.pathname.includes('/Product_details/') ||
+            window.location.pathname.includes('/Service_details/');
+        const rootPath = isProductPage ? '../' : './';
+        const resolvedPath = imagePath.startsWith('http')
+            ? imagePath
+            : rootPath + imagePath.replace(/^(\.\/|\.\.\/)/, '');
+        image.src = new URL(resolvedPath, document.baseURI).href;
+    });
+}
+
+async function loadProductFontForPdf(fontPath) {
+    const isProductPage = window.location.pathname.includes('/Product_details/') ||
+        window.location.pathname.includes('/Service_details/');
+    const rootPath = isProductPage ? '../' : './';
+    const resolvedPath = fontPath.startsWith('http')
+        ? fontPath
+        : rootPath + fontPath.replace(/^(\.\/|\.\.\/)/, '');
+    const fontUrl = new URL(resolvedPath, document.baseURI);
+    const response = await fetch(fontUrl);
+    if (!response.ok) {
+        throw new Error(`Could not load PDF font: ${fontPath}`);
+    }
+
+    const fontBytes = new Uint8Array(await response.arrayBuffer());
+    let binary = '';
+    const chunkSize = 0x4000;
+    for (let offset = 0; offset < fontBytes.length; offset += chunkSize) {
+        binary += String.fromCharCode(...fontBytes.subarray(offset, offset + chunkSize));
+    }
+    return window.btoa(binary);
+}
+
+window.downloadProductCatalogue = async function(event, identifier) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    try {
+        const product = Object.values(window.productData || {})
+            .flatMap(category => {
+                if (Array.isArray(category)) return category;
+                if (category && typeof category === 'object') {
+                    return Object.values(category).flatMap(items => Array.isArray(items) ? items : []);
+                }
+                return [];
+            })
+            .find(item => item.model === identifier || item.name === identifier);
+
+        if (!product) {
+            throw new Error(`Product information was not found for "${identifier}".`);
+        }
+
+        const jsPDF = window.jspdf && window.jspdf.jsPDF;
+        if (!jsPDF) {
+            throw new Error('The PDF library is not available. Please reload the page and try again.');
+        }
+
+        const specs = (product.specs || []).map(spec => {
+            const text = (spec.text || '').trim();
+            const separator = text.indexOf(':');
+            return separator === -1
+                ? ['Specification', text]
+                : [text.slice(0, separator).trim(), text.slice(separator + 1).trim()];
+        });
+        if (specs.length === 0) {
+            throw new Error(`No technical specifications are available for "${product.name}".`);
+        }
+
+        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 14;
+        let contentY = 8;
+
+        const watermarkFont = await loadProductFontForPdf('./Assets/Fonts/masque.ttf');
+        doc.addFileToVFS('masque.ttf', watermarkFont);
+        doc.addFont('masque.ttf', 'Masque', 'normal');
+
+        const watermarkText = 'SRINITHYA ENGINEERING PRIVATE LIMITED';
+        const watermarkAngle = Math.atan2(pageHeight, pageWidth) * 180 / Math.PI;
+        const watermarkLength = Math.hypot(pageWidth, pageHeight);
+        const drawWatermark = () => {
+            doc.setFont('Masque', 'normal');
+            doc.setFontSize(1);
+            const textWidthAtOnePoint = doc.getTextWidth(watermarkText);
+            if (textWidthAtOnePoint <= 0) {
+                throw new Error('Could not measure the PDF watermark text.');
+            }
+            const pointToMillimeters = 25.4 / 72;
+            const horizontalUnit = pageWidth / watermarkLength;
+            const verticalUnit = pageHeight / watermarkLength;
+            let watermarkFontSize = watermarkLength / textWidthAtOnePoint;
+            let watermarkInset = 0;
+
+            for (let iteration = 0; iteration < 10; iteration++) {
+                const glyphExtent = watermarkFontSize * pointToMillimeters * 1.2;
+                watermarkInset = Math.max(
+                    (margin + glyphExtent * verticalUnit) / horizontalUnit,
+                    (margin + glyphExtent * horizontalUnit) / verticalUnit
+                );
+                const availableLength = watermarkLength - 2 * watermarkInset;
+                if (availableLength <= 0) {
+                    throw new Error('The PDF page is too small for the watermark margins.');
+                }
+                const nextFontSize = availableLength / textWidthAtOnePoint;
+                if (Math.abs(nextFontSize - watermarkFontSize) < 0.01) {
+                    watermarkFontSize = nextFontSize;
+                    break;
+                }
+                watermarkFontSize = nextFontSize;
+            }
+
+            const glyphExtent = watermarkFontSize * pointToMillimeters * 1.2;
+            watermarkInset = Math.max(
+                (margin + glyphExtent * verticalUnit) / horizontalUnit,
+                (margin + glyphExtent * horizontalUnit) / verticalUnit
+            );
+            const availableLength = watermarkLength - 2 * watermarkInset;
+            if (availableLength <= 0) {
+                throw new Error('The PDF page is too small for the watermark margins.');
+            }
+            watermarkFontSize = Math.min(
+                watermarkFontSize,
+                availableLength / textWidthAtOnePoint * 0.98
+            );
+            const textLength = watermarkFontSize * textWidthAtOnePoint;
+            const startDistance = watermarkInset + (availableLength - textLength) / 2;
+            const startX = horizontalUnit * startDistance;
+            const startY = pageHeight - verticalUnit * startDistance;
+
+            doc.setFontSize(watermarkFontSize);
+            doc.setGState(new doc.GState({ opacity: 1 }));
+            doc.setGState(new doc.GState({ opacity: 0.4 }));
+            doc.setTextColor(200, 200, 200);
+            doc.text(watermarkText, startX, startY, { angle: watermarkAngle });
+        };
+
+        const letterhead = await loadProductImageForPdf('./Assets/Others/letterhead-banner.png', 'image/png');
+        const letterheadWidth = pageWidth;
+        const letterheadHeight = letterhead.height * (letterheadWidth / letterhead.width);
+        doc.addImage(letterhead.data, letterhead.format, 0, contentY, letterheadWidth, letterheadHeight);
+        contentY += letterheadHeight + 2;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(0, 0, 0);
+        doc.text('9-95/8, JYOTHI NAGAR COLONY, BALAJI NAGAR, HYDERABAD - 500087', pageWidth / 2, contentY + 5.5, { align: 'center' });
+        doc.setDrawColor(180, 180, 180);
+        doc.setLineWidth(0.3);
+        doc.line(margin, contentY + 8, pageWidth - margin, contentY + 8);
+        contentY += 11;
+
+        if (product.image) {
+            const image = await loadProductImageForPdf(product.image);
+            const maxImageWidth = pageWidth - margin * 2;
+            const maxImageHeight = 65;
+            const imageScale = Math.min(maxImageWidth / image.width, maxImageHeight / image.height);
+            const imageWidth = image.width * imageScale;
+            const imageHeight = image.height * imageScale;
+            doc.addImage(image.data, image.format, (pageWidth - imageWidth) / 2, contentY, imageWidth, imageHeight);
+            contentY += imageHeight + 7;
+        }
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(15);
+        doc.text(product.name || product.model, pageWidth / 2, contentY, { align: 'center' });
+        contentY += 5;
+
+        doc.setDrawColor(120, 120, 120);
+        doc.setLineWidth(0.5);
+        doc.line(margin, contentY, pageWidth - margin, contentY);
+        contentY += 8;
+
+        doc.setFontSize(11);
+        doc.text('Technical Specifications', margin, contentY);
+
+        doc.autoTable({
+            startY: contentY + 4,
+            head: [['Parameter', 'Specification']],
+            body: specs,
+            theme: 'grid',
+            margin: { left: margin, right: margin, bottom: 10 },
+            styles: { font: 'helvetica', fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+            headStyles: { fillColor: [30, 58, 138], textColor: [255, 255, 255], fontStyle: 'bold' },
+            columnStyles: { 0: { cellWidth: 48, fontStyle: 'bold' } },
+            rowPageBreak: 'avoid'
+        });
+
+        for (let pageNumber = 1; pageNumber <= doc.getNumberOfPages(); pageNumber++) {
+            doc.setPage(pageNumber);
+            drawWatermark();
+        }
+
+        const filename = (product.model || product.name || 'product')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '');
+        doc.save(`${filename}-specifications.pdf`);
+    } catch (error) {
+        console.error('Failed to download product specifications:', error);
+        if (typeof window.showToast === 'function') {
+            window.showToast(error.message || 'Could not create the product PDF.', 'error');
+        }
+    }
+};
 
 // --- Share Logic ---
 window.shareProduct = function(productName) {

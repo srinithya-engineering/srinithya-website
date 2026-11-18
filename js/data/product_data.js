@@ -7,11 +7,11 @@ window.productData = {
             
             description: "High-precision bending with programmable angles for complex shapes.",
             specs: [
-                { icon: "fa-solid fa-rotate", text: "Bend Dia: Up to 40mm" },
+                { icon: "fa-solid fa-rotate", text: "Bend Dia: 8 - 36mm" },
                 { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
                 { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
                 { icon: "fa-solid fa-gears", text: "Motor: 5 HP Bharat Bijlee" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 450 kg" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 380 kg" },
                 { icon: "fa-solid fa-ruler-combined", text: "Dimensions: 1200 x 800 x 1200 mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
                 { icon: "fa-solid fa-gauge-high", text: "Speed: 20 bends/min" },
@@ -30,37 +30,55 @@ window.productData = {
             image: "./Assets/Product%20Images/sbb-42.png",
             description: "Reliable bending for stirrups and standard angles with pin-type control.",
             specs: [
-                { icon: "fa-solid fa-rotate", text: "Bend Dia: 6mm - 32mm" },
+                { icon: "fa-solid fa-rotate", text: "Bend Dia: 8 - 40mm" },
                 { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
                 { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
-                { icon: "fa-solid fa-gears", text: "Motor: 5HP Bharat Bijlee" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 300 kg" },
-                { icon: "fa-solid fa-ruler-combined", text: "Dimensions: 1000 x 700 x 1100 mm" },
+                { icon: "fa-solid fa-gears", text: "Motor: Bharat Bijlee" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 550 kg" },
+                { icon: "fa-solid fa-ruler-combined", text: "Dimensions: Heavy-Duty Industrial Model" },
                 { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
-                { icon: "fa-solid fa-gauge-high", text: "Speed: 15 bends/min" },
                 { icon: "fa-solid fa-cogs", text: "Gearbox: Oil Bath Lubricated" },
                 { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
                 { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
                 { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" }
             ],
-            compare: { model: "SBB42", category: "bar-benders", "bend-dia": "6mm - 32mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
-            actions: [{ type: 'cart', name: 'SBB42' }]
+            compare: { model: "SBB55", category: "bar-benders", "bend-dia": "Up to 55mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
+            actions: [{ type: 'cart', name: 'SBB55' }]
         }
         
     ],
     'bar-cutting-models': [
+        {
+            model: "SBC42",
+            name: "SBC42",
+            image: "./Assets/Product%20Images/sbc.png",
+            description: "The industry standard for residential and commercial construction sites.",
+            specs: [
+                { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 32mm" },
+                { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
+                { icon: "fa-solid fa-gauge-high", text: "Speed: 32 times/min" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 380 kg" },
+                { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
+                { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
+                { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" },
+                { icon: "fa-solid fa-gear", text: "Gearbox: Oil Bath Lubricated" },
+                { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" }
+            ],
+            compare: { model: "SBC42", category: "bar-cutters", capacity: "Up to 36mm TMT", power: "5HP Motor", speed: "32 times/min" },
+            actions: [{ type: 'cart', name: 'SBC42' }]
+        },
         {
             model: "SBC52",
             name: "SBC52",
             image: "./Assets/Product%20Images/sbc.png",
             description: "Engineered for infrastructure projects requiring high-volume processing.",
             specs: [
-                { icon: "fa-solid fa-ruler-combined", text: "Capacity: Up to 40mm TMT" },
+                { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 36mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
                 { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
                 { icon: "fa-solid fa-gauge-high", text: "Speed: 28 times/min" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 500 kg" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 550 kg" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
                 { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
                 { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" },
@@ -75,18 +93,19 @@ window.productData = {
             image: "./Assets/Product%20Images/sbc.png",
             description: "The industry standard for residential and commercial construction sites.",
             specs: [
-                { icon: "fa-solid fa-ruler-combined", text: "Capacity: Up to 36mm TMT" },
-                { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
-                { icon: "fa-solid fa-gauge-high", text: "Speed: 32 times/min" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 350 kg" },
+                { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 40mm" },
+                { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
+                { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
+                { icon: "fa-solid fa-gauge-high", text: "Speed: Heavy-Duty Cutting Model" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: Heavy-Duty Industrial Model" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 775 kg" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
                 { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
                 { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" },
-                { icon: "fa-solid fa-gear", text: "Gearbox: Oil Bath Lubricated" },
                 { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" }
             ],
-            compare: { model: "SBC42", category: "bar-cutters", capacity: "Up to 36mm TMT", power: "5HP Motor", speed: "32 times/min" },
-            actions: [{ type: 'cart', name: 'SBC42' }]
+            compare: { model: "SBC55", category: "bar-cutters", capacity: "Up to 55mm TMT", power: "3 Phase, 415V, 50Hz", gearbox: "Reinforced Oil Bath" },
+            actions: [{ type: 'cart', name: 'SBC55' }]
         }
     ],
     'concrete-mixer-models': [
@@ -734,7 +753,7 @@ window.productData = {
     'power-trowel-models': [
         {
             model: "SPTP",
-            name: "SPTP (Petrol Powered)",
+            name: "Petrol PowerTrowel - <i>SPTP</i>",
             image: "./Assets/Others/logo.png",
             description: "",
             specs: [
@@ -750,7 +769,7 @@ window.productData = {
         },
         {
             model: "SPTE Electric",
-            name: "SPTE (Electric Powered)",
+            name: "Electrical PowerTrowel - <i>SPTE</i>",
             image: "./Assets/Others/logo.png",
             description: "",
             specs: [
@@ -1247,6 +1266,12 @@ window.productData = {
             image: "./Assets/Product%20Images/roller_sketch.png",
             description: "Suspended platforms and material lifts available for rent.",
             actions: [{ type: 'rent', name: 'Walk Behind Roller' }]
+        },
+        {
+            name: "Suspended Rope Platform",
+            image: "./Assets/Product Images/srprental.webp",
+            description: "Safe and reliable suspended platforms available for high-rise access and construction rental.",
+            actions: [{ type: 'rent', name: 'Suspended Rope Platform' }]
         }
     ],
     'maintenance-services': [
