@@ -530,46 +530,32 @@ document.addEventListener('DOMContentLoaded', function() {
     let chatHistory = JSON.parse(sessionStorage.getItem('sepl_chat_history')) || [];
     let lastContextProduct = JSON.parse(sessionStorage.getItem('sepl_chat_context_product')) || null;
 
-    // --- Text to Speech Logic ---
-    let isTtsEnabled = false;
-    const synth = window.speechSynthesis;
-    let voices = [];
+    // Hint Rotation Logic
+    const hintMessages = [
+        "Hi! Need help?",
+        "Looking for machinery?",
+        "Get a quick quote",
+        "Need spare parts?"
+    ];
+    let hintIndex = 0;
+    let hintInterval;
 
-    function loadVoices() {
-        voices = synth.getVoices();
-    }
-
-    if (synth.onvoiceschanged !== undefined) {
-        synth.onvoiceschanged = loadVoices;
-    }
-    loadVoices();
-
-    ttsBtn.addEventListener("click", () => {
-        isTtsEnabled = !isTtsEnabled;
-        const icon = ttsBtn.querySelector("i");
-        if (isTtsEnabled) {
-            icon.className = "fa-solid fa-volume-high";
-            ttsBtn.style.opacity = "1";
-        } else {
-            icon.className = "fa-solid fa-volume-xmark";
-            ttsBtn.style.opacity = "0.7";
-            synth.cancel();
+    function rotateHint() {
+        const hint = document.getElementById('sepl-chatbot-hint');
+        if (!hint || isOpen || sessionStorage.getItem('sepl_chat_auto_opened')) {
+            if (hintInterval) clearInterval(hintInterval);
+            return;
         }
-    });
 
-    function speakText(text) {
-        if (!isTtsEnabled || !synth) return;
-        synth.cancel();
-        const cleanText = text.replace(/<[^>]*>/g, '');
-        if (!cleanText) return;
-
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        if (voices.length > 0) {
-            // Try to find a good English voice
-            const preferredVoice = voices.find(v => v.name.includes('Google US English')) || voices.find(v => v.lang === 'en-US') || voices[0];
-            if (preferredVoice) utterance.voice = preferredVoice;
-        }
-        synth.speak(utterance);
+        hint.classList.remove('show');
+        
+        setTimeout(() => {
+            if (isOpen || sessionStorage.getItem('sepl_chat_auto_opened')) return;
+            
+            hintIndex = (hintIndex + 1) % hintMessages.length;
+            hint.textContent = hintMessages[hintIndex];
+            hint.classList.add('show');
+        }, 500);
     }
 
     // Show hint after delay
@@ -577,6 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const hint = document.getElementById('sepl-chatbot-hint');
         if (hint && !isOpen && !sessionStorage.getItem('sepl_chat_auto_opened')) {
             hint.classList.add('show');
+            hintInterval = setInterval(rotateHint, 4000);
         }
     }, 1500);
 
@@ -584,12 +571,12 @@ document.addEventListener('DOMContentLoaded', function() {
         isOpen = !isOpen;
         chatWindow.style.display = isOpen ? "flex" : "none";
         
-        if (!isOpen && synth) synth.cancel();
         fabOptions.style.display = isOpen ? 'none' : 'flex';
         
         // Hide hint on interaction
         const hint = document.getElementById('sepl-chatbot-hint');
         if (hint) hint.classList.remove('show');
+        if (hintInterval) clearInterval(hintInterval);
         
         // Mark as opened so auto-open doesn't trigger if user manually opens
         sessionStorage.setItem('sepl_chat_auto_opened', 'true');

@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://zenithfolio.in/sitemap.xml
+Sitemap: https://srinithyaepl.in/sitemap.xml

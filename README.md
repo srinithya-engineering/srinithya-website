@@ -1,6 +1,6 @@
 # Srinithya Engineering Private Limited (SEPL) Website
 
-This is the source code for the official website of Srinithya Engineering Private Limited, a manufacturer of bar processing machinery and trader of light construction equipment.
+This is the source code for the official website of Srinithya Engineering Private Limited (https://srinithyaepl.in), a manufacturer of bar processing machinery and trader of light construction equipment.
 
 ## Project Overview
 
@@ -42,6 +42,10 @@ The website is a static HTML/CSS/JavaScript application designed to showcase pro
 │   └── ... (other scripts)
 ├── scripts/                    # Utility/Build scripts
 │   └── convert_images.js
+│   └── generate_sitemap.js
+│   └── add_meta_tags.js
+│   └── generate_product_pages.js
+│   └── setup_hooks.js
 ├── Assets/                     # Images and icons
 │   ├── logo.png
 │   └── ...
@@ -102,3 +106,26 @@ The project relies on the following external libraries loaded via CDN. Ensure yo
 -   **Adding Products**: To add new products, duplicate an existing product card HTML block in the relevant `Product_details` file.
     -   Ensure you update the `data-*` attributes (e.g., `data-model`, `data-power`) if the page supports the "Compare" feature.
     -   Update the `addToCart` function arguments with the new product details.
+
+## WhatsApp Sharing (Open Graph)
+
+To ensure specific product images appear when sharing links on WhatsApp:
+
+1.  Run the generator script before deployment:
+    ```bash
+    node scripts/generate_product_pages.js
+    ```
+2.  **Testing with VS Code Port Forwarding**: If you are testing locally, pass your forwarded URL (e.g., `https://xxxx.use.devtunnels.ms`) as an argument:
+    ```bash
+    node scripts/generate_product_pages.js https://your-forwarded-url.use.devtunnels.ms
+    ```
+
+## Automation (Git Hooks)
+
+To ensure your sitemap and product share pages are always up to date, you can install a git pre-commit hook.
+
+1. Run the setup script once:
+    ```bash
+    node scripts/setup_hooks.js
+    ```
+2. Now, whenever you run `git commit`, the generation scripts will run automatically and include the updated files in your commit.
