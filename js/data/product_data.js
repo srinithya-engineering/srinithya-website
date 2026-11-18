@@ -48,18 +48,11 @@ window.productData = {
             actions: [{ type: 'cart', name: 'SBB52' }]
         },
         {
-<<<<<<< HEAD
-            model: "SBB42", 
-            name: "Bar Bender - <i>SBB42</i>",
-            image: "./Assets/Product Images/sbb-42.png",
-            description: "Reliable bending for stirrups and standard angles with pin-type control.",
-=======
             model: "SBB55",
             name: "SBB55",
             image: "./Assets/Product%20Images/sbb-55.jpg",
             imagePng: "./Assets/Product%20Images/sbb-55.png",
             description: "Heavy-duty bar bending for TMT bars up to 55mm.",
->>>>>>> f35623d (Updated PDF watermark and changes made to about us page)
             specs: [
                 { icon: "fa-solid fa-rotate", text: "Bend Dia: 8 - 40mm" },
                 { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
@@ -119,18 +112,11 @@ window.productData = {
             actions: [{ type: 'cart', name: 'SBC52' }]
         },
         {
-<<<<<<< HEAD
-            model: "SBC42",
-            name: "Bar Cutter - <i>SBC42</i>",
-            image: "./Assets/Product Images/sbc.png",
-            description: "The industry standard for residential and commercial construction sites.",
-=======
             model: "SBC55",
             name: "SBC55",
             image: "./Assets/Product%20Images/sbc-55.jpg",
             imagePng: "./Assets/Product%20Images/sbc-55.png",
             description: "Heavy-duty bar cutting for high-capacity TMT bar processing.",
->>>>>>> f35623d (Updated PDF watermark and changes made to about us page)
             specs: [
                 { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 40mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
