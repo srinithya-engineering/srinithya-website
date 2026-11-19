@@ -35,10 +35,11 @@
  * @param {object} product - The product data object.
  * @returns {string} - The HTML string for the product card.
  */
-window.createProductCard = function(product) {
+window.createProductCard = function(product, options = {}) {
     if (!product) return '';
 
     const rootPath = (window.location.pathname.includes('/Product_details/') || window.location.pathname.includes('/Service_details/')) ? '../' : './';
+    const hideCardTools = options.hideCardTools === true;
 
     // Generate unique ID for deep linking
     const productId = (product.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -57,7 +58,7 @@ window.createProductCard = function(product) {
     const badgeHTML = product.badge ? `<span class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-2 py-1 rounded">${product.badge}</span>` : '';
 
     // Generate Share Button
-    const shareHTML = `
+    const shareHTML = hideCardTools ? '' : `
         <button onclick="shareProduct('${product.name.replace(/'/g, "\\'")}')" class="absolute top-4 left-4 bg-white/90 hover:bg-white text-gray-600 hover:text-secondary p-2 rounded-full shadow-md transition-all duration-200 z-10" title="Share this product">
             <i class="fa-solid fa-share-nodes"></i>
         </button>`;
@@ -100,13 +101,33 @@ window.createProductCard = function(product) {
 
     // Generate PDF Download Button
     const safeIdentifier = (product.model || product.name).replace(/'/g, "\\'");
-    const pdfButtonHTML = `
+    const pdfButtonHTML = hideCardTools ? '' : `
         <button onclick="window.downloadProductCatalogue(event, '${safeIdentifier}')" class="absolute top-16 left-4 bg-white/90 hover:bg-white text-gray-600 hover:text-secondary p-2 rounded-full shadow-md transition-all duration-200 z-10" title="Download this product">
             <div class="relative w-4 h-4 flex items-center justify-center">
                 <i class="fa-solid fa-file-pdf absolute icon-swap-primary"></i>
                 <i class="fa-solid fa-download absolute icon-swap-secondary"></i>
             </div>
         </button>`;
+    const specsCopyButtonHTML = hideCardTools ? '' : `
+                    <button onclick="window.copyProductSpecs(this)" class="absolute top-0 right-0 md:right-2 text-gray-400 hover:text-secondary p-1.5 opacity-100 transition-opacity duration-200 z-10 bg-white/80 md:bg-transparent rounded-full md:rounded-none shadow-sm md:shadow-none" title="Copy Specifications">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>`;
+    const specsCopyAttributes = hideCardTools ? '' : 'oncontextmenu="return window.handleSpecsLongPress(this, event)" title="Right Click/Long press to copy specifications"';
+    const specsCopyClasses = hideCardTools
+        ? 'text-xs md:text-sm text-left text-gray-700 space-y-1 md:space-y-2 inline-block w-full px-1 md:px-4'
+        : 'text-xs md:text-sm text-left text-gray-700 space-y-1 md:space-y-2 inline-block w-full px-1 md:px-4 hover:bg-gray-50 rounded-lg transition-colors duration-200 cursor-pointer';
+    const specsCopyHintHTML = hideCardTools ? '' : `
+                <div class="text-[10px] text-gray-400 text-center mb-3 md:mb-6 italic select-none">
+                    <i class="fa-regular fa-copy mr-1"></i> Right-click / Long-press to copy
+                </div>`;
+    const specsSectionHTML = specsHTML ? `
+                <div class="relative group/specs w-full mb-1">
+                    ${specsCopyButtonHTML}
+                    <ul ${specsCopyAttributes} class="${specsCopyClasses}">
+                        ${specsHTML}
+                    </ul>
+                </div>
+                ${specsCopyHintHTML}` : '';
 
     // Determine if compare functionality should be enabled for this card
     const compareCheckboxHTML = product.compare ? `
@@ -176,17 +197,7 @@ window.createProductCard = function(product) {
                 ${compareCheckboxHTML}
                 <h3 class="text-sm md:text-2xl font-bold text-gray-900 mb-1 md:mb-2 leading-tight">${product.name}</h3>
                 ${product.description ? `<p class="text-xs md:text-sm text-gray-600 mb-2 md:mb-4 line-clamp-2">${product.description}</p>` : ''}
-                <div class="relative group/specs w-full mb-1">
-                    <button onclick="window.copyProductSpecs(this)" class="absolute top-0 right-0 md:right-2 text-gray-400 hover:text-secondary p-1.5 opacity-100 transition-opacity duration-200 z-10 bg-white/80 md:bg-transparent rounded-full md:rounded-none shadow-sm md:shadow-none" title="Copy Specifications">
-                        <i class="fa-regular fa-copy"></i>
-                    </button>
-                    <ul oncontextmenu="return window.handleSpecsLongPress(this, event)" class="text-xs md:text-sm text-left text-gray-700 space-y-1 md:space-y-2 inline-block w-full px-1 md:px-4 hover:bg-gray-50 rounded-lg transition-colors duration-200 cursor-pointer" title="Right Click/Long press to copy specifications">
-                        ${specsHTML}
-                    </ul>
-                </div>
-                <div class="text-[10px] text-gray-400 text-center mb-3 md:mb-6 italic select-none">
-                    <i class="fa-regular fa-copy mr-1"></i> Right-click / Long-press to copy
-                </div>
+                ${specsSectionHTML}
                 <div class="flex flex-col gap-2 mt-auto product-actions-container">
                     ${actionsHTML}
                 </div>
@@ -203,7 +214,8 @@ window.createProductCard = function(product) {
 window.renderProductCards = function(containerId, products) {
     const container = document.getElementById(containerId);
     if (container && products && Array.isArray(products)) {
-        container.innerHTML = products.map(createProductCard).join('');
+        const hideCardTools = container.hasAttribute('data-hide-card-tools');
+        container.innerHTML = products.map(product => createProductCard(product, { hideCardTools })).join('');
         
         // Check if any product has compare data
         const hasCompare = products.some(p => p.compare);

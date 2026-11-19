@@ -1,20 +1,38 @@
 window.productData = {
     'bar-bending-models': [ 
         {
+            model: "SBB42", 
+            name: "SBB42",
+            image: "./Assets/Product%20Images/sbb-42.png",
+            description: "Reliable bending for stirrups and standard angles with pin-type control.",
+            specs: [
+                { icon: "fa-solid fa-rotate", text: "Bend Dia: 8 - 32mm" },
+                { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
+                { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
+                { icon: "fa-solid fa-gears", text: "Motor: 5HP Bharat Bijlee" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 350 kg" },
+                { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
+                { icon: "fa-solid fa-cogs", text: "Gearbox: Oil Bath Lubricated" },
+                { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" },
+                { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
+                { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
+                { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" }
+            ],
+            compare: { model: "SBB42", category: "bar-benders", "bend-dia": "Up to 40mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
+            actions: [{ type: 'cart', name: 'SBB42' }]
+        },
+        {
             model: "SBB52",
             name: "SBB52",
             image: "./Assets/Product%20Images/bender.png",
-            
             description: "High-precision bending with programmable angles for complex shapes.",
             specs: [
                 { icon: "fa-solid fa-rotate", text: "Bend Dia: 8 - 36mm" },
                 { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
                 { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
-                { icon: "fa-solid fa-gears", text: "Motor: 5 HP Bharat Bijlee" },
+                { icon: "fa-solid fa-gears", text: "Motor: 5HP Bharat Bijlee" },
                 { icon: "fa-solid fa-weight-hanging", text: "Weight: 380 kg" },
-                { icon: "fa-solid fa-ruler-combined", text: "Dimensions: 1200 x 800 x 1200 mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
-                { icon: "fa-solid fa-gauge-high", text: "Speed: 20 bends/min" },
                 { icon: "fa-solid fa-cogs", text: "Gearbox: Oil Bath Lubricated" },
                 { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
@@ -25,14 +43,17 @@ window.productData = {
             actions: [{ type: 'cart', name: 'SBB52' }]
         },
         {
-            model: "SBB42", 
-            name: "SBB42",
-            image: "./Assets/Product%20Images/sbb-42.png",
-            description: "Reliable bending for stirrups and standard angles with pin-type control.",
+            model: "SBB55",
+            name: "SBB55",
+            image: "./Assets/Product%20Images/sbb-55.jpg",
+            imagePng: "./Assets/Product%20Images/sbb-55.png",
+            description: "High-strengthed Rebar Bending with precision and accuracy.",
             specs: [
                 { icon: "fa-solid fa-rotate", text: "Bend Dia: 8 - 40mm" },
                 { icon: "fa-solid fa-microchip", text: "Control: Pin / Foot Pedal" },
                 { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
+                { icon: "fa-solid fa-gears", text: "Motor: 7.5HP Bharat Bijlee" },
+                { icon: "fa-solid fa-weight-hanging", text: "Weight: 550 kg" },
                 { icon: "fa-solid fa-gears", text: "Motor: Bharat Bijlee" },
                 { icon: "fa-solid fa-weight-hanging", text: "Weight: 550 kg" },
                 { icon: "fa-solid fa-ruler-combined", text: "Dimensions: Heavy-Duty Industrial Model" },
@@ -46,7 +67,6 @@ window.productData = {
             compare: { model: "SBB55", category: "bar-benders", "bend-dia": "Up to 55mm", control: "Pin / Foot Pedal", features: "Save Angle Presets, Emergency Stop" },
             actions: [{ type: 'cart', name: 'SBB55' }]
         }
-        
     ],
     'bar-cutting-models': [
         {
@@ -57,6 +77,7 @@ window.productData = {
             specs: [
                 { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 32mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
+                { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
                 { icon: "fa-solid fa-gauge-high", text: "Speed: 32 times/min" },
                 { icon: "fa-solid fa-weight-hanging", text: "Weight: 380 kg" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
@@ -88,12 +109,15 @@ window.productData = {
             actions: [{ type: 'cart', name: 'SBC52' }]
         },
         {
-            model: "SBC42",
-            name: "SBC42",
-            image: "./Assets/Product%20Images/sbc.png",
-            description: "The industry standard for residential and commercial construction sites.",
+            model: "SBC55",
+            name: "SBC55",
+            image: "./Assets/Product%20Images/sbc-55.jpg",
+            imagePng: "./Assets/Product%20Images/sbc-55.png",
+            description: "Tuned to perform the best even with the High-Strength Bars",
             specs: [
                 { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 40mm" },
+                { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
+                { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
                 { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
                 { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
                 { icon: "fa-solid fa-gauge-high", text: "Speed: Heavy-Duty Cutting Model" },
@@ -1030,6 +1054,30 @@ window.productData = {
                 { icon: "fa-solid fa-people-roof", text: "Capacity: 2-10 Persons" }
             ],
             actions: [{ type: 'enquire-link', href: '../index.html#contact' }]
+        },
+        {
+            model: "SMFH-1500",
+            name: "Multi-Functional Hoist",
+            image: "./Assets/Product%20Images/smfh-1500.jpg",
+            imagePng: "./Assets/Product%20Images/smfh-1500.png",
+            description: "Multi-functional hoist for vertical lifting applications.",
+            specs: [
+                { icon: "fa-solid fa-weight-hanging", text: "Gross Lifting Capacity: 1.5 Ton" },
+                { icon: "fa-solid fa-weight-scale", text: "Net Lifting Load: 1200 kg" },
+                { icon: "fa-solid fa-arrows-up-down", text: "Max. Lifting Height: 40 Meters" },
+                { icon: "fa-solid fa-building", text: "No. of Mast: 27 Mast" },
+                { icon: "fa-solid fa-gauge-high", text: "Lifting Speed: 30-35 Mtrs/min" },
+                { icon: "fa-solid fa-gears", text: "Motor Capacity: 12.5 HP, 3 Phase Brake Motor" },
+                { icon: "fa-solid fa-bolt", text: "Power Required: 3 Phase, 50Hz, 415 V AC, 14.1 Amps" },
+                { icon: "fa-solid fa-link", text: "Rope Size: 12mm" },
+                { icon: "fa-solid fa-ruler-combined", text: "Mast Size (L x B x H): 500 x 400 x 1500 mm" },
+                { icon: "fa-solid fa-ruler-combined", text: "Rectangular Cage Size (L x B x H): 1450 x 830 x 610 mm" },
+                { icon: "fa-solid fa-anchor", text: "Wall Tie Interval: 6 Meters" },
+                { icon: "fa-solid fa-weight-scale", text: "Machine Weight (50 Mtrs): Approx. 5500 kg" },
+                { icon: "fa-solid fa-gears", text: "Built-In Features: Emergency locking mechanism; Hour Meter; Upper and lower limit switch; Emergency shut-off button; Pendant operation system; Heavy-duty planetary gearbox system" },
+                { icon: "fa-solid fa-shield-halved", text: "Safety Features: Power fail-safe brake motor; Mechanical free-fall arrester lock; Upper and lower limit switch; Fully guarded drive unit; Emergency cut-off switch" }
+            ],
+            actions: [{ type: 'enquire-link', href: 'index.html#contact' }]
         }
     ],
     'vibrators': [
