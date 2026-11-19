@@ -66,11 +66,12 @@
     // --- Phase 3: Lifting Solutions ---
     const liftingSolutions = [
         {
-            title: "Suspended Scaffold Solution",
-            image: ["./Assets/Product Images/srp.png", "./Assets/Product Images/srp2.webp"],
-            imageWebp: ["./Assets/Product Images/srp.webp", "./Assets/Product Images/srp2.webp"],
-            description: "Customizable high-safety suspended platforms for facade work.",
-            models: ["ZLP 800"],
+            title: "Vertical Lifting Solution",
+            image: ["./Assets/Product Images/srp.png", "./Assets/Product Images/srp2.webp", "./Assets/Product Images/smfh-1500.jpg"],
+            imageWebp: ["./Assets/Product Images/srp.webp", "./Assets/Product Images/srp2.webp", null],
+            imagePng: [null, null, "./Assets/Product Images/smfh-1500.png"],
+            description: "Suspended platforms and multi-functional hoists for safe access and vertical lifting.",
+            models: ["ZLP 800", "Multi-Functional Hoist"],
             link: "Product_details/suspended_rope_platform.html"
         },
         {
@@ -203,14 +204,16 @@
 
         const images = Array.isArray(product.image) ? product.image : [product.image];
         const webpImages = product.imageWebp ? (Array.isArray(product.imageWebp) ? product.imageWebp : [product.imageWebp]) : [];
+        const pngImages = product.imagePng ? (Array.isArray(product.imagePng) ? product.imagePng : [product.imagePng]) : [];
 
         if (images.length > 1) {
             const imageTags = images.map((img, index) => {
                 let imgSrc = img.startsWith('./') ? rootPath + img.substring(2) : img;
                 let webpSrc = webpImages[index] ? (webpImages[index].startsWith('./') ? rootPath + webpImages[index].substring(2) : webpImages[index]) : null;
+                let pngSrc = pngImages[index] ? (pngImages[index].startsWith('./') ? rootPath + pngImages[index].substring(2) : pngImages[index]) : null;
                 
                 // Auto-infer WebP if not explicitly provided
-                if (!webpSrc && imgSrc && !imgSrc.startsWith('data:') && !imgSrc.startsWith('http')) {
+                if (!webpSrc && !pngSrc && imgSrc && !imgSrc.startsWith('data:') && !imgSrc.startsWith('http')) {
                     webpSrc = imgSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
                 }
 
@@ -221,13 +224,18 @@
                 const srcAttr = isFirst ? `src="${imgSrc}"` : `src="${placeholder}" data-src="${imgSrc}"`;
                 const encodedWebpSrc = webpSrc ? webpSrc.replace(/ /g, '%20') : '';
                 const srcsetAttr = isFirst ? `srcset="${encodedWebpSrc}"` : `data-srcset="${encodedWebpSrc}"`;
+                const encodedPngSrc = pngSrc ? pngSrc.replace(/ /g, '%20') : '';
+                const pngSrcAttr = isFirst ? `srcset="${encodedPngSrc}"` : `data-srcset="${encodedPngSrc}"`;
 
                 const singleImgTag = `<img ${srcAttr} alt="${product.title}" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" loading="lazy" decoding="async">`;
 
-                if (webpSrc) {
+                if (webpSrc || pngSrc) {
+                    const sources = [
+                        webpSrc ? `<source ${srcsetAttr} type="image/webp">` : '',
+                        pngSrc ? `<source ${pngSrcAttr} type="image/png">` : ''
+                    ].join('');
                     return `<picture class="absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${isFirst ? 'opacity-100' : 'opacity-0'} p-4">
-                                <source ${srcsetAttr} type="image/webp">
-                                ${singleImgTag}
+                                ${sources}${singleImgTag}
                             </picture>`;
                 }
                 return singleImgTag.replace('class="', `class="absolute inset-0 transition-opacity duration-700 ease-in-out ${isFirst ? 'opacity-100' : 'opacity-0'} p-4 `);
@@ -253,16 +261,24 @@
             if (webpSrc && webpSrc.startsWith('./')) {
                 webpSrc = rootPath + webpSrc.substring(2);
             }
+            let pngSrc = pngImages[0];
+            if (pngSrc && pngSrc.startsWith('./')) {
+                pngSrc = rootPath + pngSrc.substring(2);
+            }
 
             // Auto-infer WebP if not explicitly provided
-            if (!webpSrc && imgSrc && !imgSrc.startsWith('data:') && !imgSrc.startsWith('http')) {
+            if (!webpSrc && !pngSrc && imgSrc && !imgSrc.startsWith('data:') && !imgSrc.startsWith('http')) {
                 webpSrc = imgSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
             }
 
             const singleImgTag = `<img onclick="openImageModal('${imgSrc}')" src="${imgSrc}" alt="${product.title}" loading="lazy" decoding="async" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 cursor-pointer" width="300" height="200">`;
 
-            imageHTML = webpSrc
-                ? `<picture class="w-full h-full block p-4"><source srcset="${webpSrc.replace(/ /g, '%20')}" type="image/webp">${singleImgTag}</picture>`
+            const sources = [
+                webpSrc ? `<source srcset="${webpSrc.replace(/ /g, '%20')}" type="image/webp">` : '',
+                pngSrc ? `<source srcset="${pngSrc.replace(/ /g, '%20')}" type="image/png">` : ''
+            ].join('');
+            imageHTML = sources
+                ? `<picture class="w-full h-full block p-4">${sources}${singleImgTag}</picture>`
                 : `<div class="w-full h-full p-4">${singleImgTag}</div>`;
         }
 

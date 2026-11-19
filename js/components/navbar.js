@@ -176,7 +176,7 @@ const rootPath = getRootPath(),
                                         <a href="${rootPath}Product_details/scrap_straightener_models.html" class="megamenu-link"><i class="fa-solid fa-recycle w-6 text-secondary"></i> Scrap Straighteners</a>
                                         <a href="${rootPath}Product_details/road_roller_models.html" class="megamenu-link"><i class="fa-solid fa-road w-6 text-secondary"></i> Road Rollers</a>
                                         <a href="${rootPath}Product_details/excavator_drum_compactor.html" class="megamenu-link"><i class="fa-solid fa-weight-hanging w-6 text-secondary"></i> Excavator Drum Compactor</a>
-                                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="megamenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Suspended Platforms</a>
+                                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="megamenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Vertical Lifting Solution</a>
                                         <a href="${rootPath}Product_details/mini_lift_models.html" class="megamenu-link"><i class="fa-solid fa-dolly w-6 text-secondary"></i> Mini Lifts / Cranes</a>
                                         <a href="${rootPath}Product_details/industrial_cutting_tools.html" class="megamenu-link"><i class="fa-solid fa-crosshairs w-6 text-secondary"></i> Industrial Cutters</a>
                                     </div>
@@ -270,7 +270,7 @@ const rootPath = getRootPath(),
                         <a href="${rootPath}Product_details/scrap_straightener_models.html" class="mobile-submenu-link"><i class="fa-solid fa-recycle w-6 text-secondary"></i> Scrap Straighteners</a>
                         <a href="${rootPath}Product_details/road_roller_models.html" class="mobile-submenu-link"><i class="fa-solid fa-road w-6 text-secondary"></i> Road Rollers</a>
                         <a href="${rootPath}Product_details/excavator_drum_compactor.html" class="mobile-submenu-link"><i class="fa-solid fa-weight-hanging w-6 text-secondary"></i> Excavator Drum Compactor</a>
-                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="mobile-submenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Suspended Platforms</a>
+                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="mobile-submenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Vertical Lifting Solution</a>
                         <a href="${rootPath}Product_details/mini_lift_models.html" class="mobile-submenu-link"><i class="fa-solid fa-dolly w-6 text-secondary"></i> Mini Lifts / Cranes</a>
                         <a href="${rootPath}Product_details/industrial_cutting_tools.html" class="mobile-submenu-link"><i class="fa-solid fa-crosshairs w-6 text-secondary"></i> Industrial Cutters</a>
                         <h4 class="font-semibold text-gray-500 pt-2 text-sm">Light Equipment</h4>
