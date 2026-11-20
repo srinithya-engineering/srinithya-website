@@ -121,7 +121,7 @@
             imageWebp: ["./Assets/Product Images/scme.webp", "./Assets/Product Images/scpb.webp", "./Assets/Product Images/scme-220.webp"],
             description: "Portable 1-bag and 2-bag mixers for any site.",
             models: ["1 Bag Mixer", "2 Bag Mixer", "Buckets"],
-            link: "Product_details/concrete_mixer_models.html"
+            link: "Product_details/concrete_handling_equipment.html"
         },
         {
             title: "High Frequency Converters",

@@ -22,8 +22,8 @@ const OUTPUT_DIR = path.join(__dirname, '../Product_details/share');
 const CATEGORY_MAP = {
     'bar-bending-models': 'bar_bending_models.html',
     'bar-cutting-models': 'bar_cutting_models.html',
-    'concrete-mixer-models': 'concrete_mixer_models.html',
-    'concrete-pouring-buckets': 'concrete_mixer_models.html',
+    'concrete-mixer-models': 'concrete_handling_equipment.html',
+    'concrete-pouring-buckets': 'concrete_handling_equipment.html',
     'dewatering-pump': 'dewatering_pump.html',
     'handy-vibration-models': 'handy_vibration_models.html',
     'high-frequency-converter-models': 'high_frequency_converter_models.html',

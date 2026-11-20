@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concrete Mixer Models | SEPL</title>
+    <meta name="description" content="Durable Concrete Mixers and Pouring Buckets. Capacities ranging from 220L to 350L for efficient on-site mixing.">
+    
+    <!-- Open Graph / WhatsApp Sharing -->
+    <meta property="og:title" content="Concrete Mixer Models | Srinithya Engineering">
+    <meta property="og:description" content="Portable mixers ranging from 220L (1 bag) to 350L (2 bag) capacity.">
+    <meta property="og:image" content="https://srinithyaepl.in/Assets/Product%20Images/scme.png">
+    <meta property="og:url" content="https://srinithyaepl.in/Product_details/concrete_handling_equipment.html">
+    <meta property="og:type" content="product">
+
+    <!-- Modern Font: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"></noscript>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#d97706',
+                        dark: '#111827',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/components/navbar.js"></script>
+    <script src="../js/core/router.js" defer></script>
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        @keyframes total-flash {
+          50% {
+            transform: scale(1.1);
+            color: #d97706; /* secondary color */
+          }
+        }
+        .flash-animation {
+          animation: total-flash 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-800 font-sans">
+    <script>
+        // Check session storage immediately to prevent loader flash on navigation
+        if (sessionStorage.getItem('sepl_intro_shown')) {
+            document.documentElement.classList.add('hide-loader');
+            document.addEventListener('DOMContentLoaded', function() { document.body.classList.add('loaded'); });
+        }
+    </script>
+    <style>
+        .hide-loader #loader-wrapper { display: none !important; }
+    </style>
+
+    <!-- Loading Screen -->
+    <div id="loader-wrapper">
+        <div class="loader-section section-top"></div>
+        <div class="loader-section section-bottom"></div>
+        <div id="loader-logo-container">
+            <div class="relative">
+                <div class="logo-light-container"><div class="logo-light-spinner"></div></div>
+                <img src="../Assets/Others/logo.webp" alt="Loading..." class="relative z-20 w-full h-auto drop-shadow-2xl">
+            </div>
+        </div>
+    </div>
+
+    <main id="main-content">
+    <section class="py-20 pt-48">
+        <div class="max-w-7xl mx-auto px-4">
+            
+            <div class="mb-4">
+                <nav class="flex text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                        <li class="inline-flex items-center">
+                            <a href="../index.html" class="inline-flex items-center hover:text-primary"><i class="fa-solid fa-house mr-2"></i>Home</a>
+                        </li>
+                        <li>
+                            <div class="flex items-center"><i class="fa-solid fa-chevron-right text-gray-300 mx-2"></i><a href="../index.html#products" class="hover:text-primary">Products</a></div>
+                        </li>
+                        <li aria-current="page">
+                            <div class="flex items-center"><i class="fa-solid fa-chevron-right text-gray-300 mx-2"></i><span class="text-gray-800 font-medium">Concrete Mixers</span></div>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl font-bold text-gradient-primary mb-3">Concrete Mixer Models</h1>
+            <p class="text-xl text-gray-600 mb-12">Portable mixers ranging from 220L (1 bag) to 350L (2 bag) capacity.</p>
+
+            <div class="flex items-center my-8 md:my-12">
+                <div class="flex-grow h-px bg-gray-300"></div>
+                <h2 class="text-xl md:text-3xl font-bold text-primary px-4 md:px-6 text-center">Concrete Mixers</h2>
+                <div class="flex-grow h-px bg-gray-300"></div>
+            </div>
+
+            <div id="concrete-mixer-grid" data-product-key="concrete-mixer-models" class="flex flex-wrap justify-center gap-6 [&>*]:w-full [&>*]:sm:w-[22rem]"></div>
+            
+            <div class="flex items-center my-8 md:my-12">
+                <div class="flex-grow h-px bg-gray-300"></div>
+                <h2 class="text-xl md:text-3xl font-bold text-primary px-4 md:px-6 text-center">Concrete Pouring buckets</h2>
+                <div class="flex-grow h-px bg-gray-300"></div>
+            </div>
+
+            <div id="concrete-buckets-grid" data-product-key="concrete-pouring-buckets" class="flex flex-wrap justify-center gap-6 [&>*]:w-full [&>*]:sm:w-[22rem]"></div>
+            </div>
+    </section>
+    <!-- Compare Bar -->
+    <div id="compare-bar" class="fixed bottom-0 left-0 w-full bg-primary text-white p-4 shadow-lg transform translate-y-full transition-transform duration-300 z-50 hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center">
+                        <span class="font-bold text-lg">Compare Models</span>
+                        <span id="compare-count" class="ml-2 bg-secondary text-white text-sm font-bold w-6 h-6 flex items-center justify-center rounded-full">0</span>
+                    </div>
+                    <button onclick="clearCompare()" class="text-gray-300 hover:text-white" title="Clear Selection">&times; Clear</button>
+                </div>
+                <button id="compare-now-btn" onclick="showCompareModal()" class="bg-white text-primary hover:bg-gray-100 font-bold py-2 px-6 rounded transition disabled:bg-gray-500 disabled:text-gray-300 disabled:cursor-not-allowed" disabled>
+                    Compare Now
+                </button>
+            </div>
+            <div id="compare-items-preview" class="flex flex-wrap items-center gap-2 pt-3 border-t border-blue-800">
+                <!-- Preview items will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div id="compare-modal" class="fixed inset-0 z-[80] hidden bg-black bg-opacity-70 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center bg-primary text-white">
+                <h2 class="text-2xl font-bold">Compare Mixers</h2>
+                <button onclick="closeCompareModal()" class="text-white hover:text-red-200 text-3xl">&times;</button>
+            </div>
+            <div id="compare-modal-body" class="p-6 overflow-y-auto">
+                <!-- Comparison table will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Link the Universal Compare Script -->
+    <script src="../js/core/compare.js"></script>
+    </main>
+
+    <script src="../js/components/footer.js"></script>
+    <script src="../js/core/cart.js"></script>
+    <script src="../js/core/search.js"></script>
+    <script src="../js/components/whatsapp.js" defer></script>
+    <script src="../js/data/product_data.js"></script>
+    <script src="../js/components/product_renderer.js"></script>
+
+</body>
+</html>

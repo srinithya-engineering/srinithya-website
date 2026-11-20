@@ -962,7 +962,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 0.3 Help / Capabilities
         if (query === 'help' || query.includes('what can you do') || query.includes('capabilities')) {
             return {
-                text: "I can search the product catalog, answer questions using published specifications, compare named models, guide bar-machine selection by operation and diameter, and help you find rental and contact options. I can’t verify live stock or unpublished prices.",
+                text: "I can search the product catalog, answer questions using published specifications, compare named models, guide bar-machine selection by operation and diameter, and help you find rental and contact options. I canâ€™t verify live stock or unpublished prices.",
                 suggestions: ["Recommend a machine", "Compare SBB42 and SBB52", "Show rental options"]
             };
         }
@@ -1067,8 +1067,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const emailMatch = query.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
         if (phoneMatch || emailMatch) {
             return {
-                text: "I can’t send or store contact details from this chat. Please contact sales directly using one of these options.",
-                html: `<p>I can’t send or store contact details from this chat. Contact sales directly:</p><a class="bot-action-btn" href="mailto:sales@srinithyaepl.in">Email Sales</a><a class="bot-action-btn" href="https://wa.me/919059239819" target="_blank" rel="noopener noreferrer">WhatsApp Sales</a>`
+                text: "I canâ€™t send or store contact details from this chat. Please contact sales directly using one of these options.",
+                html: `<p>I canâ€™t send or store contact details from this chat. Contact sales directly:</p><a class="bot-action-btn" href="mailto:sales@srinithyaepl.in">Email Sales</a><a class="bot-action-btn" href="https://wa.me/919059239819" target="_blank" rel="noopener noreferrer">WhatsApp Sales</a>`
             };
         }
 
@@ -1130,10 +1130,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (query.includes('give feedback') || query.includes('rate experience')) {
              return {
                  text: "We value your feedback! How would you rate your experience?",
-                 suggestions: ["⭐⭐⭐⭐⭐ Great", "⭐⭐⭐ Good", "⭐ Needs Improvement"]
+                 suggestions: ["â­â­â­â­â­ Great", "â­â­â­ Good", "â­ Needs Improvement"]
              };
         }
-        if (query.includes('⭐')) {
+        if (query.includes('â­')) {
              return { text: "Thank you for your feedback! We are constantly improving." };
         }
 
@@ -1172,8 +1172,8 @@ document.addEventListener('DOMContentLoaded', function() {
             'three phase': { term: "Three Phase Power", def: "an industrial electrical supply system using 415V AC", usage: "powering heavy-duty machinery like large bar benders and cutters", benefit: "consistent power delivery and higher efficiency for large motors" },
             'hp': { term: "Horsepower (HP)", def: "a unit of measurement for engine or motor power", rule: "higher HP generally means the machine can handle heavier loads or work faster" },
             'rpm': { term: "RPM", def: "Revolutions Per Minute, indicating speed or frequency", rule: "higher RPM in vibrators leads to better concrete consolidation" },
-            'm20': { term: "M20 Concrete", def: "a standard concrete grade with 20 N/mm² compressive strength", spec: "Mix Ratio 1:1.5:3 (Cement : Sand : Aggregate)" },
-            'm25': { term: "M25 Concrete", def: "a standard concrete grade with 25 N/mm² compressive strength", spec: "Mix Ratio 1:1:2 (Cement : Sand : Aggregate)" },
+            'm20': { term: "M20 Concrete", def: "a standard concrete grade with 20 N/mmÂ² compressive strength", spec: "Mix Ratio 1:1.5:3 (Cement : Sand : Aggregate)" },
+            'm25': { term: "M25 Concrete", def: "a standard concrete grade with 25 N/mmÂ² compressive strength", spec: "Mix Ratio 1:1:2 (Cement : Sand : Aggregate)" },
             'opc': { term: "Ordinary Portland Cement (OPC)", def: "the most common type of cement used in general construction", benefit: "fast setting and high initial strength" },
             'ppc': { term: "Pozzolana Portland Cement (PPC)", def: "a blended cement using pozzolanic materials", benefit: "better durability and resistance to cracks over time" },
             'tmt': { term: "TMT (Thermo Mechanically Treated) Bars", def: "high-strength reinforcement steel with a tough outer core and soft inner core", benefit: "superior ductility, weldability, and earthquake resistance" },
@@ -1181,8 +1181,8 @@ document.addEventListener('DOMContentLoaded', function() {
             'cover block': { term: "Cover Block", def: "a spacer used to lift the rebar off the ground before pouring concrete", usage: "maintaining a specified distance between the TMT bar and the shuttering to prevent corrosion" },
             'needle': { term: "Vibrator Needle", def: "the vibrating head inserted into concrete", rule: "diameter should be chosen based on reinforcement spacing (e.g., 40mm is standard, 25mm for congested areas)" },
             'curing': { term: "Curing", def: "the process of maintaining moisture in concrete to promote hydration", rule: "minimum 7 days is required, though 28 days is recommended for full strength" },
-            'fe500': { term: "Fe500 Grade", def: "steel bars with a yield strength of 500 N/mm²", usage: "general construction of high-rise buildings" },
-            'fe550': { term: "Fe550 Grade", def: "steel bars with a yield strength of 550 N/mm²", usage: "projects requiring higher load-bearing capacity" }
+            'fe500': { term: "Fe500 Grade", def: "steel bars with a yield strength of 500 N/mmÂ²", usage: "general construction of high-rise buildings" },
+            'fe550': { term: "Fe550 Grade", def: "steel bars with a yield strength of 550 N/mmÂ²", usage: "projects requiring higher load-bearing capacity" }
         };
 
         // Dynamic Synthesis Logic
@@ -1342,7 +1342,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (rentalProducts.length === 0) {
                 return {
-                    text: "I can’t confirm rental options from the product data on this page. Please contact our team to check.",
+                    text: "I canâ€™t confirm rental options from the product data on this page. Please contact our team to check.",
                     suggestions: ["Contact Sales", "Open WhatsApp"]
                 };
             }
@@ -1372,7 +1372,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const hasKnownApplication = /\b(bars?|rods?|rebar|steel|tmt|bend|bender|bending|cut|cutter|cutting|mixer|mixing|concrete|compactor|compaction|soil|roller|vibrator|lift|hoist|crane|platform|pump|trowel|straightener|cabin|container|scissor|rent|rental|hire)\b/i.test(query);
         if (recommendationIntent && !hasKnownApplication && !findMentionedProduct(query, products)) {
             return {
-                text: "Tell me what job you need to do, and I’ll narrow the catalog down. For bar work, include whether you need to bend or cut and the largest bar diameter.",
+                text: "Tell me what job you need to do, and Iâ€™ll narrow the catalog down. For bar work, include whether you need to bend or cut and the largest bar diameter.",
                 suggestions: ["Bend or cut steel bars", "Recommend a concrete mixer", "Recommend a compactor", "Show lifting equipment"]
             };
         }
@@ -1470,7 +1470,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const namedCapacity = getProductCapacity(referencedProduct, action);
                 if (!namedCapacity) {
-                    const unverifiableText = `I can’t verify a published ${actionLabel} capacity for ${referencedProduct.name}. Please confirm suitability with our sales team.`;
+                    const unverifiableText = `I canâ€™t verify a published ${actionLabel} capacity for ${referencedProduct.name}. Please confirm suitability with our sales team.`;
                     return {
                         text: unverifiableText,
                         html: `<p>${escapeHtml(unverifiableText)}</p>${getProductCardHTML(referencedProduct)}`,
@@ -1948,7 +1948,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return `<div class="bot-product-card">
                     <h4>${p.name}</h4>
                     <p>${p.description}</p>
-                    ${p.specs ? p.specs.slice(0, 2).map(s => `<small>• ${s.text}</small><br>`).join('') : ''}
+                    ${p.specs ? p.specs.slice(0, 2).map(s => `<small>â€¢ ${s.text}</small><br>`).join('') : ''}
                     <a href="${link}" class="text-secondary font-bold text-xs mt-2 inline-block hover:underline">View Product Details <i class="fa-solid fa-arrow-right"></i></a>
                     <button onclick="window.addToCart('${safeName}')" class="bot-action-btn"><i class="fa-solid fa-plus"></i> Add to Estimate</button>
                 </div>`;
@@ -2427,7 +2427,7 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (cat.includes('suspended')) page = 'Product_details/suspended_rope_platform.html';
         else if (cat.includes('bending')) page = 'Product_details/bar_bending_models.html';
         else if (cat.includes('cutting') && !cat.includes('industrial')) page = 'Product_details/bar_cutting_models.html';
-        else if (cat.includes('mixer')) page = 'Product_details/concrete_mixer_models.html';
+        else if (cat.includes('mixer')) page = 'Product_details/concrete_handling_equipment.html';
         else if (cat.includes('compactor')) page = 'Product_details/plate_compactor_models.html';
         else if (cat.includes('trowel')) page = 'Product_details/power_trowel_models.html';
         else if (cat.includes('converter')) page = 'Product_details/high_frequency_converter_models.html';

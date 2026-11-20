@@ -199,7 +199,7 @@ const rootPath = getRootPath(),
                                         </h3>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                                             <div class="space-y-3">
-                                                <a href="${rootPath}Product_details/concrete_mixer_models.html" class="megamenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Handling Equipment</a>
+                                                <a href="${rootPath}Product_details/concrete_handling_equipment.html" class="megamenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Handling Equipment</a>
                                                 <a href="${rootPath}Product_details/high_frequency_converter_models.html" class="megamenu-link"><i class="fa-solid fa-wave-square w-6 text-secondary"></i> High Frequency Converters</a>
                                                 <a href="${rootPath}Product_details/Vibrators.html" class="megamenu-link"><i class="fa-solid fa-bolt w-6 text-secondary"></i> Vibrators</a>
                                                 <a href="${rootPath}Product_details/high_frequency_poker_models.html" class="megamenu-link"><i class="fa-solid fa-plug w-6 text-secondary"></i> High Frequency Pokers</a>
@@ -298,7 +298,7 @@ const rootPath = getRootPath(),
                         <a href="${rootPath}Product_details/mini_lift_models.html" class="mobile-submenu-link"><i class="fa-solid fa-dolly w-6 text-secondary"></i> Mini Lift / Crane</a>
                         <a href="${rootPath}Product_details/scissorlift_models.html" class="mobile-submenu-link"><i class="fa-solid fa-arrows-up-down w-6 text-secondary"></i> Scissor Lifts</a>
                         <h4 class="font-semibold text-gray-500 pt-2 text-sm">Concreting Solutions</h4>
-                        <a href="${rootPath}Product_details/concrete_mixer_models.html" class="mobile-submenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Handling Equipment</a>
+                        <a href="${rootPath}Product_details/concrete_handling_equipment.html" class="mobile-submenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Handling Equipment</a>
                         <a href="${rootPath}Product_details/high_frequency_converter_models.html" class="mobile-submenu-link"><i class="fa-solid fa-wave-square w-6 text-secondary"></i> High Frequency Converters</a>
                         <a href="${rootPath}Product_details/Vibrators.html" class="mobile-submenu-link"><i class="fa-solid fa-bolt w-6 text-secondary"></i> Vibrators</a>
                         <a href="${rootPath}Product_details/high_frequency_poker_models.html" class="mobile-submenu-link"><i class="fa-solid fa-plug w-6 text-secondary"></i> High Frequency Pokers</a>
