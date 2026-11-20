@@ -31,16 +31,30 @@
     const rebarProcessing = [
         {
             title: "Bar Bending Machine",
-            image: "./Assets/Product Images/bender.png",
-            imageWebp: "./Assets/Product Images/bender.webp",
+            image: [
+                "./Assets/Product Images/sbb-42.png",
+                "./Assets/Product Images/sbb-52.png",
+                "./Assets/Product Images/sbb-55.png"
+            ],
+            imageWebp: [
+                "./Assets/Product Images/sbb-42.webp",
+                "./Assets/Product Images/sbb-52.webp",
+                "./Assets/Product Images/sbb-55.webp"
+            ],
             description: "Automatic bending with digital control panel. Angles range 0-360 degrees.",
             models: ["SBB 42", "SBB 52", "SBB 55"],
             link: "Product_details/bar_bending_models.html"
         },
         {
             title: "Bar Cutting Machine",
-            image: "./Assets/Product Images/sbc.png",
-            imageWebp: "./Assets/Product Images/sbc.webp",
+            image: [
+                "./Assets/Product Images/sbc.png",
+                "./Assets/Product Images/sbc-55.png"
+            ],
+            imageWebp: [
+                "./Assets/Product Images/sbc.webp",
+                "./Assets/Product Images/sbc-55.webp"
+            ],
             description: "Precise cutting for TMT bars up to 40mm. Low noise, high efficiency.",
             models: ["SBC 42", "SBC 52", "SBC 55"],
             link: "Product_details/bar_cutting_models.html"
@@ -66,13 +80,20 @@
     // --- Phase 3: Lifting Solutions ---
     const liftingSolutions = [
         {
-            title: "Vertical Lifting Solution",
-            image: ["./Assets/Product Images/srp.png", "./Assets/Product Images/srp2.webp", "./Assets/Product Images/smfh-1500.jpg"],
-            imageWebp: ["./Assets/Product Images/srp.webp", "./Assets/Product Images/srp2.webp", null],
-            imagePng: [null, null, "./Assets/Product Images/smfh-1500.png"],
-            description: "Suspended platforms and multi-functional hoists for safe access and vertical lifting.",
-            models: ["ZLP 800", "Multi-Functional Hoist"],
+            title: "Suspended Rope Platform",
+            image: ["./Assets/Product Images/srp.png", "./Assets/Product Images/srp2.webp"],
+            imageWebp: ["./Assets/Product Images/srp.webp", "./Assets/Product Images/srp2.webp"],
+            description: "Suspended platforms for safe access and high-rise work.",
+            models: ["ZLP 800"],
             link: "Product_details/suspended_rope_platform.html"
+        },
+        {
+            title: "Heavy Lifting Equipment",
+            image: "./Assets/Product Images/smfh-1500.png",
+            imageWebp: "./Assets/Product Images/smfh-1500.webp",
+            description: "Heavy-duty hoist for vertical lifting of materials on construction sites.",
+            models: ["SMFH-1500"],
+            link: "Product_details/heavy_lifting_equipment.html"
         },
         {
             title: "Mini Lift / Crane",

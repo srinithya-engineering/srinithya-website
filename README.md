@@ -31,34 +31,25 @@ The website is a static HTML/CSS/JavaScript application designed to showcase pro
 
 ```
 /
-├── index.html                  # Homepage (Landing page)
-├── about.html                  # About Us page
-├── css/                        # Stylesheets
+├── index.html, about.html, services.html
+├── 404.html, CNAME, robots.txt, sitemap.xml
+├── organize_project.js
+├── Assets/
+│   ├── APC/
+│   ├── Custom Icons/
+│   ├── Fonts/
+│   ├── Others/
+│   └── Product Images/
+├── css/
 │   └── style.css
-├── js/                         # JavaScript Logic & Components
-│   ├── navbar.js
-│   ├── footer.js
-│   ├── product_renderer.js
-│   └── ... (other scripts)
-├── scripts/                    # Utility/Build scripts
-│   └── convert_images.js
-│   └── generate_sitemap.js
-│   └── add_meta_tags.js
-│   └── generate_product_pages.js
-│   └── setup_hooks.js
-├── Assets/                     # Images and icons
-│   ├── logo.png
-│   └── ...
-└── Product_details/            # Individual product category pages
-    ├── bar_cutting_models.html
-    ├── bar_bending_models.html
-    ├── scrap_straightener_models.html
-    ├── concrete_mixer_models.html
-    ├── plate_compactor_models.html
-    ├── power_trowel_models.html
-    ├── high_frequency_converter_models.html
-    ├── safety_equipment_models.html
-    └── Vibrators.html
+├── js/
+│   ├── components/             # Navigation, footer, cards, and renderers
+│   ├── config/                 # Tailwind configuration
+│   ├── core/                   # Routing, cart, comparison, and search
+│   └── data/                   # Product and chatbot data
+├── Product_details/            # Product category pages and share pages
+├── Service_details/             # Repair, rental, and maintenance pages
+└── scripts/                    # Sitemap, image, product-page, and hook utilities
 ```
 
 ## Setup & Configuration
@@ -95,7 +86,7 @@ The project relies on the following external libraries loaded via CDN. Ensure yo
 
 ## Customization
 
--   **Colors**: The primary and secondary colors are defined in the Tailwind config script within the `<head>` of each HTML file:
+-   **Colors**: The shared Tailwind theme is in `js/config/tailwind-config.js`. Some product pages define the same theme inline in their `<head>`, so update both the shared file and any page-specific configuration when changing colors:
     ```javascript
     colors: {
         primary: '#1e3a8a',   // Dark Blue
@@ -103,9 +94,25 @@ The project relies on the following external libraries loaded via CDN. Ensure yo
         dark: '#111827',      // Almost Black
     }
     ```
--   **Adding Products**: To add new products, duplicate an existing product card HTML block in the relevant `Product_details` file.
-    -   Ensure you update the `data-*` attributes (e.g., `data-model`, `data-power`) if the page supports the "Compare" feature.
-    -   Update the `addToCart` function arguments with the new product details.
+-   **Adding Products**: Add model details, specifications, comparison data, and image paths to `js/data/product_data.js`. Add or update the corresponding category card in `js/components/product_cards.js`. Product category pages render their models from this shared data.
+
+## Maintenance Scripts
+
+-   Generate the sitemap after adding or removing public HTML pages:
+    ```bash
+    node scripts/generate_sitemap.js
+    ```
+    The generator excludes the 404 page and creates entries for the site, product, and service pages.
+-   Generate or refresh product sharing pages:
+    ```bash
+    node scripts/generate_product_pages.js
+    ```
+-   Convert PNG and JPEG assets to WebP:
+    ```bash
+    node scripts/convert_images.js
+    ```
+    This script requires the `sharp` Node.js package and preserves the source images.
+-   `organize_project.js` moves files from legacy locations into their configured folders and updates HTML/CSS paths. It skips files that are already in their destination folders.
 
 ## WhatsApp Sharing (Open Graph)
 

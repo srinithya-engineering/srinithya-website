@@ -24,7 +24,7 @@ window.productData = {
         {
             model: "SBB52",
             name: "SBB52",
-            image: "./Assets/Product%20Images/bender.png",
+            image: "./Assets/Product%20Images/sbb-52.png",
             description: "High-precision bending with programmable angles for complex shapes.",
             specs: [
                 { icon: "fa-solid fa-rotate", text: "Bend Dia: 8 - 36mm" },
@@ -45,7 +45,7 @@ window.productData = {
         {
             model: "SBB55",
             name: "SBB55",
-            image: "./Assets/Product%20Images/sbb-55.jpg",
+            image: "./Assets/Product%20Images/sbb-55.png",
             imagePng: "./Assets/Product%20Images/sbb-55.png",
             description: "High-strengthed Rebar Bending with precision and accuracy.",
             specs: [
@@ -54,9 +54,6 @@ window.productData = {
                 { icon: "fa-solid fa-shield-halved", text: "Features: Save Angle Presets, Emergency Stop" },
                 { icon: "fa-solid fa-gears", text: "Motor: 7.5HP Bharat Bijlee" },
                 { icon: "fa-solid fa-weight-hanging", text: "Weight: 550 kg" },
-                { icon: "fa-solid fa-gears", text: "Motor: Bharat Bijlee" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: 550 kg" },
-                { icon: "fa-solid fa-ruler-combined", text: "Dimensions: Heavy-Duty Industrial Model" },
                 { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
                 { icon: "fa-solid fa-cogs", text: "Gearbox: Oil Bath Lubricated" },
                 { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" },
@@ -78,7 +75,6 @@ window.productData = {
                 { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 32mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
                 { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
-                { icon: "fa-solid fa-gauge-high", text: "Speed: 32 times/min" },
                 { icon: "fa-solid fa-weight-hanging", text: "Weight: 380 kg" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
                 { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
@@ -98,11 +94,11 @@ window.productData = {
                 { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 36mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
                 { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
-                { icon: "fa-solid fa-gauge-high", text: "Speed: 28 times/min" },
                 { icon: "fa-solid fa-weight-hanging", text: "Weight: 550 kg" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
                 { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
                 { icon: "fa-solid fa-leaf", text: "Eco-Friendly: Energy Efficient Motor" },
+                { icon: "fa-solid fa-gear", text: "Gearbox: Oil Bath Lubricated" },
                 { icon: "fa-solid fa-tools", text: "Maintenance: Low Maintenance Design" }
             ],
             compare: { model: "SBC52", category: "bar-cutters", capacity: "Up to 42mm TMT", power: "5HP Motor", gearbox: "Reinforced Oil Bath" },
@@ -111,17 +107,14 @@ window.productData = {
         {
             model: "SBC55",
             name: "SBC55",
-            image: "./Assets/Product%20Images/sbc-55.jpg",
+            image: "./Assets/Product%20Images/sbc-55.png",
             imagePng: "./Assets/Product%20Images/sbc-55.png",
             description: "Tuned to perform the best even with the High-Strength Bars",
             specs: [
                 { icon: "fa-solid fa-ruler-combined", text: "Capacity: 8 - 40mm" },
                 { icon: "fa-solid fa-bolt", text: "Power: 5HP Motor" },
                 { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
-                { icon: "fa-solid fa-bolt", text: "Power: 3 Phase, 415V, 50Hz" },
                 { icon: "fa-solid fa-gear", text: "Gearbox: Reinforced Oil Bath" },
-                { icon: "fa-solid fa-gauge-high", text: "Speed: Heavy-Duty Cutting Model" },
-                { icon: "fa-solid fa-weight-hanging", text: "Weight: Heavy-Duty Industrial Model" },
                 { icon: "fa-solid fa-weight-hanging", text: "Weight: 775 kg" },
                 { icon: "fa-solid fa-shield", text: "Warranty: 1 Year Comprehensive" },
                 { icon: "fa-solid fa-user-shield", text: "Safety: Emergency Stop, Safety Guards" },
@@ -894,26 +887,26 @@ window.productData = {
             imageWebp: "./Assets/Product%20Images/sss.webp",
             description: "Cost-effective solution for straightening coils and lighter scrap.",
             specs: [
-                { icon: "fa-solid fa-arrow-right-long", text: "Range: 4mm - 12mm" },
+                { icon: "fa-solid fa-arrow-right-long", text: "Range: 6mm - 14mm" },
                 { icon: "fa-solid fa-gauge", text: "Speed: 25 meters/min" },
                 { icon: "fa-solid fa-recycle", text: "Usage: Coil & Light Scrap" }
             ],
-            compare: { model: "GX6-14 Eco Model", category: "scrap-straightener-models", range: "4mm - 12mm", "speed-feature": "25 meters/min", "usage-accuracy": "Coil & Light Scrap" },
+            compare: { model: "GX6-14 Eco Model", category: "scrap-straightener-models", range: "6mm - 14mm", "speed-feature": "25 meters/min", "usage-accuracy": "Coil & Light Scrap" },
             actions: [{ type: 'cart', name: 'GX6-14 Eco Model' }]
         },
         {
-            model: "GX6-25 Pro Model",
-            name: "GX6-25 Pro",
+            model: "GX8-25 Pro Model",
+            name: "GX8-25 Pro",
             image: "./Assets/Product%20Images/sss.png",
             imageWebp: "./Assets/Product%20Images/sss.webp",
             description: "Advanced straightener with integrated hydraulic cutter for precise lengths.",
             specs: [
-                { icon: "fa-solid fa-arrow-right-long", text: "Range: 6mm - 16mm" },
+                { icon: "fa-solid fa-arrow-right-long", text: "Range: 8mm - 25mm" },
                 { icon: "fa-solid fa-scissors", text: "Feature: Auto-Cut Function" },
                 { icon: "fa-solid fa-arrows-left-right", text: "Accuracy: High Precision" }
             ],
-            compare: { model: "GX6-25 Pro Model", category: "scrap-straightener-models", range: "6mm - 16mm", "speed-feature": "Auto-Cut Function", "usage-accuracy": "High Precision" },
-            actions: [{ type: 'cart', name: 'GX6-25 Pro Model' }]
+            compare: { model: "GX8-25 Pro Model", category: "scrap-straightener-models", range: "8mm - 25mm", "speed-feature": "Auto-Cut Function", "usage-accuracy": "High Precision" },
+            actions: [{ type: 'cart', name: 'GX8-25 Pro Model' }]
         }
     ],
     'shutter-vibrator-models': {
@@ -1054,11 +1047,13 @@ window.productData = {
                 { icon: "fa-solid fa-people-roof", text: "Capacity: 2-10 Persons" }
             ],
             actions: [{ type: 'enquire-link', href: '../index.html#contact' }]
-        },
+        }
+    ],
+    'heavy-lifting-equipment': [
         {
             model: "SMFH-1500",
             name: "Multi-Functional Hoist",
-            image: "./Assets/Product%20Images/smfh-1500.jpg",
+            image: "./Assets/Product%20Images/smfh-1500.png",
             imagePng: "./Assets/Product%20Images/smfh-1500.png",
             description: "Multi-functional hoist for vertical lifting applications.",
             specs: [

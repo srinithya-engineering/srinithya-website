@@ -39,6 +39,7 @@ const CATEGORY_MAP = {
     'scrap-straightener-models': 'scrap_straightener_models.html',
     'shutter-vibrator-models': 'shutter_vibrator_models.html',
     'surface-smootheners': 'surface_smootheners.html',
+    'heavy-lifting-equipment': 'heavy_lifting_equipment.html',
     'suspended-rope-platform': 'suspended_rope_platform.html',
     'vibrators': 'Vibrators.html',
     'scissor-lift-models': 'scissorlift_models.html',

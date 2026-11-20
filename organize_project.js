@@ -25,7 +25,8 @@ const moves = {
         'search.js'
     ],
     'js/data': [
-        'product_data.js'
+        'product_data.js',
+        'chatbot.js'
     ],
     'js/config': [
         'tailwind-config.js'
@@ -34,7 +35,12 @@ const moves = {
         'style.css'
     ],
     'scripts': [
-        'convert_images.js'
+        'add_meta_tags.js',
+        'check_share_config.js',
+        'convert_images.js',
+        'generate_product_pages.js',
+        'generate_sitemap.js',
+        'setup_hooks.js'
     ]
 };
 
@@ -49,14 +55,13 @@ function findAndMoveFile(fileName, targetDir) {
 
     const targetPath = path.join(rootDir, targetDir, fileName);
 
+    if (fs.existsSync(targetPath)) {
+        console.log(`Skipped: ${fileName} (already in ${targetDir})`);
+        return;
+    }
+
     for (const currentPath of possiblePaths) {
         if (fs.existsSync(currentPath)) {
-            // Don't move if it's already in the right place
-            if (path.resolve(currentPath) === path.resolve(targetPath)) {
-                console.log(`Skipped: ${fileName} (already in ${targetDir})`);
-                return;
-            }
-
             // Create target directory if it doesn't exist
             if (!fs.existsSync(path.join(rootDir, targetDir))) {
                 fs.mkdirSync(path.join(rootDir, targetDir), { recursive: true });

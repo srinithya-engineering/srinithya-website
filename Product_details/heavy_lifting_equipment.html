@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heavy Lifting Equipment | SEPL</title>
+    <meta name="description" content="Explore the Multi-Functional Hoist for heavy-duty vertical material lifting on construction sites.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/config/tailwind-config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/components/navbar.js"></script>
+    <script src="../js/core/router.js" defer></script>
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://srinithyaepl.in/Product_details/heavy_lifting_equipment.html">
+    <meta property="og:title" content="Heavy Lifting Equipment | SEPL">
+    <meta property="og:description" content="Explore the Multi-Functional Hoist for heavy-duty vertical material lifting on construction sites.">
+    <meta property="og:image" content="https://srinithyaepl.in/Assets/Product%20Images/smfh-1500.webp">
+</head>
+<body class="text-gray-800 font-sans">
+    <script>
+        if (sessionStorage.getItem('sepl_intro_shown')) {
+            document.documentElement.classList.add('hide-loader');
+            document.addEventListener('DOMContentLoaded', function() { document.body.classList.add('loaded'); });
+        }
+    </script>
+    <style>
+        .hide-loader #loader-wrapper { display: none !important; }
+    </style>
+
+    <div id="loader-wrapper">
+        <div class="loader-section section-top"></div>
+        <div class="loader-section section-bottom"></div>
+        <div id="loader-logo-container">
+            <div class="relative">
+                <div class="logo-light-container"><div class="logo-light-spinner"></div></div>
+                <img src="../Assets/Others/logo.webp" alt="Loading..." class="relative z-20 w-full h-auto drop-shadow-2xl">
+            </div>
+        </div>
+    </div>
+
+    <main id="main-content">
+        <section class="py-20 pt-48">
+            <div class="max-w-7xl mx-auto px-4">
+                <nav class="flex text-sm text-gray-500 mb-4" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                        <li><a href="../index.html" class="inline-flex items-center hover:text-primary"><i class="fa-solid fa-house mr-2"></i>Home</a></li>
+                        <li><div class="flex items-center"><i class="fa-solid fa-chevron-right text-gray-300 mx-2"></i><a href="../index.html#products" class="hover:text-primary">Products</a></div></li>
+                        <li aria-current="page"><div class="flex items-center"><i class="fa-solid fa-chevron-right text-gray-300 mx-2"></i><span class="text-gray-800 font-medium">Heavy Lifting Equipment</span></div></li>
+                    </ol>
+                </nav>
+
+                <h1 class="text-4xl md:text-5xl font-bold text-gradient-primary mb-3">Heavy Lifting Equipment</h1>
+                <p class="text-xl text-gray-600 mb-12">Heavy-duty equipment for vertical material lifting on construction sites.</p>
+
+                <div id="heavy-lifting-equipment-grid" data-product-key="heavy-lifting-equipment" class="flex flex-wrap justify-center gap-6 [&>*]:w-full [&>*]:sm:w-[22rem]"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="image-modal" class="fixed inset-0 z-[80] hidden bg-black bg-opacity-80 flex items-center justify-center p-4" onclick="closeImageModal()">
+        <div class="relative max-w-4xl max-h-full" onclick="event.stopPropagation()">
+            <img id="modal-image" src="" alt="Enlarged Product View" class="w-auto h-auto max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+            <button onclick="closeImageModal()" class="absolute -top-2 -right-2 text-white bg-red-600 rounded-full h-8 w-8 flex items-center justify-center text-xl hover:bg-red-700 focus:outline-none">&times;</button>
+        </div>
+    </div>
+
+    <script src="../js/core/cart.js"></script>
+    <script src="../js/core/search.js"></script>
+    <script src="../js/data/product_data.js"></script>
+    <script src="../js/components/product_renderer.js"></script>
+    <script src="../js/components/footer.js" defer></script>
+    <script src="../js/components/whatsapp.js" defer></script>
+</body>
+</html>

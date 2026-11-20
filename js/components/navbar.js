@@ -168,39 +168,58 @@ const rootPath = getRootPath(),
                         <div class="absolute top-full left-0 w-full flex justify-center mt-1 invisible group-hover:visible opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 ease-in-out delay-200 group-hover:delay-0 z-[-1] group-hover:z-10 pointer-events-none">
                             <div class="w-full max-w-5xl bg-white shadow-2xl rounded-lg border border-gray-200/50 overflow-hidden pointer-events-auto">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 p-8">
-                                    
                                     <div class="space-y-3">
-                                        <h3 class="text-sm font-bold text-primary uppercase tracking-wider border-b pb-2 mb-3">Heavy Machinery</h3>
-                                        <a href="${rootPath}Product_details/bar_cutting_models.html" class="megamenu-link"><i class="fa-solid fa-scissors w-6 text-secondary"></i> Bar Cutting Machines</a>
-                                        <a href="${rootPath}Product_details/bar_bending_models.html" class="megamenu-link"><i class="fa-solid fa-rotate-left w-6 text-secondary"></i> Bar Bending Machines</a>
-                                        <a href="${rootPath}Product_details/scrap_straightener_models.html" class="megamenu-link"><i class="fa-solid fa-recycle w-6 text-secondary"></i> Scrap Straighteners</a>
+                                        <h3 class="text-sm font-bold text-primary uppercase tracking-wider border-b pb-2 mb-3">Soil &amp; Foundation</h3>
                                         <a href="${rootPath}Product_details/road_roller_models.html" class="megamenu-link"><i class="fa-solid fa-road w-6 text-secondary"></i> Road Rollers</a>
                                         <a href="${rootPath}Product_details/excavator_drum_compactor.html" class="megamenu-link"><i class="fa-solid fa-weight-hanging w-6 text-secondary"></i> Excavator Drum Compactor</a>
-                                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="megamenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Vertical Lifting Solution</a>
-                                        <a href="${rootPath}Product_details/mini_lift_models.html" class="megamenu-link"><i class="fa-solid fa-dolly w-6 text-secondary"></i> Mini Lifts / Cranes</a>
-                                        <a href="${rootPath}Product_details/industrial_cutting_tools.html" class="megamenu-link"><i class="fa-solid fa-crosshairs w-6 text-secondary"></i> Industrial Cutters</a>
+                                        <a href="${rootPath}Product_details/plate_compactor_models.html" class="megamenu-link"><i class="fa-solid fa-compress w-6 text-secondary"></i> Plate Compactors</a>
                                     </div>
-                                    
-                                    <div class="md:col-span-2">
-                                        <h3 class="text-sm font-bold text-primary uppercase tracking-wider border-b pb-2 mb-3">Light Equipment</h3>
-                                        <div class="grid grid-cols-2 gap-x-8 gap-y-3">
-                                            <a href="${rootPath}Product_details/plate_compactor_models.html" class="megamenu-link"><i class="fa-solid fa-compress w-6 text-secondary"></i> Plate Compactors</a>
-                                            <a href="${rootPath}Product_details/surface_smootheners.html" class="megamenu-link"><i class="fa-solid fa-ruler-horizontal w-6 text-secondary"></i> Surface Smootheners</a>
-                                            <a href="${rootPath}Product_details/concrete_mixer_models.html" class="megamenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Mixers</a>
-                                            <a href="${rootPath}Product_details/Vibrators.html" class="megamenu-link"><i class="fa-solid fa-bolt w-6 text-secondary"></i> Vibrators</a>
-                                            <a href="${rootPath}Product_details/shutter_vibrator_models.html" class="megamenu-link"><i class="fa-solid fa-industry w-6 text-secondary"></i> Shutter Vibrators</a>
-                                            <a href="${rootPath}Product_details/high_frequency_converter_models.html" class="megamenu-link"><i class="fa-solid fa-wave-square w-6 text-secondary"></i> HF Converters</a>
-                                            <a href="${rootPath}Product_details/high_frequency_poker_models.html" class="megamenu-link"><i class="fa-solid fa-plug w-6 text-secondary"></i> HF Pokers</a>
-                                            <a href="${rootPath}Product_details/handy_vibration_models.html" class="megamenu-link"><i class="fa-solid fa-hand-fist w-6 text-secondary"></i> Handy Vibrators</a>
-                                            <a href="${rootPath}Product_details/mechanical_poker_models.html" class="megamenu-link"><i class="fa-solid fa-gears w-6 text-secondary"></i> Mechanical Pokers</a>
-                                            <a href="${rootPath}Product_details/dewatering_pump.html" class="megamenu-link"><i class="fa-solid fa-droplet w-6 text-secondary"></i> Dewatering Pumps</a>
-                                            <a href="${rootPath}Product_details/portable_bar_processing_models.html" class="megamenu-link"><i class="fa-solid fa-toolbox w-6 text-secondary"></i> Portable Bar Tools</a>
-                                            <a href="${rootPath}Product_details/scissorlift_models.html" class="megamenu-link"><i class="fa-solid fa-arrows-up-down w-6 text-secondary"></i> Scissor Lifts</a>
+
+                                    <div class="space-y-3">
+                                        <h3 class="text-sm font-bold text-primary uppercase tracking-wider border-b pb-2 mb-3">Rebar Processing</h3>
+                                        <a href="${rootPath}Product_details/bar_bending_models.html" class="megamenu-link"><i class="fa-solid fa-rotate-left w-6 text-secondary"></i> Bar Bending Machine</a>
+                                        <a href="${rootPath}Product_details/bar_cutting_models.html" class="megamenu-link"><i class="fa-solid fa-scissors w-6 text-secondary"></i> Bar Cutting Machine</a>
+                                        <a href="${rootPath}Product_details/scrap_straightener_models.html" class="megamenu-link"><i class="fa-solid fa-recycle w-6 text-secondary"></i> Scrap Straightener</a>
+                                        <a href="${rootPath}Product_details/portable_bar_processing_models.html" class="megamenu-link"><i class="fa-solid fa-toolbox w-6 text-secondary"></i> Portable Bar Equipment</a>
+                                    </div>
+
+                                    <div class="space-y-3">
+                                        <h3 class="text-sm font-bold text-primary uppercase tracking-wider border-b pb-2 mb-3">Lifting Solutions</h3>
+                                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="megamenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Suspended Rope Platform</a>
+                                        <a href="${rootPath}Product_details/heavy_lifting_equipment.html" class="megamenu-link"><i class="fa-solid fa-weight-hanging w-6 text-secondary"></i> Heavy Lifting Equipment</a>
+                                        <a href="${rootPath}Product_details/mini_lift_models.html" class="megamenu-link"><i class="fa-solid fa-dolly w-6 text-secondary"></i> Mini Lift / Crane</a>
+                                        <a href="${rootPath}Product_details/scissorlift_models.html" class="megamenu-link"><i class="fa-solid fa-arrows-up-down w-6 text-secondary"></i> Scissor Lifts</a>
+                                    </div>
+
+                                    <div class="space-y-3 md:col-span-2 rounded-xl border border-gray-100 bg-gray-50/70 p-4">
+                                        <h3 class="flex items-center gap-3 text-sm font-bold text-primary uppercase tracking-wider pb-2 mb-3">
+                                            <span aria-hidden="true" class="h-px flex-1 bg-gradient-to-r from-gray-200 to-secondary/70"></span>
+                                            <span>Concreting Solutions</span>
+                                            <span aria-hidden="true" class="h-px flex-1 bg-gradient-to-r from-secondary/70 to-gray-200"></span>
+                                        </h3>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                                            <div class="space-y-3">
+                                                <a href="${rootPath}Product_details/concrete_mixer_models.html" class="megamenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Handling Equipment</a>
+                                                <a href="${rootPath}Product_details/high_frequency_converter_models.html" class="megamenu-link"><i class="fa-solid fa-wave-square w-6 text-secondary"></i> High Frequency Converters</a>
+                                                <a href="${rootPath}Product_details/Vibrators.html" class="megamenu-link"><i class="fa-solid fa-bolt w-6 text-secondary"></i> Vibrators</a>
+                                                <a href="${rootPath}Product_details/high_frequency_poker_models.html" class="megamenu-link"><i class="fa-solid fa-plug w-6 text-secondary"></i> High Frequency Pokers</a>
+                                            </div>
+                                            <div class="space-y-3 sm:border-l sm:border-gray-200 sm:pl-6">
+                                                <a href="${rootPath}Product_details/mechanical_poker_models.html" class="megamenu-link"><i class="fa-solid fa-gears w-6 text-secondary"></i> Mechanical Pokers</a>
+                                                <a href="${rootPath}Product_details/shutter_vibrator_models.html" class="megamenu-link"><i class="fa-solid fa-industry w-6 text-secondary"></i> Shutter Vibrators</a>
+                                                <a href="${rootPath}Product_details/handy_vibration_models.html" class="megamenu-link"><i class="fa-solid fa-hand-fist w-6 text-secondary"></i> Handy Vibrator Solution</a>
+                                                <a href="${rootPath}Product_details/surface_smootheners.html" class="megamenu-link"><i class="fa-solid fa-ruler-horizontal w-6 text-secondary"></i> Surface Smootheners</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="bg-gray-50 p-4 text-center border-t">
-                                    <a href="${rootPath}index.html#products" class="text-sm font-semibold text-primary hover:text-secondary transition-colors">View Full Product Catalogue <i class="fa-solid fa-arrow-right ml-1"></i></a>
+
+                                    <div class="space-y-3">
+                                        <h3 class="text-sm font-bold text-primary uppercase tracking-wider border-b pb-2 mb-3">Miscellaneous &amp; Finishing</h3>
+                                        <a href="${rootPath}Product_details/industrial_cutting_tools.html" class="megamenu-link"><i class="fa-solid fa-crosshairs w-6 text-secondary"></i> Industrial Cutting Tools</a>
+                                        <a href="${rootPath}Product_details/dewatering_pump.html" class="megamenu-link"><i class="fa-solid fa-droplet w-6 text-secondary"></i> Dewatering Pumps</a>
+                                        <a href="${rootPath}Product_details/prefab_structures.html" class="megamenu-link"><i class="fa-solid fa-building w-6 text-secondary"></i> Prefab. Structures</a>
+                                        <a href="${rootPath}Product_details/civic_utility_products.html" class="megamenu-link"><i class="fa-solid fa-city w-6 text-secondary"></i> Civic Utility Products</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -264,28 +283,34 @@ const rootPath = getRootPath(),
                     </button>
                     <div id="mobile-products-menu" class="hidden pl-4 pt-2 pb-2 border-l-2 border-gray-200 ml-3 space-y-1">
                         <a href="${rootPath}index.html#products" class="mobile-submenu-link font-bold text-primary">View All Products</a>
-                        <h4 class="font-semibold text-gray-500 pt-2 text-sm">Heavy Machinery</h4>
-                        <a href="${rootPath}Product_details/bar_cutting_models.html" class="mobile-submenu-link"><i class="fa-solid fa-scissors w-6 text-secondary"></i> Bar Cutting</a>
-                        <a href="${rootPath}Product_details/bar_bending_models.html" class="mobile-submenu-link"><i class="fa-solid fa-rotate-left w-6 text-secondary"></i> Bar Bending</a>
-                        <a href="${rootPath}Product_details/scrap_straightener_models.html" class="mobile-submenu-link"><i class="fa-solid fa-recycle w-6 text-secondary"></i> Scrap Straighteners</a>
+                        <h4 class="font-semibold text-gray-500 pt-2 text-sm">Soil &amp; Foundation</h4>
                         <a href="${rootPath}Product_details/road_roller_models.html" class="mobile-submenu-link"><i class="fa-solid fa-road w-6 text-secondary"></i> Road Rollers</a>
                         <a href="${rootPath}Product_details/excavator_drum_compactor.html" class="mobile-submenu-link"><i class="fa-solid fa-weight-hanging w-6 text-secondary"></i> Excavator Drum Compactor</a>
-                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="mobile-submenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Vertical Lifting Solution</a>
-                        <a href="${rootPath}Product_details/mini_lift_models.html" class="mobile-submenu-link"><i class="fa-solid fa-dolly w-6 text-secondary"></i> Mini Lifts / Cranes</a>
-                        <a href="${rootPath}Product_details/industrial_cutting_tools.html" class="mobile-submenu-link"><i class="fa-solid fa-crosshairs w-6 text-secondary"></i> Industrial Cutters</a>
-                        <h4 class="font-semibold text-gray-500 pt-2 text-sm">Light Equipment</h4>
                         <a href="${rootPath}Product_details/plate_compactor_models.html" class="mobile-submenu-link"><i class="fa-solid fa-compress w-6 text-secondary"></i> Plate Compactors</a>
-                        <a href="${rootPath}Product_details/surface_smootheners.html" class="mobile-submenu-link"><i class="fa-solid fa-ruler-horizontal w-6 text-secondary"></i> Surface Smootheners</a>
-                        <a href="${rootPath}Product_details/concrete_mixer_models.html" class="mobile-submenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Mixers</a>
-                        <a href="${rootPath}Product_details/Vibrators.html" class="mobile-submenu-link"><i class="fa-solid fa-bolt w-6 text-secondary"></i> Vibrators</a>
-                        <a href="${rootPath}Product_details/shutter_vibrator_models.html" class="mobile-submenu-link"><i class="fa-solid fa-industry w-6 text-secondary"></i> Shutter Vibrators</a>
-                        <a href="${rootPath}Product_details/high_frequency_converter_models.html" class="mobile-submenu-link"><i class="fa-solid fa-wave-square w-6 text-secondary"></i> HF Converters</a>
-                        <a href="${rootPath}Product_details/high_frequency_poker_models.html" class="mobile-submenu-link"><i class="fa-solid fa-plug w-6 text-secondary"></i> HF Pokers</a>
-                        <a href="${rootPath}Product_details/handy_vibration_models.html" class="mobile-submenu-link"><i class="fa-solid fa-hand-fist w-6 text-secondary"></i> Handy Vibrators</a>
-                        <a href="${rootPath}Product_details/mechanical_poker_models.html" class="mobile-submenu-link"><i class="fa-solid fa-gears w-6 text-secondary"></i> Mechanical Pokers</a>
-                        <a href="${rootPath}Product_details/dewatering_pump.html" class="mobile-submenu-link"><i class="fa-solid fa-droplet w-6 text-secondary"></i> Dewatering Pumps</a>
-                        <a href="${rootPath}Product_details/portable_bar_processing_models.html" class="mobile-submenu-link"><i class="fa-solid fa-toolbox w-6 text-secondary"></i> Portable Equipment</a>
+                        <h4 class="font-semibold text-gray-500 pt-2 text-sm">Rebar Processing</h4>
+                        <a href="${rootPath}Product_details/bar_bending_models.html" class="mobile-submenu-link"><i class="fa-solid fa-rotate-left w-6 text-secondary"></i> Bar Bending Machine</a>
+                        <a href="${rootPath}Product_details/bar_cutting_models.html" class="mobile-submenu-link"><i class="fa-solid fa-scissors w-6 text-secondary"></i> Bar Cutting Machine</a>
+                        <a href="${rootPath}Product_details/scrap_straightener_models.html" class="mobile-submenu-link"><i class="fa-solid fa-recycle w-6 text-secondary"></i> Scrap Straightener</a>
+                        <a href="${rootPath}Product_details/portable_bar_processing_models.html" class="mobile-submenu-link"><i class="fa-solid fa-toolbox w-6 text-secondary"></i> Portable Bar Equipment</a>
+                        <h4 class="font-semibold text-gray-500 pt-2 text-sm">Lifting Solutions</h4>
+                        <a href="${rootPath}Product_details/suspended_rope_platform.html" class="mobile-submenu-link"><i class="fa-solid fa-elevator w-6 text-secondary"></i> Suspended Rope Platform</a>
+                        <a href="${rootPath}Product_details/heavy_lifting_equipment.html" class="mobile-submenu-link"><i class="fa-solid fa-weight-hanging w-6 text-secondary"></i> Heavy Lifting Equipment</a>
+                        <a href="${rootPath}Product_details/mini_lift_models.html" class="mobile-submenu-link"><i class="fa-solid fa-dolly w-6 text-secondary"></i> Mini Lift / Crane</a>
                         <a href="${rootPath}Product_details/scissorlift_models.html" class="mobile-submenu-link"><i class="fa-solid fa-arrows-up-down w-6 text-secondary"></i> Scissor Lifts</a>
+                        <h4 class="font-semibold text-gray-500 pt-2 text-sm">Concreting Solutions</h4>
+                        <a href="${rootPath}Product_details/concrete_mixer_models.html" class="mobile-submenu-link"><i class="fa-solid fa-blender w-6 text-secondary"></i> Concrete Handling Equipment</a>
+                        <a href="${rootPath}Product_details/high_frequency_converter_models.html" class="mobile-submenu-link"><i class="fa-solid fa-wave-square w-6 text-secondary"></i> High Frequency Converters</a>
+                        <a href="${rootPath}Product_details/Vibrators.html" class="mobile-submenu-link"><i class="fa-solid fa-bolt w-6 text-secondary"></i> Vibrators</a>
+                        <a href="${rootPath}Product_details/high_frequency_poker_models.html" class="mobile-submenu-link"><i class="fa-solid fa-plug w-6 text-secondary"></i> High Frequency Pokers</a>
+                        <a href="${rootPath}Product_details/mechanical_poker_models.html" class="mobile-submenu-link"><i class="fa-solid fa-gears w-6 text-secondary"></i> Mechanical Pokers</a>
+                        <a href="${rootPath}Product_details/shutter_vibrator_models.html" class="mobile-submenu-link"><i class="fa-solid fa-industry w-6 text-secondary"></i> Shutter Vibrators</a>
+                        <a href="${rootPath}Product_details/handy_vibration_models.html" class="mobile-submenu-link"><i class="fa-solid fa-hand-fist w-6 text-secondary"></i> Handy Vibrator Solution</a>
+                        <a href="${rootPath}Product_details/surface_smootheners.html" class="mobile-submenu-link"><i class="fa-solid fa-ruler-horizontal w-6 text-secondary"></i> Surface Smootheners</a>
+                        <h4 class="font-semibold text-gray-500 pt-2 text-sm">Miscellaneous &amp; Finishing</h4>
+                        <a href="${rootPath}Product_details/industrial_cutting_tools.html" class="mobile-submenu-link"><i class="fa-solid fa-crosshairs w-6 text-secondary"></i> Industrial Cutting Tools</a>
+                        <a href="${rootPath}Product_details/dewatering_pump.html" class="mobile-submenu-link"><i class="fa-solid fa-droplet w-6 text-secondary"></i> Dewatering Pumps</a>
+                        <a href="${rootPath}Product_details/prefab_structures.html" class="mobile-submenu-link"><i class="fa-solid fa-building w-6 text-secondary"></i> Prefab. Structures</a>
+                        <a href="${rootPath}Product_details/civic_utility_products.html" class="mobile-submenu-link"><i class="fa-solid fa-city w-6 text-secondary"></i> Civic Utility Products</a>
                     </div>
                 </div>
                 <div>

@@ -628,13 +628,26 @@ window.downloadProductCatalogue = async function(event, identifier) {
         contentY += letterheadHeight + 2;
 
         doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8.5);
         doc.setTextColor(0, 0, 0);
-        doc.text('9-95/8, JYOTHI NAGAR COLONY, BALAJI NAGAR, HYDERABAD - 500087', pageWidth / 2, contentY + 5.5, { align: 'center' });
+        const companyDetails = [
+            '9-95/8 JYOTHI NAGAR COLONY, BALAJI NAGAR, JAWAHAR NAGAR MUNICIPALITY, KAPRA MANDAL, HYDERABAD, TELANGANA-87',
+            'CIN:- U51909TG2020PTC139942; GSTIN:- 36ABDCS5864M1ZP; MSME/Udyam No:- UDYAM-TS-02-0005256',
+            'Phone:- 9059239819, Email:- sales@srinithyaepl.in, Website:- www.srinithyaepl.in'
+        ];
+        let contactFontSize = 8.5;
+        const contactWidth = pageWidth - margin * 2;
+        doc.setFontSize(contactFontSize);
+        while (contactFontSize > 6 && Math.max(...companyDetails.map(line => doc.getTextWidth(line))) > contactWidth) {
+            contactFontSize -= 0.25;
+            doc.setFontSize(contactFontSize);
+        }
+        companyDetails.forEach((line, index) => {
+            doc.text(line, pageWidth / 2, contentY + 3.5 + index * 3, { align: 'center' });
+        });
         doc.setDrawColor(180, 180, 180);
         doc.setLineWidth(0.3);
-        doc.line(margin, contentY + 8, pageWidth - margin, contentY + 8);
-        contentY += 11;
+        doc.line(margin, contentY + 12, pageWidth - margin, contentY + 12);
+        contentY += 15;
 
         if (product.image) {
             const image = await loadProductImageForPdf(product.image);

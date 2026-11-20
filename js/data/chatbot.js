@@ -484,6 +484,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div id="sepl-chatbot-messages"></div>
             <div id="sepl-chatbot-quick-actions">
                 <button class="sepl-quick-btn" data-action="quote">Get Quote</button>
+                <button class="sepl-quick-btn" data-action="rentals">Rental Options</button>
                 <button class="sepl-quick-btn" data-action="catalog">Brochure</button>
                 <button class="sepl-quick-btn" data-action="support">Support</button>
                 <button class="sepl-quick-btn" data-action="whatsapp">WhatsApp</button>
@@ -583,10 +584,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Send welcome message on first open
         if (isOpen && messagesDiv.children.length === 0) {
-            addMessage("bot", 
-                "Hello! I am the SEPL Assistant. I can help you find information about our construction equipment. Try asking for 'Bar Bender', 'SBB52', or 'Compactor'.",
+            const isRentalPage = window.location.pathname.includes('rental_equipment');
+            addMessage(
+                "bot",
+                isRentalPage
+                    ? "Hello! I can help you explore the equipment listed for rental. Live availability and rental rates are not shown here, but I can guide you to the rental team."
+                    : "Hello! I can help you find equipment, compare published specifications, and choose a machine for your bar size. What are you working on?",
                 null,
-                ["Bar Bending Machine", "Concrete Mixer", "Download Brochure"]
+                isRentalPage
+                    ? ["Show rental options", "Ask about rental rates", "Contact Rental Desk"]
+                    : ["Recommend a machine", "Compare SBB42 and SBB52", "Rental Options"]
             );
         }
     }
@@ -618,10 +625,12 @@ document.addEventListener('DOMContentLoaded', function() {
     clearBtn.addEventListener("click", () => {
         messagesDiv.innerHTML = '';
         lastContextProduct = null;
-        if (synth) synth.cancel();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         chatHistory = [];
         sessionStorage.removeItem('sepl_chat_history');
         sessionStorage.removeItem('sepl_chat_context_product');
+        sessionStorage.removeItem('sepl_chat_pending_requirement');
+        sessionStorage.removeItem('sepl_chat_pending_comparison');
         addMessage("bot", "Chat history cleared. How can I help you?");
     });
 
@@ -632,6 +641,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let text = "";
             switch(action) {
                 case 'quote': text = "How do I get a quote?"; break;
+                case 'rentals': text = "What equipment can I rent?"; break;
                 case 'catalog': text = "Download product brochure"; break;
                 case 'support': text = "Contact support"; break;
                 case 'whatsapp': text = "Connect on WhatsApp"; break;
@@ -710,6 +720,37 @@ document.addEventListener('DOMContentLoaded', function() {
         if (div) div.remove();
     }
 
+    let isTtsEnabled = false;
+
+    function speakText(text) {
+        if (!isTtsEnabled || !text || !('speechSynthesis' in window)) return;
+        try {
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+        } catch (error) {
+            console.error('Text-to-speech failed:', error);
+        }
+    }
+
+    ttsBtn.setAttribute('aria-pressed', 'false');
+    ttsBtn.addEventListener('click', () => {
+        if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+            ttsBtn.title = 'Text-to-speech is not supported in this browser';
+            return;
+        }
+
+        isTtsEnabled = !isTtsEnabled;
+        ttsBtn.setAttribute('aria-pressed', String(isTtsEnabled));
+        ttsBtn.title = isTtsEnabled ? 'Disable text-to-speech' : 'Enable text-to-speech';
+        ttsBtn.style.opacity = isTtsEnabled ? '1' : '0.7';
+        const icon = ttsBtn.querySelector('i');
+        if (icon) {
+            icon.classList.toggle('fa-volume-high', isTtsEnabled);
+            icon.classList.toggle('fa-volume-xmark', !isTtsEnabled);
+        }
+        if (!isTtsEnabled) window.speechSynthesis.cancel();
+    });
+
     function processInput() {
         const text = inputField.value.trim();
         if (!text) return;
@@ -723,10 +764,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const delay = Math.floor(Math.random() * 1000) + 1000;
         
         setTimeout(async () => {
-            hideTyping();
-            const response = await generateResponse(text);
-            addMessage("bot", response.text, response.html, response.suggestions);
-            speakText(response.text);
+            try {
+                const response = await generateResponse(text);
+                addMessage("bot", response.text, response.html, response.suggestions);
+                speakText(response.text);
+            } catch (error) {
+                console.error('Chatbot response failed:', error);
+                addMessage("bot", "I ran into a problem while preparing that answer. Please try asking about a product model or contact our team.");
+            } finally {
+                hideTyping();
+            }
         }, delay);
     }
 
@@ -813,8 +860,83 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionStorage.setItem('sepl_chat_context_product', JSON.stringify(product));
     }
 
+    function loadPendingRequirement() {
+        const stored = sessionStorage.getItem('sepl_chat_pending_requirement');
+        if (!stored) return null;
+
+        try {
+            const requirement = JSON.parse(stored);
+            if (!requirement || typeof requirement !== 'object' || Array.isArray(requirement)) {
+                throw new Error('Saved recommendation requirement is not an object.');
+            }
+
+            const capacity = Number(requirement.capacity);
+            return {
+                capacity: Number.isFinite(capacity) && capacity > 0 ? capacity : null,
+                action: ['bend', 'cut'].includes(requirement.action) ? requirement.action : null,
+                portable: requirement.portable === true,
+                awaiting: ['task', 'capacity'].includes(requirement.awaiting) ? requirement.awaiting : null
+            };
+        } catch (error) {
+            console.warn('Could not restore the pending recommendation requirement:', error);
+            sessionStorage.removeItem('sepl_chat_pending_requirement');
+            return null;
+        }
+    }
+
+    function loadPendingComparison() {
+        const stored = sessionStorage.getItem('sepl_chat_pending_comparison');
+        if (!stored) return null;
+
+        try {
+            const comparison = JSON.parse(stored);
+            if (
+                !comparison ||
+                typeof comparison.primary !== 'string' ||
+                !Array.isArray(comparison.options) ||
+                comparison.options.some(option => typeof option !== 'string')
+            ) {
+                throw new Error('Invalid comparison selection state');
+            }
+            return comparison;
+        } catch (error) {
+            console.warn('Could not restore the pending comparison:', error);
+            sessionStorage.removeItem('sepl_chat_pending_comparison');
+            return null;
+        }
+    }
+
     async function generateResponse(query) {
         query = query.toLowerCase();
+        let pendingRequirement = loadPendingRequirement();
+        let pendingComparison = loadPendingComparison();
+        if (pendingComparison) {
+            const selection = normalizeAssistantText(query)
+                .replace(/^(?:compare\s+(?:with|against)?\s*|with\s+|and\s+|vs\s+|against\s+)/, '');
+            const selectedOption = pendingComparison.options.find(option =>
+                normalizeAssistantText(option) === selection
+            );
+            if (selectedOption) {
+                pendingComparison.selectedOption = selectedOption;
+            } else {
+                sessionStorage.removeItem('sepl_chat_pending_comparison');
+                pendingComparison = null;
+            }
+        }
+        const diameterMatch = query.match(/\b(\d+(?:\.\d+)?)\s*(mm|millimeters?|inch(?:es)?|in|")(?![a-z])/i);
+        const bareCapacityMatch = pendingRequirement && pendingRequirement.awaiting === 'capacity'
+            ? query.match(/^\s*(\d+(?:\.\d+)?)\s*$/)
+            : null;
+        const cutIntent = /\b(cut|cutter|cutting|shear|shearing)\b/i.test(query);
+        const bendIntent = /\b(bend|bender|bending)\b/i.test(query);
+        const portableIntent = /\b(portable|mobile|on site)\b/i.test(query);
+        const barIntent = /\b(bars?|rods?|rebar|reinforcing|reinforcement|steel|tmt)\b/i.test(query);
+        const pendingFollowUp = !!(diameterMatch || bareCapacityMatch || cutIntent || bendIntent || portableIntent || barIntent);
+
+        if (pendingRequirement && !pendingFollowUp) {
+            sessionStorage.removeItem('sepl_chat_pending_requirement');
+            pendingRequirement = null;
+        }
 
         // 0.1 Name Recognition
         const nameMatch = query.match(/(?:my name is|i am|i'm|call me) ([a-zA-Z]+)/i);
@@ -840,8 +962,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // 0.3 Help / Capabilities
         if (query === 'help' || query.includes('what can you do') || query.includes('capabilities')) {
             return {
-                text: "I can help you with:<br>• <strong>Finding products</strong> (e.g., 'Show me bar benders')<br>• <strong>Technical specs</strong> (e.g., 'Weight of SBB52')<br>• <strong>Comparisons</strong> (e.g., 'Compare SBB52 and SBB42')<br>• <strong>General questions</strong> (e.g., 'What is 3 phase power?')<br>• <strong>Getting quotes</strong> and brochures.",
-                suggestions: ["Find Bar Bender", "Download Brochure", "Contact Sales"]
+                text: "I can search the product catalog, answer questions using published specifications, compare named models, guide bar-machine selection by operation and diameter, and help you find rental and contact options. I can’t verify live stock or unpublished prices.",
+                suggestions: ["Recommend a machine", "Compare SBB42 and SBB52", "Show rental options"]
             };
         }
 
@@ -944,11 +1066,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const phoneMatch = query.match(/\b[6-9]\d{9}\b/);
         const emailMatch = query.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
         if (phoneMatch || emailMatch) {
-            const contact = phoneMatch ? phoneMatch[0] : emailMatch[0];
-            // In a real app, send this to backend/email service
             return {
-                text: `Thanks! I've noted your contact details (<strong>${contact}</strong>). Our sales team will get in touch with you shortly.`,
-                suggestions: ["Browse Products", "Download Brochure"]
+                text: "I can’t send or store contact details from this chat. Please contact sales directly using one of these options.",
+                html: `<p>I can’t send or store contact details from this chat. Contact sales directly:</p><a class="bot-action-btn" href="mailto:sales@srinithyaepl.in">Email Sales</a><a class="bot-action-btn" href="https://wa.me/919059239819" target="_blank" rel="noopener noreferrer">WhatsApp Sales</a>`
             };
         }
 
@@ -993,16 +1113,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (query.includes('service')) { setTimeout(() => window.location.href = rootPath + 'services.html', 1000); return { text: "Opening Services page..." }; }
         }
         
-        // 0.91. Intent: Rental Inquiry (Contextual)
-        if ((query.includes('rent') || query.includes('hire') || query.includes('lease')) && lastContextProduct) {
-             const responseText = `Yes, the <strong>${lastContextProduct.name}</strong> is available for rent. Would you like to check availability or view our rental terms?`;
-             return {
-                 text: responseText.replace(/<[^>]*>/g, ''),
-                 html: responseText,
-                 suggestions: ["View Rental Services", "Contact Rental Desk"]
-             };
-        }
-
         if (query.includes('clear') && (query.includes('cart') || query.includes('estimate') || query.includes('tray'))) {
              if (typeof window.clearCart === 'function') {
                  window.clearCart();
@@ -1125,9 +1235,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 })()
             },
             { keywords: ['who', 'are', 'you'], response: "I am the SEPL Intelligent Assistant, a virtual agent designed to help you navigate our extensive range of construction machinery and services." },
-            { keywords: ['location'], response: "Our headquarters are located in Hyderabad, Telangana. You can find our full address and location map in the Contact section at the bottom of the page." },
-            { keywords: ['located'], response: "Our headquarters are located in Hyderabad, Telangana. You can find our full address and location map in the Contact section at the bottom of the page." },
-            { keywords: ['address'], response: "Our headquarters are located in Hyderabad, Telangana. You can find our full address and location map in the Contact section at the bottom of the page." },
+            { keywords: ['location'], response: "Our office is at 9-95/8 Jyothi Nagar Colony, Balaji Nagar, Jawahar Nagar Municipality, Kapra Mandal, Hyderabad, Telangana-87." },
+            { keywords: ['located'], response: "Our office is at 9-95/8 Jyothi Nagar Colony, Balaji Nagar, Jawahar Nagar Municipality, Kapra Mandal, Hyderabad, Telangana-87." },
+            { keywords: ['address'], response: "Our office is at 9-95/8 Jyothi Nagar Colony, Balaji Nagar, Jawahar Nagar Municipality, Kapra Mandal, Hyderabad, Telangana-87." },
             { keywords: ['warranty'], response: "We stand by our quality. Most of our heavy machinery comes with a 1-year comprehensive warranty. Specific details are available on individual product pages." },
             { keywords: ['guarantee'], response: "We stand by our quality. Most of our heavy machinery comes with a 1-year comprehensive warranty. Specific details are available on individual product pages." },
             { keywords: ['service'], response: "We offer comprehensive support including on-site repair, workshop service, and spare parts replacement. You can book a service directly through the 'Services' menu." },
@@ -1147,7 +1257,6 @@ document.addEventListener('DOMContentLoaded', function() {
             { keywords: ['petrol', 'vs', 'diesel'], response: "Petrol engines are generally lighter and easier to start, while Diesel engines offer better fuel economy and torque for heavy-duty, continuous operation." },
             { keywords: ['warranty', 'claim'], response: "To claim warranty, please keep your purchase invoice handy and contact our support team with the machine's serial number." },
             { keywords: ['return', 'policy'], response: "Returns are subject to terms and conditions. Please contact our sales office immediately if you face issues with a delivered product." },
-            { keywords: ['rent', 'hire', 'rental'], response: "Yes, we offer equipment rental services! You can browse our rental options in the 'Services' section." },
             // General Cleverness
             { keywords: ['boss', 'owner', 'ceo', 'director'], response: "Srinithya Engineering is led by a team of experienced directors dedicated to construction innovation." },
             { keywords: ['discount', 'offer'], response: "We offer competitive pricing! For bulk orders or specific discounts, please request a quote or contact our sales team directly." },
@@ -1163,7 +1272,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { keywords: ['portable', 'vs', 'stationary'], response: "Portable machines are ideal for sites with limited space or where rebar needs to be processed at multiple locations. Stationary machines offer higher capacity and speed for centralized processing yards." },
             { keywords: ['portable', 'vs', 'normal'], response: "Portable machines are lightweight and can be moved easily around the site, whereas normal (stationary) machines are heavy-duty, designed for high-volume production in a fixed location." },
             { keywords: ['email', 'mail'], response: "You can email us at sales@srinithyaepl.in for quotes and inquiries." },
-            { keywords: ['phone', 'call', 'number', 'mobile'], response: "You can reach our sales team at +91 90320 69819." },
+            { keywords: ['phone', 'call', 'number', 'mobile'], response: "You can reach our sales team at +91 9059 239819." },
             { keywords: ['mission', 'vision'], response: "Our mission is to empower the construction industry with reliable, efficient, and affordable machinery." },
             { keywords: ['founded', 'established'], response: "Srinithya Engineering has been serving the construction industry with dedication and quality products for many years." }
         ];
@@ -1176,8 +1285,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (query.includes("contact") || query.includes("email") || query.includes("phone") || query.includes("address") || query.includes("whatsapp")) {
             return { 
-                text: "You can reach our team via the 'Get in Touch' form, or email us at sales@srinithyaepl.in. For instant support, use the WhatsApp button!",
-                suggestions: ["Open WhatsApp", "Call Now"]
+                text: "Contact sales by phone at +91 9059 239819, email sales@srinithyaepl.in, or WhatsApp the team.",
+                html: `<p>Contact sales:</p><a class="bot-action-btn" href="tel:+919059239819">Call +91 9059 239819</a><a class="bot-action-btn" href="mailto:sales@srinithyaepl.in">Email Sales</a><a class="bot-action-btn" href="https://wa.me/919059239819" target="_blank" rel="noopener noreferrer">WhatsApp Sales</a>`
             };
         }
         if (query.includes("quote") || query.includes("price") || query.includes("estimate")) {
@@ -1201,47 +1310,213 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const products = flattenProducts(window.productData);
-        
-        // 0.68. Intelligent Recommendation (Capacity based)
-        const capacityMatch = query.match(/(?:bend|cut|process).*?(\d+)\s*mm/i);
-        if (capacityMatch) {
-            const size = parseFloat(capacityMatch[1]);
-            const action = query.includes('cut') ? 'cut' : 'bend';
-            const categoryKeyword = action === 'cut' ? 'cutting' : 'bending';
-            
-            // Filter products
-            const suitableProducts = products.filter(p => {
-                if (!p.category.toLowerCase().includes(categoryKeyword)) return false;
-                // Extract capacity from specs or compare data
-                let cap = 0;
-                if (p.compare && (p.compare.capacity || p.compare['bend-dia'])) {
-                    const capStr = p.compare.capacity || p.compare['bend-dia'];
-                    const capMatch = capStr.match(/(\d+)/);
-                    if (capMatch) cap = parseFloat(capMatch[1]);
-                }
-                return cap >= size;
-            }).sort((a, b) => {
-                // Sort by capacity ascending (closest match first)
-                let capA = 0, capB = 0;
-                if (a.compare) { const m = (a.compare.capacity || a.compare['bend-dia'] || '').match(/(\d+)/); if(m) capA = parseFloat(m[1]); }
-                if (b.compare) { const m = (b.compare.capacity || b.compare['bend-dia'] || '').match(/(\d+)/); if(m) capB = parseFloat(m[1]); }
-                return capA - capB;
-            });
+        if (pendingComparison && pendingComparison.selectedOption) {
+            const primary = products.find(product =>
+                normalizeAssistantText(product.model || product.name) === normalizeAssistantText(pendingComparison.primary)
+            );
+            const selected = products.find(product =>
+                normalizeAssistantText(product.model || product.name) === normalizeAssistantText(pendingComparison.selectedOption)
+            );
+            sessionStorage.removeItem('sepl_chat_pending_comparison');
+            if (primary && selected) {
+                return generateComparisonResponse(primary, selected);
+            }
+        }
 
-            if (suitableProducts.length > 0) {
-                const p = suitableProducts[0];
-                updateContext(p);
+        // Answer rental questions from the published rental list without claiming live stock.
+        const rentalFollowUp = lastContextProduct &&
+            lastContextProduct.category === 'rental-services' &&
+            /\b(available|availability|rate|rates|price|cost|stock|how much)\b/i.test(query);
+        const rentalIntent = /\b(rent|rental|renting|hire|hiring|lease|leasing)\b/i.test(query) || rentalFollowUp;
+        if (rentalIntent) {
+            const rentalProducts = products.filter(product => product.category === 'rental-services');
+            const rentalMatches = findRentalMatches(query, rentalProducts);
+            const mentionedProduct = findMentionedProduct(query, products);
+            const refersToContext = /\b(it|this|that|same)\b/i.test(query);
+            const contextualProduct = mentionedProduct || ((refersToContext || rentalFollowUp) ? lastContextProduct : null);
+
+            if (rentalMatches.length === 0 && contextualProduct) {
+                const relatedRental = findRentalListingForProduct(contextualProduct, rentalProducts);
+                if (relatedRental) rentalMatches.push(relatedRental);
+            }
+
+            if (rentalProducts.length === 0) {
                 return {
-                    text: `For ${action}ing <strong>${size}mm</strong> bars, I recommend the <strong>${p.name}</strong> (Capacity: up to ${p.compare.capacity || p.compare['bend-dia']}).`,
-                    html: getProductCardHTML(p),
-                    suggestions: [`Price of ${p.model}`, "View Details", "Compare"]
-                };
-            } else {
-                return {
-                    text: `I couldn't find a standard machine for ${action}ing <strong>${size}mm</strong> bars. Our standard range usually goes up to 42mm or 52mm. Please contact us for custom heavy-duty solutions.`,
-                    suggestions: ["Contact Support"]
+                    text: "I can’t confirm rental options from the product data on this page. Please contact our team to check.",
+                    suggestions: ["Contact Sales", "Open WhatsApp"]
                 };
             }
+
+            const showAllRentals = rentalMatches.length === 0 || rentalMatches.length > 1;
+            const displayedRentals = showAllRentals ? rentalProducts : rentalMatches;
+            const listedNames = displayedRentals.map(product => product.name).join(', ');
+            const availabilityNote = "The website does not publish live rental availability or rates; our team can confirm those details.";
+            const productNote = contextualProduct && contextualProduct.category !== 'rental-services'
+                ? `The catalog lists ${contextualProduct.name} as a product, but does not confirm that exact model for rental. `
+                : '';
+
+            if (!showAllRentals) updateContext(displayedRentals[0]);
+
+            return {
+                text: showAllRentals
+                    ? `The rental page lists: ${listedNames}. ${availabilityNote}`
+                    : `${productNote}${displayedRentals[0].name} is listed as a rental option. ${availabilityNote}`,
+                html: `<p>${escapeHtml(productNote)}${showAllRentals ? `Rental options listed on the site: ${escapeHtml(listedNames)}.` : `<strong>${escapeHtml(displayedRentals[0].name)}</strong> is listed as a rental option.`} ${escapeHtml(availabilityNote)}</p>${displayedRentals.map(getRentalCardHTML).join('')}`,
+                suggestions: showAllRentals
+                    ? ["Ask about Bar Bender rental", "Ask about Bar Cutter rental", "Contact Rental Desk"]
+                    : ["Ask about rates", "Contact Rental Desk"]
+            };
+        }
+
+        const recommendationIntent = /\b(recommend|recommendation|suggest|suitable|best|help me choose|which.*(?:machine|equipment)|what should i (?:use|buy|choose))\b/i.test(query);
+        const hasKnownApplication = /\b(bars?|rods?|rebar|steel|tmt|bend|bender|bending|cut|cutter|cutting|mixer|mixing|concrete|compactor|compaction|soil|roller|vibrator|lift|hoist|crane|platform|pump|trowel|straightener|cabin|container|scissor|rent|rental|hire)\b/i.test(query);
+        if (recommendationIntent && !hasKnownApplication && !findMentionedProduct(query, products)) {
+            return {
+                text: "Tell me what job you need to do, and I’ll narrow the catalog down. For bar work, include whether you need to bend or cut and the largest bar diameter.",
+                suggestions: ["Bend or cut steel bars", "Recommend a concrete mixer", "Recommend a compactor", "Show lifting equipment"]
+            };
+        }
+
+        const bareCapacityValue = bareCapacityMatch ? parseFloat(bareCapacityMatch[1]) : null;
+        const diameterValue = diameterMatch ? parseFloat(diameterMatch[1]) : bareCapacityValue;
+        const diameterUnit = diameterMatch ? diameterMatch[2].toLowerCase() : 'mm';
+        let requestedCapacity = null;
+        if (diameterValue) {
+            const diameterInMillimeters = /^(?:inch(?:es)?|in|")$/.test(diameterUnit)
+                ? diameterValue * 25.4
+                : diameterValue;
+            requestedCapacity = Math.round(diameterInMillimeters * 100) / 100;
+        } else if (pendingRequirement && pendingRequirement.capacity) {
+            requestedCapacity = pendingRequirement.capacity;
+        }
+
+        const explicitAction = cutIntent ? 'cut' : bendIntent ? 'bend' : null;
+        let action = explicitAction || (pendingRequirement && pendingRequirement.action) || null;
+        const mentionedProduct = findMentionedProduct(query, products);
+        const refersToContext = /\b(it|this|that|same)\b|^\s*(?:and|what about|how about)\b/i.test(query);
+        const referencedProduct = mentionedProduct || (refersToContext ? lastContextProduct : null);
+        const contextualProduct = referencedProduct || (pendingRequirement ? lastContextProduct : null);
+        const contextCategory = contextualProduct ? `${contextualProduct.category || ''} ${(contextualProduct.compare && contextualProduct.compare.category) || ''}`.toLowerCase() : '';
+
+        if (!action && contextCategory) {
+            if (contextCategory.includes('cut')) action = 'cut';
+            else if (contextCategory.includes('bend')) action = 'bend';
+        }
+        if (!action && /bar_cutting_models/i.test(window.location.pathname)) action = 'cut';
+        if (!action && /bar_bending_models/i.test(window.location.pathname)) action = 'bend';
+
+        const isBarPage = /bar_(?:cutting|bending)_models/i.test(window.location.pathname);
+        const isBarRequirement = barIntent ||
+            /\b(machine|machinery|portable|bender|cutter)\b/i.test(query) ||
+            !!pendingRequirement ||
+            isBarPage ||
+            !!(referencedProduct && getProductWorkTypes(referencedProduct).length);
+        const selectionIntent = /\b(need|looking|recommend|suggest|choose|suitable|best|buy|purchase|want|required?|right|which|should i use)\b/i.test(query);
+
+        if (referencedProduct && explicitAction && /\b(can|will|handle|support|operate|use)\b/i.test(query) &&
+            !getProductWorkTypes(referencedProduct).includes(explicitAction)) {
+            const referencedWorkTypes = getProductWorkTypes(referencedProduct);
+            const mismatchText = `The catalog identifies ${referencedProduct.name} as a ${referencedWorkTypes.includes('bend') ? 'bending' : referencedWorkTypes.includes('cut') ? 'cutting' : 'different'} machine, not a ${explicitAction === 'cut' ? 'cutting' : 'bending'} machine.`;
+            return {
+                text: mismatchText,
+                html: `<p>${escapeHtml(mismatchText)}</p>${getProductCardHTML(referencedProduct)}`,
+                suggestions: explicitAction === 'cut' ? ["Show Bar Cutters", "Recommend a cutter"] : ["Show Bar Benders", "Recommend a bender"]
+            };
+        }
+
+        if (requestedCapacity && isBarRequirement && !action) {
+            sessionStorage.setItem('sepl_chat_pending_requirement', JSON.stringify({
+                capacity: requestedCapacity,
+                portable: portableIntent || !!(pendingRequirement && pendingRequirement.portable),
+                awaiting: 'task'
+            }));
+            return {
+                text: `I can recommend equipment for ${requestedCapacity} mm bars. Do you need to bend or cut them?`,
+                suggestions: [`Bend ${requestedCapacity}mm bars`, `Cut ${requestedCapacity}mm bars`]
+            };
+        }
+
+        if (isBarRequirement && action && !requestedCapacity && (selectionIntent || pendingRequirement)) {
+            sessionStorage.setItem('sepl_chat_pending_requirement', JSON.stringify({
+                action,
+                portable: portableIntent || !!(pendingRequirement && pendingRequirement.portable),
+                awaiting: 'capacity'
+            }));
+            return {
+                text: `What is the largest bar diameter you need to ${action === 'cut' ? 'cut' : 'bend'}? You can reply in mm or inches.`,
+                suggestions: ["20 mm", "32 mm", "40 mm"]
+            };
+        }
+
+        if (requestedCapacity && action) {
+            sessionStorage.removeItem('sepl_chat_pending_requirement');
+            const asksAboutNamedProduct = !!(referencedProduct && (
+                /\b(can|will|handle|support|suitable|capacity|rated|maximum|max|fit)\b/i.test(query) ||
+                refersToContext
+            ));
+            const namedProductWorkTypes = referencedProduct ? getProductWorkTypes(referencedProduct) : [];
+            const actionLabel = action === 'cut' ? 'cutting' : 'bending';
+
+            if (asksAboutNamedProduct) {
+                updateContext(referencedProduct);
+                if (!namedProductWorkTypes.includes(action)) {
+                    const mismatchText = `The catalog identifies ${referencedProduct.name} as a ${namedProductWorkTypes.includes('bend') ? 'bending' : namedProductWorkTypes.includes('cut') ? 'cutting' : 'different'} machine, not a ${actionLabel} machine. I can show suitable ${actionLabel} equipment instead.`;
+                    return {
+                        text: mismatchText,
+                        html: `<p>${escapeHtml(mismatchText)}</p>${getProductCardHTML(referencedProduct)}`,
+                        suggestions: action === 'cut' ? ["Show Bar Cutters", "Recommend a cutter"] : ["Show Bar Benders", "Recommend a bender"]
+                    };
+                }
+
+                const namedCapacity = getProductCapacity(referencedProduct, action);
+                if (!namedCapacity) {
+                    const unverifiableText = `I can’t verify a published ${actionLabel} capacity for ${referencedProduct.name}. Please confirm suitability with our sales team.`;
+                    return {
+                        text: unverifiableText,
+                        html: `<p>${escapeHtml(unverifiableText)}</p>${getProductCardHTML(referencedProduct)}`,
+                        suggestions: ["Contact Sales", "Show similar models"]
+                    };
+                }
+
+                const capacityText = `${referencedProduct.name} has a published maximum ${actionLabel} capacity of ${namedCapacity} mm. The requested ${requestedCapacity} mm bar size ${namedCapacity >= requestedCapacity ? 'is within' : 'exceeds'} that limit. Confirm bar grade and site conditions with our team.`;
+                return {
+                    text: capacityText,
+                    html: `<p>${escapeHtml(capacityText)}</p>${getProductCardHTML(referencedProduct)}`,
+                    suggestions: [`Compare ${referencedProduct.model}`, "Contact Sales"]
+                };
+            }
+
+            const needsPortable = portableIntent || !!(pendingRequirement && pendingRequirement.portable);
+            const suitableProducts = products
+                .filter(product => {
+                    if (product.category === 'rental-services') return false;
+                    const workTypes = getProductWorkTypes(product);
+                    if (!workTypes.includes(action)) return false;
+                    if (needsPortable && !isPortableProduct(product)) return false;
+                    return getProductCapacity(product, action) >= requestedCapacity;
+                })
+                .sort((a, b) => getProductCapacity(a, action) - getProductCapacity(b, action));
+
+            if (suitableProducts.length > 0) {
+                const product = suitableProducts[0];
+                const capacity = getProductCapacity(product, action);
+                updateContext(product);
+                const recommendationText = `For ${actionLabel} ${requestedCapacity} mm bars${needsPortable ? ' on site' : ''}, ${product.name} is the smallest listed model that meets the request, with capacity up to ${capacity} mm.`;
+                return {
+                    text: recommendationText,
+                    html: `<p>${escapeHtml(recommendationText)}</p>${getProductCardHTML(product)}`,
+                    suggestions: [`Specs of ${product.model}`, `Compare ${product.model}`, "Ask about portable options"]
+                };
+            }
+
+            const categoryProducts = products.filter(product => getProductWorkTypes(product).includes(action));
+            const maxCapacity = categoryProducts.reduce((max, product) => Math.max(max, getProductCapacity(product, action)), 0);
+            return {
+                text: maxCapacity
+                    ? `I couldn't find a listed machine rated to ${actionLabel} ${requestedCapacity} mm bars. The largest published capacity in that category is ${maxCapacity} mm; please contact our team about a suitable solution.`
+                    : `I couldn't find published ${actionLabel} capacity data for that request. Please contact our team to confirm a suitable machine.`,
+                suggestions: ["Contact Sales", "Open WhatsApp"]
+            };
         }
 
         // Synonyms map for better context understanding
@@ -1302,8 +1577,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Score products
         const scoredProducts = products.map(p => {
             let score = 0;
-            const specsStr = p.specs ? p.specs.map(s => s.text).join(' ') : '';
-            const searchStr = `${p.name} ${p.model} ${p.category} ${p.description || ''} ${specsStr}`.toLowerCase();
+            const name = String(p.name || '').toLowerCase();
+            const model = String(p.model || '').toLowerCase();
+            const category = String(p.category || '').toLowerCase();
+            const specsStr = p.specs ? p.specs.map(spec => spec.text || '').join(' ') : '';
+            const searchStr = `${name} ${model} ${category} ${p.description || ''} ${specsStr}`.toLowerCase();
             // Create a set of words for exact matching of short tokens
             const searchWords = new Set(searchStr.split(/[\s\-\(\)\/]+/));
             
@@ -1313,7 +1591,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // 1. Numeric Match (Strongest) - Allow substring for models (e.g. "52" in "SBB52")
                 if (/\d/.test(token)) {
-                    if (p.model.toLowerCase().includes(token)) {
+                    if (model && model.includes(token)) {
                         tokenScore += 40; // High boost for model numbers
                         matched = true;
                     } else if (searchStr.includes(token)) {
@@ -1343,9 +1621,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (matched) {
                     score += tokenScore;
                     // Bonus for exact category match
-                    if (p.category.toLowerCase().includes(token)) score += 5;
+                    if (category.includes(token)) score += 5;
                     // Bonus for name match
-                    if (p.name.toLowerCase().includes(token)) score += 5;
+                    if (name.includes(token)) score += 5;
                 }
             });
             return { product: p, score: score };
@@ -1401,32 +1679,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // --- Comparison Logic ---
         if (query.includes('compare') || query.includes(' vs ') || query.includes('difference') || query.includes('better') || query.includes('prefer')) {
-            // Use matches or find mentioned products specifically
-            const uniqueProducts = [...new Set(matches)];
-            
-            if (uniqueProducts.length >= 2) {
-                const p1 = uniqueProducts[0];
-                const p2 = uniqueProducts[1];
-                const isBetterQuery = query.includes('better') || query.includes('prefer');
-                const introText = isBetterQuery 
-                    ? `To help you decide whether <strong>${p1.name}</strong> is better than <strong>${p2.name}</strong>, here is a comparison:`
-                    : `Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:`;
+            const namedProducts = findMentionedProducts(query, products);
+            const contextualProduct = refersToContext ? lastContextProduct : null;
+
+            if (namedProducts.length >= 2) {
+                return generateComparisonResponse(namedProducts[0], namedProducts[1], query);
+            }
+
+            if (namedProducts.length === 1 && lastContextProduct && namedProducts[0].name !== lastContextProduct.name) {
+                return generateComparisonResponse(
+                    lastContextProduct,
+                    namedProducts[0],
+                    query,
+                    `Comparing your previous selection <strong>${lastContextProduct.name}</strong> with <strong>${namedProducts[0].name}</strong>:`
+                );
+            }
+
+            const comparisonProduct = namedProducts[0] || contextualProduct || (matches.length === 1 ? matches[0] : null);
+            if (comparisonProduct) {
+                const alternatives = products.filter(product =>
+                    product.category === comparisonProduct.category &&
+                    product.category !== 'rental-services' &&
+                    (product.model || product.name) !== (comparisonProduct.model || comparisonProduct.name)
+                ).slice(0, 3);
+
+                if (alternatives.length > 0) {
+                    sessionStorage.setItem('sepl_chat_pending_comparison', JSON.stringify({
+                        primary: comparisonProduct.model || comparisonProduct.name,
+                        options: alternatives.map(product => product.model || product.name)
+                    }));
+                    updateContext(comparisonProduct);
+                    return {
+                        text: `Which model should I compare with ${comparisonProduct.name}?`,
+                        suggestions: alternatives.map(product => product.model || product.name)
+                    };
+                }
 
                 return {
-                    text: introText,
-                    html: `<p>${introText}</p>` + generateComparisonHTML(p1, p2),
-                    suggestions: [`Price of ${p1.model}`, `Price of ${p2.model}`, "Add both to Estimate"]
+                    text: `I found ${comparisonProduct.name}, but there are no other models in the same catalog category to compare. Tell me the other model you have in mind.`
                 };
             }
-            // If only 1 mentioned and we have context
-            if (uniqueProducts.length === 1 && lastContextProduct && uniqueProducts[0].name !== lastContextProduct.name) {
-                 const p1 = lastContextProduct;
-                 const p2 = uniqueProducts[0];
-                 return {
-                    text: `Comparing your previous selection <strong>${p1.name}</strong> with <strong>${p2.name}</strong>:`,
-                    html: `<p>Comparing your previous selection <strong>${p1.name}</strong> with <strong>${p2.name}</strong>:</p>` + generateComparisonHTML(p1, p2),
-                    suggestions: [`Price of ${p2.model}`, "Add to Estimate"]
-                };
+
+            const uniqueProducts = [...new Set(matches)];
+            if (uniqueProducts.length >= 2) {
+                return generateComparisonResponse(uniqueProducts[0], uniqueProducts[1], query);
             }
         }
 
@@ -1866,11 +2162,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const findProduct = (text) => {
                 return products.map(p => {
                     let score = 0;
-                    if (text.includes(p.model.toLowerCase())) score += 100;
-                    if (text.includes(p.name.toLowerCase())) score += 50;
+                    const model = String(p.model || '').toLowerCase();
+                    const name = String(p.name || '').toLowerCase();
+                    if (model && text.includes(model)) score += 100;
+                    if (name && text.includes(name)) score += 50;
                     // Partial match for words > 3 chars
                     text.split(' ').forEach(w => {
-                        if (w.length > 3 && (p.name.toLowerCase().includes(w) || p.model.toLowerCase().includes(w))) score += 10;
+                        if (w.length > 3 && (name.includes(w) || model.includes(w))) score += 10;
                     });
                     return { p, score };
                 })
@@ -1894,24 +2192,55 @@ document.addEventListener('DOMContentLoaded', function() {
         return null;
     }
 
+    function generateComparisonResponse(p1, p2, query = '', introText = null) {
+        const isBetterQuery = query.includes('better') || query.includes('prefer');
+        const intro = introText || (isBetterQuery
+            ? `To help you decide whether <strong>${p1.name}</strong> is better than <strong>${p2.name}</strong>, here is a comparison:`
+            : `Here is a comparison between <strong>${p1.name}</strong> and <strong>${p2.name}</strong>:`);
+        return {
+            text: intro,
+            html: `<p>${intro}</p>${generateComparisonHTML(p1, p2)}`,
+            suggestions: [`Price of ${p1.model}`, `Price of ${p2.model}`, "Add both to Estimate"]
+        };
+    }
+
     // Helper to generate comparison HTML
     function generateComparisonHTML(p1, p2) {
+        const getFields = product => {
+            const fields = {};
+            Object.entries(product.compare || {}).forEach(([key, value]) => {
+                if (!['model', 'category', 'image'].includes(key) && value !== null && value !== undefined && value !== '') {
+                    const normalizedKey = normalizeAssistantText(key).replace(/\s+/g, '-');
+                    fields[normalizedKey] = value;
+                }
+            });
+            (product.specs || []).forEach(spec => {
+                const separator = (spec.text || '').indexOf(':');
+                if (separator > 0) {
+                    const label = normalizeAssistantText(spec.text.slice(0, separator)).replace(/\s+/g, '-');
+                    fields[label] = spec.text.slice(separator + 1).trim();
+                }
+            });
+            return fields;
+        };
+        const fields1 = getFields(p1);
+        const fields2 = getFields(p2);
+        const keys = [...new Set([...Object.keys(fields1), ...Object.keys(fields2)])];
         let html = `<div class="bot-product-card" style="font-size:12px;">
             <table style="width:100%; border-collapse: collapse;">
                 <tr style="border-bottom:1px solid #eee;">
                     <th style="text-align:left; padding:4px;">Feature</th>
-                    <th style="text-align:left; padding:4px;">${p1.model || 'Prod 1'}</th>
-                    <th style="text-align:left; padding:4px;">${p2.model || 'Prod 2'}</th>
+                    <th style="text-align:left; padding:4px;">${escapeHtml(p1.model || 'Product 1')}</th>
+                    <th style="text-align:left; padding:4px;">${escapeHtml(p2.model || 'Product 2')}</th>
                 </tr>`;
         
-        if (p1.compare && p2.compare) {
-            const keys = Object.keys(p1.compare).filter(k => k !== 'model' && k !== 'category' && k !== 'image');
-            keys.slice(0, 5).forEach(key => {
+        if (keys.length > 0) {
+            keys.slice(0, 8).forEach(key => {
                 const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, ' ');
                 html += `<tr style="border-bottom:1px solid #f9f9f9;">
-                    <td style="padding:4px; font-weight:bold; color:#555;">${label}</td>
-                    <td style="padding:4px;">${p1.compare[key] || '-'}</td>
-                    <td style="padding:4px;">${p2.compare[key] || '-'}</td>
+                    <td style="padding:4px; font-weight:bold; color:#555;">${escapeHtml(label)}</td>
+                    <td style="padding:4px;">${escapeHtml(fields1[key] || '-')}</td>
+                    <td style="padding:4px;">${escapeHtml(fields2[key] || '-')}</td>
                 </tr>`;
             });
         } else {
@@ -1924,11 +2253,142 @@ document.addEventListener('DOMContentLoaded', function() {
         const link2 = getProductLink(p2);
         
         html += `<div style="margin-top:8px; display:flex; justify-content:space-between;">
-            <a href="${link1}" class="text-secondary font-bold text-xs hover:underline">${p1.name}</a>
-            <a href="${link2}" class="text-secondary font-bold text-xs hover:underline">${p2.name}</a>
+            <a href="${link1}" class="text-secondary font-bold text-xs hover:underline">${escapeHtml(p1.name)}</a>
+            <a href="${link2}" class="text-secondary font-bold text-xs hover:underline">${escapeHtml(p2.name)}</a>
         </div>`;
         
         return html;
+    }
+
+    function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[character]);
+    }
+
+    function normalizeAssistantText(value) {
+        return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    }
+
+    function findRentalMatches(query, rentalProducts) {
+        const normalizedQuery = normalizeAssistantText(query);
+        const aliases = {
+            'bar bender': ['bar bending', 'bender'],
+            'bar cutter': ['bar cutting', 'cutter', 'shear'],
+            'walk behind roller': ['road roller', 'roller'],
+            'suspended rope platform': ['suspended platform', 'rope platform', 'gondola']
+        };
+
+        return rentalProducts.filter(product => {
+            const name = normalizeAssistantText(product.name);
+            const productAliases = aliases[name] || [];
+            return normalizedQuery.includes(name) ||
+                productAliases.some(alias => normalizedQuery.includes(normalizeAssistantText(alias)));
+        });
+    }
+
+    function findMentionedProducts(query, products) {
+        const normalizedQuery = normalizeAssistantText(query);
+        const compactQuery = normalizedQuery.replace(/\s+/g, '');
+        return products
+            .filter(product => product.category !== 'rental-services')
+            .map(product => {
+                const identifiers = [product.model, product.name]
+                    .map(normalizeAssistantText)
+                    .filter(identifier => identifier.length >= 4);
+                const matches = identifiers
+                    .map(identifier => {
+                        const directPosition = normalizedQuery.indexOf(identifier);
+                        const compactPosition = compactQuery.indexOf(identifier.replace(/\s+/g, ''));
+                        return {
+                            position: directPosition >= 0 ? directPosition : compactPosition,
+                            length: identifier.length
+                        };
+                    })
+                    .filter(match => match.position >= 0)
+                    .sort((a, b) => a.position - b.position || b.length - a.length);
+                return matches.length
+                    ? { product, position: matches[0].position, length: matches[0].length }
+                    : null;
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.position - b.position || b.length - a.length)
+            .map(match => match.product);
+    }
+
+    function findMentionedProduct(query, products) {
+        return findMentionedProducts(query, products)[0] || null;
+    }
+
+    function findRentalListingForProduct(product, rentalProducts) {
+        if (product.category === 'rental-services') {
+            const name = normalizeAssistantText(product.name);
+            return rentalProducts.find(item => normalizeAssistantText(item.name) === name) || null;
+        }
+
+        const workTypes = getProductWorkTypes(product);
+        if (workTypes.includes('bend')) {
+            return rentalProducts.find(item => normalizeAssistantText(item.name).includes('bender')) || null;
+        }
+        if (workTypes.includes('cut')) {
+            return rentalProducts.find(item => normalizeAssistantText(item.name).includes('cutter')) || null;
+        }
+
+        const category = normalizeAssistantText(`${product.category || ''} ${(product.compare && product.compare.category) || ''}`);
+        if (category.includes('roller')) {
+            return rentalProducts.find(item => normalizeAssistantText(item.name).includes('roller')) || null;
+        }
+        if (category.includes('suspended') || category.includes('platform')) {
+            return rentalProducts.find(item => normalizeAssistantText(item.name).includes('platform')) || null;
+        }
+        return null;
+    }
+
+    function getRentalCardHTML(product) {
+        const link = getProductLink(product);
+        const message = encodeURIComponent(`Hi, I would like to enquire about renting ${product.name}.`);
+        return `<div class="bot-product-card">
+                    <h4>${escapeHtml(product.name)}</h4>
+                    <p>Rates and live availability are confirmed by our rental team.</p>
+                    <a href="${link}" class="text-secondary font-bold text-xs mt-2 inline-block hover:underline">View Rental Options</a>
+                    <a href="https://wa.me/919059239819?text=${message}" target="_blank" rel="noopener noreferrer" class="bot-action-btn">Ask about this rental</a>
+                </div>`;
+    }
+
+    function getProductWorkTypes(product) {
+        const compareType = product.compare && product.compare.type ? product.compare.type : '';
+        const searchable = normalizeAssistantText(`${product.category || ''} ${product.name || ''} ${product.description || ''} ${compareType}`);
+        const workTypes = [];
+        if (/\b(bend|bender|bending)\b/.test(searchable)) workTypes.push('bend');
+        if (/\b(cut|cutter|cutting|shear|shearing)\b/.test(searchable)) workTypes.push('cut');
+        return workTypes;
+    }
+
+    function isPortableProduct(product) {
+        const compareType = product.compare && product.compare.type ? product.compare.type : '';
+        return /\b(portable|mobile|on site)\b/.test(
+            normalizeAssistantText(`${product.category || ''} ${product.name || ''} ${compareType}`)
+        );
+    }
+
+    function getProductCapacity(product, action) {
+        const capacityPattern = action === 'cut'
+            ? /\b(capacity|cutting|cutter|diameter|dia)\b/i
+            : /\b(capacity|bend|bending|diameter|dia)\b/i;
+        const matchingSpec = (product.specs || []).find(spec =>
+            capacityPattern.test(spec.text || '') && /\d/.test(spec.text || '')
+        );
+        const compare = product.compare || {};
+        const compareValue = action === 'cut'
+            ? compare.capacity
+            : (compare['bend-dia'] || compare.capacity);
+        const value = matchingSpec ? matchingSpec.text : (compareValue || '');
+        const numbers = String(value).match(/\d+(?:\.\d+)?/g) || [];
+        return numbers.reduce((max, number) => Math.max(max, parseFloat(number)), 0);
     }
 
     // Helper to flatten the nested productData structure
@@ -1960,7 +2420,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const cat = (product.category || '').toLowerCase();
         let page = 'index.html';
         
-        if (cat.includes('bending')) page = 'Product_details/bar_bending_models.html';
+        if (cat.includes('rental')) return `${rootPath}Service_details/rental_equipment.html#rental-grid`;
+        else if (cat.includes('maintenance')) page = 'Service_details/maintenance_services.html';
+        else if (cat.includes('repair')) page = 'Service_details/repair_services.html';
+        else if (cat.includes('heavy-lifting-equipment')) page = 'Product_details/heavy_lifting_equipment.html';
+        else if (cat.includes('suspended')) page = 'Product_details/suspended_rope_platform.html';
+        else if (cat.includes('bending')) page = 'Product_details/bar_bending_models.html';
         else if (cat.includes('cutting') && !cat.includes('industrial')) page = 'Product_details/bar_cutting_models.html';
         else if (cat.includes('mixer')) page = 'Product_details/concrete_mixer_models.html';
         else if (cat.includes('compactor')) page = 'Product_details/plate_compactor_models.html';
@@ -1974,18 +2439,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${rootPath}${page}#${productId}`;
     }
 
-    // Helper for fuzzy matching (simple check for now, can be expanded to Levenshtein if needed)
+    // Allow a small number of edit mistakes when matching catalog terms.
     function isFuzzyMatch(token, text) {
         if (token.length < 4) return false;
-        // Check if text contains a word that is very similar to token
-        const words = text.split(/[\s\-\(\)]+/);
+        const maxDistance = token.length >= 8 ? 2 : 1;
+        const words = text.toLowerCase().split(/[^a-z0-9]+/);
         return words.some(w => {
-            if (Math.abs(w.length - token.length) > 1) return false;
-            let diff = 0;
-            for (let i = 0; i < Math.min(w.length, token.length); i++) {
-                if (w[i] !== token[i]) diff++;
+            if (!w || Math.abs(w.length - token.length) > maxDistance) return false;
+            let previous = Array.from({ length: token.length + 1 }, (_, index) => index);
+            for (let row = 1; row <= w.length; row++) {
+                const current = [row];
+                let rowMinimum = row;
+                for (let column = 1; column <= token.length; column++) {
+                    const cost = w[row - 1] === token[column - 1] ? 0 : 1;
+                    current[column] = Math.min(
+                        current[column - 1] + 1,
+                        previous[column] + 1,
+                        previous[column - 1] + cost
+                    );
+                    rowMinimum = Math.min(rowMinimum, current[column]);
+                }
+                if (rowMinimum > maxDistance) return false;
+                previous = current;
             }
-            return diff <= 1; // Allow 1 char difference
+            return previous[token.length] <= maxDistance;
         });
     }
 
